@@ -15,9 +15,11 @@ from sqlalchemy.dialects.postgresql import UUID, ARRAY, JSONB
 # Note, the database credentials in the DB URL are set to the default values for a local Arches install, 
 # these should be changed to match your own database and set with the ARCHES_DB_URL environment variable.
 ARCHES_DB_URL = os.getenv('ARCHES_DB_URL', 'postgresql://postgres:postgis@127.0.0.1:5434/rascoll')
-IMPORT_DIR = os.getenv('RASCOLL_ETL_DIR', '/home/ekansa/gci-data')
-RAW_IMPORT_CSV = os.path.join(IMPORT_DIR, 'gci-all-orig.csv')
-ARCHES_INSERT_SQL_PATH =  os.path.join(IMPORT_DIR, 'etl_sql.txt')
+
+current_directory = os.getcwd()
+DATA_DIR = os.getenv('RASCOLL_ETL_DIR', os.path.join(current_directory, 'data'))
+RAW_IMPORT_CSV = os.path.join(DATA_DIR, 'gci-all-orig.csv')
+ARCHES_INSERT_SQL_PATH =  os.path.join(DATA_DIR, 'etl_sql.txt')
 
 STAGING_SCHEMA_NAME = 'staging'
 IMPORT_TABLE_NAME = 'rsci'
@@ -121,7 +123,7 @@ RSCI_MAPPING_CONFIGS = {
 }
 
 
-IMPORT_PLACES_CSV = os.path.join(IMPORT_DIR, 'gci-all-places.csv')
+IMPORT_PLACES_CSV = os.path.join(DATA_DIR, 'gci-all-places.csv')
 
 PLACE_MODEL_UUID = '3dda9f54-d771-11ef-825b-0275dc2ded29'
 PLACE_MODEL_NAME = 'place_clone'
@@ -226,7 +228,7 @@ PLACE_MAPPING_CONFIGS = {
 
 
 
-IMPORT_RSCI_PLACES_CSV = os.path.join(IMPORT_DIR, 'gci-all-rsci-places.csv')
+IMPORT_RSCI_PLACES_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-places.csv')
 
 RSCI_PLACE_PRODUCTION_TYPE_IDS = ['d1adc747-6773-47c2-8470-a2ef0ab23fb9',]
 REL_RSCI_PLACE_REL_TYPE_ID = 'ac41d9be-79db-4256-b368-2f4559cfbe55'

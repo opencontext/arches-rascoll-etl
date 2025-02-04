@@ -69,5 +69,12 @@ def drop_import_table(tab_name, staging_schema=general_configs.STAGING_SCHEMA_NA
     execute_sql(sql)
 
 
-
+def lookup_data_type_sql_str(data_type):
+    """Maps a SQLAlchemy data type object to a SQL string """
+    mapped_data_type = general_configs.DATA_TYPES_SQL.get(data_type)
+    if mapped_data_type is None:
+        # the key lookup for an ARRAY(UUID) field doesn't work, so
+        # we'll just assume we mean an uuid array.
+        mapped_data_type = 'uuid[]'
+    return mapped_data_type
 

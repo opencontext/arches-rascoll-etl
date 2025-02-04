@@ -1,6 +1,4 @@
-import codecs
 import copy
-import datetime
 import json
 import os
 import uuid as GenUUID
@@ -29,12 +27,58 @@ sqls = ref_collection.prepare_all_sql_inserts()
 """
 
 
+def save_data_to_csv_with_objects_as_json(df_stage, col_data_types, path):
+    """Saves a dataframe to a CSV file with JSON objects as strings"""
+    df_temp = df_stage.copy()
+    for col, data_type in col_data_types.items():
+        mapped_data_type = utilities.lookup_data_type_sql_str(data_type)
+        if mapped_data_type == 'jsonb':
+            index = (
+                df_temp[col].notnull() 
+            )
+            df_temp.loc[index, col] = df_temp[index][col].apply(lambda x: json.dumps(x))
+        elif mapped_data_type == 'uuid':
+            index = (
+                df_temp[col].notnull() 
+            )
+            df_temp.loc[index, col] = df_temp[index][col].apply(lambda x: str(x))
+        elif mapped_data_type == 'uuid[]':
+            index = (
+                df_temp[col].notnull() 
+            )
+            df_temp.loc[index, col] = df_temp[index][col].apply(lambda x: json.dumps(x))
+    df_temp.to_csv(path, index=False)
 
-def prep_transformed_data(df, configs=general_configs.RSCI_MAPPING_CONFIGS):
+
+def make_objs_from_json_strings(df_stage, col_data_types):
+    """Makes JSON objects from JSON strings in a dataframe"""
+    for col, data_type in col_data_types.items():
+        mapped_data_type = utilities.lookup_data_type_sql_str(data_type)
+        if mapped_data_type == 'jsonb':
+            index = (
+                df_stage[col].notnull() 
+                & df_stage[col].apply(lambda x: isinstance(x, str))
+                & (df_stage[col] != 'NaN')
+            )
+            df_stage.loc[~index, col] = ''
+            df_stage.loc[index, col] = df_stage[index][col].apply(lambda x: json.loads(x))
+        elif mapped_data_type == 'uuid[]':
+            index = (
+                df_stage[col].notnull() 
+            )
+            df_stage.loc[~index, col] = ''
+            df_stage.loc[index, col] = df_stage[index][col].apply(lambda x: json.loads(x))
+    return df_stage
+
+
+
+def prep_transformed_data(df, configs):
+    """Prepares a dataset from the dataframe df for transformation into a staging table"""
     dict_rows = {}
-    model_staging_schema = configs.get('model_staging_schema')
     col_data_types = {}
     for _, row in df.iterrows():
+        # Given the small data volumes, I'm not bothering to optimize performance with
+        # vectorized operations. We'll just iterate through the rows.
         raw_pk = row[configs.get('raw_pk_col')]
         if not dict_rows.get(raw_pk):
             dict_rows[raw_pk] = {}
@@ -59,7 +103,7 @@ def prep_transformed_data(df, configs=general_configs.RSCI_MAPPING_CONFIGS):
                     # If we can't convert the string to JSON, we'll just skip it.
                     continue
             if mapping.get('make_tileid'):
-                tileid = GenUUID.uuid4()
+                tileid = str(GenUUID.uuid4())
                 staging_tileid = f'{stage_field_prefix}tileid'
                 dict_rows[raw_pk][staging_tileid] = tileid
                 col_data_types[staging_tileid] = UUID
@@ -98,15 +142,15 @@ def prep_transformed_data(df, configs=general_configs.RSCI_MAPPING_CONFIGS):
                     tile_data[key] = copy.deepcopy(val)
             dict_rows[raw_pk][tile_data_col] = tile_data
     rows = [dict(row) for _, row in dict_rows.items()]
-    df_new = pd.DataFrame(rows)
-    return df_new, col_data_types
+    df_staging = pd.DataFrame(rows)
+    return df_staging, col_data_types
 
 
 def prepare_all_transformed_data(
     df=None,
     raw_path=general_configs.RAW_IMPORT_CSV, 
     all_configs=general_configs.ALL_MAPPING_CONFIGS, 
-    overwrite=False,
+    regenerate=False,
     staging_schema=general_configs.STAGING_SCHEMA_NAME,
     db_url=general_configs.ARCHES_DB_URL,
 ):
@@ -114,24 +158,33 @@ def prepare_all_transformed_data(
         df = pd.read_csv(raw_path)
     dfs = {}
     for configs in all_configs:
-        utilities.drop_import_table(configs.get('staging_table'))
         staging_table = configs.get('staging_table')
+        print(f'Preparing data for: {staging_table}')
+        utilities.drop_import_table(staging_table)
         trans_path = utilities.make_full_path_filename(
-            general_configs.IMPORT_DIR, 
+            general_configs.DATA_DIR, 
             f'{staging_table}.csv'
         )
         if not configs.get('load_path'):
             # Use the main data frame of reference and sample collection items.
-            df_new, col_data_types = prep_transformed_data(df, configs)
+            df_stage, col_data_types = prep_transformed_data(df, configs)
         else:
             # Use a separate data frame for the data prior to transformation.
             df_load = pd.read_csv(configs.get('load_path'))
-            df_new, col_data_types = prep_transformed_data(df_load, configs)
-        if overwrite and os.path.exists(trans_path):
-            df_new = pd.read_csv(trans_path)
-        df_new.to_csv(trans_path, index=False)
+            df_stage, col_data_types = prep_transformed_data(df_load, configs)
+        if not regenerate and os.path.exists(trans_path):
+            # Yes this is inefficient. We're always regenerating a df_stage even if we
+            # don't want to regenerate and will be throwing away the newly created df_stage
+            # by reading an existing dataset. But we still want the col_data_types, so
+            # we'll just suffer with the inefficiency.
+            df_stage = pd.read_csv(trans_path)
+            print(f'Loaded previously prepared {len(df_stage.index)} rows of data for: {staging_table}')
+            df_stage = make_objs_from_json_strings(df_stage, col_data_types)
+        save_data_to_csv_with_objects_as_json(df_stage, col_data_types, trans_path)
+        # Always replace the data in the stating schema. We dropped the staging table above 
+        # at the top of this loop.
         engine = utilities.create_engine(db_url)
-        df_new.to_sql(
+        df_stage.to_sql(
             staging_table,
             con=engine,
             schema=staging_schema,
@@ -139,17 +192,21 @@ def prepare_all_transformed_data(
             index=False,
             dtype=col_data_types,
         )
-        dfs[staging_table] = df_new
+        dfs[staging_table] = df_stage
     return dfs
 
 
 def prepare_all_sql_inserts(
     all_configs=general_configs.ALL_MAPPING_CONFIGS,
     staging_schema=general_configs.STAGING_SCHEMA_NAME,
+    relational_views_sqls=general_configs.ARCHES_REL_VIEW_PREP_SQLS,
     total_count=15000,
     increment=15000,
 ):
     sqls = []
+    if relational_views_sqls:
+        # Add the SQL statements for the relational views.
+        sqls += relational_views_sqls
     for configs in all_configs:
         staging_table = configs.get('staging_table')
         model_staging_schema = configs.get('model_staging_schema')
@@ -173,7 +230,7 @@ def prepare_all_sql_inserts(
                         continue
                 limit_offset = ''
                 stage_targ_field = f'{stage_field_prefix}{targ_field}'
-                targ_data_type_sql = general_configs.DATA_TYPES_SQL.get(mapping.get('data_type'))
+                targ_data_type_sql = utilities.lookup_data_type_sql_str(mapping.get('data_type'))
                 # Now handle tileid fields. Tileids are made for attribute data added to an resource instance.
                 # They will be used to know that we haven't already added certain tile data to a resource instance.
                 if mapping.get('make_tileid'):
