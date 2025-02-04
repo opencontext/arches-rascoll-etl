@@ -8,3 +8,35 @@ We're using the Arches relational views feature (see documentation: https://arch
 
 The Python scripts read configurations to understand how to transform raw data into data for the staging tables. These configurations are also used to generate SQL statements used to move data from the staging tables in the "staging" schema into various tables defined by the Arches relational views. These configurations and the code that reads these configurations should in theory be a useful basis for other Arches ETL needs beyond the "Arches for Reference and Sample Collection" application and package.
 
+
+## How To
+
+This is not intended to be a fully polished ETL pipeline into Arches. It's mainly an ad hoc assemblage of some handy scripts to help with ETL projects in a *hopefully* more reproducible manner.
+
+### Created a staging schema in your Arches RASColl PostgreSQL database (Arches database PostgreSQL connection)
+
+```sql
+
+CREATE SCHEMA IF NOT EXISTS staging;
+
+```
+
+
+### In a Python shell, populate the staging schema with data ready loading into Arches
+
+```python
+
+from arches_rascoll import ref_collection
+# Prepare the staging tables, load them into the staging table, save them
+# do the data directory.
+dfs = ref_collection.prepare_all_transformed_data()
+# Prepare the SQL statements and save them as a file in the data directory.
+sqls = ref_collection.prepare_all_sql_inserts()
+
+```
+
+
+### Execute the SQL statements to load into Arches
+
+Execute the SQL statements in the `etl_sql.txt` file. The order of operations matters, so make sure you have
+the inserts for resource instances run before you attempt to load tile data.
