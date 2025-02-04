@@ -305,8 +305,59 @@ RSCI_PLACE_MAPPING_CONFIGS = {
     ],
 }
 
+RSCI_NOTES_STATEMENT_TYPE_IDS = ['9886efe9-c323-49d5-8d32-5c2a214e5630',] # sample description
+RSCI_PHYS_FORM_STATEMENT_TYPE_IDS = ['72c01bf3-60a3-4a09-bc33-ddbd508c145f',] # condition
 
-
+RSCI_STATEMENTS_CONFIGS = {
+    'model_id': RSCI_UUID,
+    'staging_table': 'rsci_statements',
+    'model_staging_schema': RSCI_MODEL_NAME,
+    'raw_pk_col': 'rsci_uuid',
+    'mappings': [
+        {
+            'raw_col': 'rsci_uuid',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'default_values': [
+                ('graphid', UUID, RSCI_UUID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+            ], 
+        },
+        {
+            'raw_col': 'Notes',
+            'targ_table': 'statement',
+            'stage_field_prefix': 'notes_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'statement_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('statement_type', ARRAY(UUID), RSCI_NOTES_STATEMENT_TYPE_IDS,),
+                ('statement_language_', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
+            ],
+        },
+        {
+            'raw_col': 'Physical Form',
+            'targ_table': 'statement',
+            'stage_field_prefix': 'physical_form_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'statement_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('statement_type', ARRAY(UUID), RSCI_PHYS_FORM_STATEMENT_TYPE_IDS,),
+                ('statement_language_', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
+            ],
+        },
+    ],
+}
 
 
 
@@ -315,6 +366,7 @@ ALL_MAPPING_CONFIGS = [
     RSCI_MAPPING_CONFIGS,
     PLACE_MAPPING_CONFIGS,
     RSCI_PLACE_MAPPING_CONFIGS,
+    RSCI_STATEMENTS_CONFIGS,
 ]
 
 
