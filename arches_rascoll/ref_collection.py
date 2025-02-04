@@ -19,6 +19,16 @@ from arches_rascoll import general_configs
 from arches_rascoll import places
 from arches_rascoll import utilities
 
+"""
+# Use like this in a Python shell:
+
+from arches_rascoll import ref_collection
+dfs = ref_collection.prepare_all_transformed_data()
+sqls = ref_collection.prepare_all_sql_inserts()
+
+"""
+
+
 
 def prep_transformed_data(df, configs=general_configs.RSCI_MAPPING_CONFIGS):
     dict_rows = {}
