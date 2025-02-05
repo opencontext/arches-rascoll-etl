@@ -126,7 +126,7 @@ RSCI_MAPPING_CONFIGS = {
 IMPORT_PLACES_CSV = os.path.join(DATA_DIR, 'gci-all-places.csv')
 
 PLACE_MODEL_UUID = '3dda9f54-d771-11ef-825b-0275dc2ded29'
-PLACE_MODEL_NAME = 'place_clone'
+PLACE_MODEL_NAME = 'place'
 
 PLACE_STATEMENT_TYPE_UUIDS = ['72202a9f-1551-4cbc-9c7a-73c02321f3ea','df8e4cf6-9b0b-472f-8986-83d5b2ca28a0',]
 

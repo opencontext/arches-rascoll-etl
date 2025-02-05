@@ -96,7 +96,7 @@
                 
 
 
-                INSERT INTO place_clone.instances (
+                INSERT INTO place.instances (
                     
                     
                     
@@ -108,15 +108,15 @@
                     
                     resourceinstanceid::uuid,
                     graphid::uuid, graphpublicationid::uuid, principaluser_id::integer
-                FROM staging.place_clone
-                WHERE staging.place_clone.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM place_clone.instances)
-                ORDER BY staging.place_clone.resourceinstanceid
+                FROM staging.place
+                WHERE staging.place.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM place.instances)
+                ORDER BY staging.place.resourceinstanceid
                 
                 ;
                 
 
 
-                INSERT INTO place_clone.name (
+                INSERT INTO place.name (
                     resourceinstanceid, 
                     tileid, 
                     
@@ -128,12 +128,12 @@
                     
                     specific_place_content::jsonb,
                     specific_place_type::uuid[], specific_place_language::uuid[], specific_place_nodegroupid::uuid
-                FROM staging.place_clone
+                FROM staging.place
                 WHERE 
-                    staging.place_clone.specific_place_tileid::uuid NOT IN (SELECT tileid FROM tiles)
-                    AND (staging.place_clone.specific_place_content IS NOT NULL)
+                    staging.place.specific_place_tileid::uuid NOT IN (SELECT tileid FROM tiles)
+                    AND (staging.place.specific_place_content IS NOT NULL)
                     
-                ORDER BY staging.place_clone.resourceinstanceid
+                ORDER BY staging.place.resourceinstanceid
                 
                 ;
                 
@@ -142,15 +142,15 @@
 
                 UPDATE tiles
                 SET sortorder = 0,
-                nodegroupid = staging.place_clone.specific_place_nodegroupid::uuid,
-                tiledata = staging.place_clone.specific_place_tile_data::jsonb
-                FROM staging.place_clone
-                WHERE staging.place_clone.specific_place_tileid::uuid = tiles.tileid::uuid;
+                nodegroupid = staging.place.specific_place_nodegroupid::uuid,
+                tiledata = staging.place.specific_place_tile_data::jsonb
+                FROM staging.place
+                WHERE staging.place.specific_place_tileid::uuid = tiles.tileid::uuid;
 
                 
 
 
-                INSERT INTO place_clone.statement (
+                INSERT INTO place.statement (
                     resourceinstanceid, 
                     tileid, 
                     
@@ -162,12 +162,12 @@
                     
                     statement_content::jsonb,
                     statement_type::uuid[], statement_language::uuid[], statement_nodegroupid::uuid
-                FROM staging.place_clone
+                FROM staging.place
                 WHERE 
-                    staging.place_clone.statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)
-                    AND (staging.place_clone.statement_content IS NOT NULL)
+                    staging.place.statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)
+                    AND (staging.place.statement_content IS NOT NULL)
                     
-                ORDER BY staging.place_clone.resourceinstanceid
+                ORDER BY staging.place.resourceinstanceid
                 
                 ;
                 
@@ -176,15 +176,15 @@
 
                 UPDATE tiles
                 SET sortorder = 0,
-                nodegroupid = staging.place_clone.statement_nodegroupid::uuid,
-                tiledata = staging.place_clone.statement_tile_data::jsonb
-                FROM staging.place_clone
-                WHERE staging.place_clone.statement_tileid::uuid = tiles.tileid::uuid;
+                nodegroupid = staging.place.statement_nodegroupid::uuid,
+                tiledata = staging.place.statement_tile_data::jsonb
+                FROM staging.place
+                WHERE staging.place.statement_tileid::uuid = tiles.tileid::uuid;
 
                 
 
 
-                INSERT INTO place_clone.external_uri (
+                INSERT INTO place.external_uri (
                     resourceinstanceid, 
                     tileid, 
                     
@@ -196,18 +196,18 @@
                     
                     specific_place_uri_external_uri::jsonb,
                     specific_place_uri_nodegroupid::uuid
-                FROM staging.place_clone
+                FROM staging.place
                 WHERE 
-                    staging.place_clone.specific_place_uri_tileid::uuid NOT IN (SELECT tileid FROM tiles)
-                    AND (staging.place_clone.specific_place_uri_external_uri IS NOT NULL)
+                    staging.place.specific_place_uri_tileid::uuid NOT IN (SELECT tileid FROM tiles)
+                    AND (staging.place.specific_place_uri_external_uri IS NOT NULL)
                     
-                ORDER BY staging.place_clone.resourceinstanceid
+                ORDER BY staging.place.resourceinstanceid
                 
                 ;
                 
 
 
-                INSERT INTO place_clone.defined_by (
+                INSERT INTO place.defined_by (
                     resourceinstanceid, 
                     tileid, 
                     
@@ -219,12 +219,12 @@
                     
                     ST_AsText(ST_GeomFromGeoJSON(geo_point_defined_by)),
                     geo_point_nodegroupid::uuid
-                FROM staging.place_clone
+                FROM staging.place
                 WHERE 
-                    staging.place_clone.geo_point_tileid::uuid NOT IN (SELECT tileid FROM tiles)
-                    AND (staging.place_clone.geo_point_defined_by IS NOT NULL)
+                    staging.place.geo_point_tileid::uuid NOT IN (SELECT tileid FROM tiles)
+                    AND (staging.place.geo_point_defined_by IS NOT NULL)
                     
-                ORDER BY staging.place_clone.resourceinstanceid
+                ORDER BY staging.place.resourceinstanceid
                 
                 ;
                 
