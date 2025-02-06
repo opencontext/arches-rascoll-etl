@@ -50,6 +50,17 @@
                 
 
 
+
+                UPDATE tiles
+                SET sortorder = 0,
+                nodegroupid = staging.rsci.common_name_nodegroupid::uuid,
+                tiledata = staging.rsci.common_name_tile_data::jsonb
+                FROM staging.rsci
+                WHERE staging.rsci.common_name_tileid::uuid = tiles.tileid::uuid;
+
+                
+
+
                 INSERT INTO reference_and_sample_collection_item.name (
                     resourceinstanceid, 
                     tileid, 
@@ -93,6 +104,17 @@
                 ORDER BY staging.rsci.resourceinstanceid
                 
                 ;
+                
+
+
+
+                UPDATE tiles
+                SET sortorder = 0,
+                nodegroupid = staging.rsci.barcode_no_nodegroupid::uuid,
+                tiledata = staging.rsci.barcode_no_tile_data::jsonb
+                FROM staging.rsci
+                WHERE staging.rsci.barcode_no_tileid::uuid = tiles.tileid::uuid;
+
                 
 
 

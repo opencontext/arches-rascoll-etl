@@ -34,6 +34,7 @@ RSCI_MODEL_NAME = 'reference_and_sample_collection_item'
 ENG_VALUE_UUID = 'bc35776b-996f-4fc1-bd25-9f6432c1f349'
 
 PREFERRED_TERM_TYPE_UUID = '8f40c740-3c02-4839-b1a4-f1460823a9fe'
+ALT_NAME_TYPE_UUID = '0798bf2c-ab07-43d7-81f4-f1e2d20251a1'
 
 TILE_DATA_COPY_FLAG = '----COPY:stage_targ_field----'
 
@@ -57,6 +58,35 @@ def make_lang_dict_value(value, lang='en'):
             'direction': 'ltr',
         }
     }
+
+
+RSCI_BARCODE_TYPE_UUIDS = ['ae7f2811-3fee-4624-bc74-9451bd05be2d']
+
+RSCI_NAME_TILE_DATA = {
+    "bda5ce4c-d376-11ef-a239-0275dc2ded29": [PREFERRED_TERM_TYPE_UUID,], # type
+    "bda511e6-d376-11ef-a239-0275dc2ded29": None, # source
+    "bda5852c-d376-11ef-a239-0275dc2ded29": None, # _label
+    "bda5e77e-d376-11ef-a239-0275dc2ded29": [ENG_VALUE_UUID,], # language
+    "bda5cf14-d376-11ef-a239-0275dc2ded29": TILE_DATA_COPY_FLAG,
+}
+
+RSCI_ALT_NAME_TILE_DATA = {
+    "bda5ce4c-d376-11ef-a239-0275dc2ded29": [ALT_NAME_TYPE_UUID,], # type
+    "bda511e6-d376-11ef-a239-0275dc2ded29": None, # source
+    "bda5852c-d376-11ef-a239-0275dc2ded29": None, # _label
+    "bda5e77e-d376-11ef-a239-0275dc2ded29": [ENG_VALUE_UUID,], # language
+    "bda5cf14-d376-11ef-a239-0275dc2ded29": TILE_DATA_COPY_FLAG,
+}
+
+RSCI_STATEMENT_TILE_DATA = {
+    "bda54b02-d376-11ef-a239-0275dc2ded29": RSCI_BARCODE_TYPE_UUIDS, # type
+    "bda559a8-d376-11ef-a239-0275dc2ded29": None, # _label
+    "bda57dc0-d376-11ef-a239-0275dc2ded29": None, # source
+    "9e729fcc-d714-11ef-8c40-0275dc2ded29": None, # data assignment
+    "bda5c60e-d376-11ef-a239-0275dc2ded29": TILE_DATA_COPY_FLAG,
+}
+
+
 
 RSCI_MAPPING_CONFIGS = {
     'model_id': RSCI_UUID,
@@ -91,6 +121,7 @@ RSCI_MAPPING_CONFIGS = {
                 ('name_language_', ARRAY(UUID), [ENG_VALUE_UUID],),
                 ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
             ], 
+            'tile_data': RSCI_NAME_TILE_DATA,
         },
         {
             'raw_col': 'Additional Names',
@@ -101,10 +132,10 @@ RSCI_MAPPING_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('name_type_', ARRAY(UUID), ['0798bf2c-ab07-43d7-81f4-f1e2d20251a1'],),
+                ('name_type_', ARRAY(UUID), [ALT_NAME_TYPE_UUID],),
                 ('name_language_', ARRAY(UUID), [ENG_VALUE_UUID],),
                 ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
-            ], 
+            ],
         },
         {
             'raw_col': 'Barcode No.',
@@ -115,9 +146,10 @@ RSCI_MAPPING_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('identifier_type', ARRAY(UUID), ['ae7f2811-3fee-4624-bc74-9451bd05be2d'],),
+                ('identifier_type', ARRAY(UUID), RSCI_BARCODE_TYPE_UUIDS,),
                 ('nodegroupid', UUID, 'bda3962c-d376-11ef-a239-0275dc2ded29',),
-            ], 
+            ],
+            'tile_data': RSCI_STATEMENT_TILE_DATA,
         },
     ],
 }
