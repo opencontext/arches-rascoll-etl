@@ -421,8 +421,8 @@ RSCI_STATEMENTS_CONFIGS = {
 #---------------------------------#
 #- GROUP CONFIGS -----------------#
 #---------------------------------#
-GROUP_MODEL_UUID = '3695ea42-d770-11ef-8f5d-0275dc2ded29'
-GROUP_MODEL_NAME = 'group'
+GROUP_MODEL_UUID = '36956e50-d770-11ef-8f5d-0275dc2ded29'
+GROUP_MODEL_NAME = 'group_'
 IMPORT_RAW_GROUP_CSV = os.path.join(DATA_DIR, 'gci-all-groups.csv')
 
 # This is here to start out the gci-all-groups.csv file. Add to that file as needed.
@@ -458,7 +458,7 @@ GROUP_MAPPING_CONFIGS = {
             'make_tileid': False,
             'default_values': [
                 ('graphid', UUID, GROUP_MODEL_UUID,),
-                ('graphpublicationid', UUID, 'e2b081a8-d7f6-11ef-8ff3-0275dc2ded29',),
+                ('graphpublicationid', UUID, '3fd6e10e-d8c6-11ef-9ef7-0275dc2ded29',),
                 ('principaluser_id', Integer, 1,),
             ], 
         },
@@ -467,12 +467,12 @@ GROUP_MAPPING_CONFIGS = {
             'targ_table': 'name',
             'stage_field_prefix': 'group_name_',
             'value_transform': make_lang_dict_value,
-            'targ_field': 'content',
+            'targ_field': 'name_content',
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('type', ARRAY(UUID), [PREFERRED_TERM_TYPE_UUID],),
-                ('language', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('name_type', ARRAY(UUID), [PREFERRED_TERM_TYPE_UUID],),
+                ('name_language', ARRAY(UUID), [ENG_VALUE_UUID],),
                 ('nodegroupid', UUID, '3695cff8-d770-11ef-8f5d-0275dc2ded29',),
             ],
             'tile_data': GROUP_NAME_TILE_DATA, 
@@ -490,6 +490,7 @@ ALL_MAPPING_CONFIGS = [
     PLACE_MAPPING_CONFIGS,
     RSCI_PLACE_MAPPING_CONFIGS,
     RSCI_STATEMENTS_CONFIGS,
+    GROUP_MAPPING_CONFIGS,
 ]
 
 
