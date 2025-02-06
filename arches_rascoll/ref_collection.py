@@ -202,6 +202,7 @@ def prepare_all_sql_inserts(
     relational_views_sqls=general_configs.ARCHES_REL_VIEW_PREP_SQLS,
     total_count=15000,
     increment=15000,
+    add_tile_update_sqls=False,
 ):
     sqls = []
     if relational_views_sqls:
@@ -285,6 +286,9 @@ def prepare_all_sql_inserts(
                 sqls.append(sql)
                 if not mapping.get('tile_data'):
                     # No need to do a SQL UPDATE on the tile data.
+                    continue
+                if not add_tile_update_sqls:
+                    # We're not adding the tile data to the SQL statements.
                     continue
                 # Compose a SQL UPDATE statement for the tile data.
                 tile_data_col = f'{stage_field_prefix}tile_data'
