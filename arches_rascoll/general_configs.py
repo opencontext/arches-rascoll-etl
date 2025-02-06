@@ -29,10 +29,17 @@ IMPORT_TABLE_NAME = 'rsci'
 RSCI_UUID = 'bda239c6-d376-11ef-a239-0275dc2ded29'
 RSCI_MODEL_NAME = 'reference_and_sample_collection_item'
 
+
+# NOTE: Lots of the UUIDs to concept items are actually the UUIDs for
+# preLabel "values" (in the Arches "values" table) that are related to the concept.
+# At first this is super confusing. 
+
 # The UUID for the English language value. This is the prefLabel relates to the
 # English concept (id: '38729dbe-6d1c-48ce-bf47-e2a18945600e')
 ENG_VALUE_UUID = 'bc35776b-996f-4fc1-bd25-9f6432c1f349'
 
+# These UUIDs are actually for the prefLabel value that is related to the concepts
+# for these types... Again, a reminder about this likely point of confusion.
 PREFERRED_TERM_TYPE_UUID = '8f40c740-3c02-4839-b1a4-f1460823a9fe'
 ALT_NAME_TYPE_UUID = '0798bf2c-ab07-43d7-81f4-f1e2d20251a1'
 
@@ -418,6 +425,7 @@ GROUP_MODEL_UUID = '3695ea42-d770-11ef-8f5d-0275dc2ded29'
 GROUP_MODEL_NAME = 'group'
 IMPORT_RAW_GROUP_CSV = os.path.join(DATA_DIR, 'gci-all-groups.csv')
 
+# This is here to start out the gci-all-groups.csv file. Add to that file as needed.
 GROUP_DATA = [
     {
         'group_uuid': '19f9b6b2-02bf-4018-ae12-ed619d81571a',
@@ -432,7 +440,6 @@ GROUP_NAME_TILE_DATA = {
     "3696269c-d770-11ef-8f5d-0275dc2ded29": [ENG_VALUE_UUID,], # language
     "3696194a-d770-11ef-8f5d-0275dc2ded29": TILE_DATA_COPY_FLAG,
 }
-
 
 GROUP_MAPPING_CONFIGS = {
     'model_id': GROUP_MODEL_UUID,
