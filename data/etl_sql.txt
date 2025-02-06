@@ -7,6 +7,10 @@
     
 
 
+    SELECT __arches_create_resource_model_views('36956e50-d770-11ef-8f5d-0275dc2ded29');
+    
+
+
                 INSERT INTO reference_and_sample_collection_item.instances (
                     
                     
@@ -47,17 +51,6 @@
                 ORDER BY staging.rsci.resourceinstanceid
                 
                 ;
-                
-
-
-
-                UPDATE tiles
-                SET sortorder = 0,
-                nodegroupid = staging.rsci.common_name_nodegroupid::uuid,
-                tiledata = staging.rsci.common_name_tile_data::jsonb
-                FROM staging.rsci
-                WHERE staging.rsci.common_name_tileid::uuid = tiles.tileid::uuid;
-
                 
 
 
@@ -107,17 +100,6 @@
                 
 
 
-
-                UPDATE tiles
-                SET sortorder = 0,
-                nodegroupid = staging.rsci.barcode_no_nodegroupid::uuid,
-                tiledata = staging.rsci.barcode_no_tile_data::jsonb
-                FROM staging.rsci
-                WHERE staging.rsci.barcode_no_tileid::uuid = tiles.tileid::uuid;
-
-                
-
-
                 INSERT INTO place.instances (
                     
                     
@@ -161,17 +143,6 @@
                 
 
 
-
-                UPDATE tiles
-                SET sortorder = 0,
-                nodegroupid = staging.place.specific_place_nodegroupid::uuid,
-                tiledata = staging.place.specific_place_tile_data::jsonb
-                FROM staging.place
-                WHERE staging.place.specific_place_tileid::uuid = tiles.tileid::uuid;
-
-                
-
-
                 INSERT INTO place.statement (
                     resourceinstanceid, 
                     tileid, 
@@ -192,17 +163,6 @@
                 ORDER BY staging.place.resourceinstanceid
                 
                 ;
-                
-
-
-
-                UPDATE tiles
-                SET sortorder = 0,
-                nodegroupid = staging.place.statement_nodegroupid::uuid,
-                tiledata = staging.place.statement_tile_data::jsonb
-                FROM staging.place
-                WHERE staging.place.statement_tileid::uuid = tiles.tileid::uuid;
-
                 
 
 
@@ -379,6 +339,49 @@
                     AND (staging.rsci_statements.physical_form_statement_content IS NOT NULL)
                     
                 ORDER BY staging.rsci_statements.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO group_.instances (
+                    
+                    
+                    
+                    resourceinstanceid,
+                    graphid, graphpublicationid, principaluser_id
+                ) SELECT
+                    
+                    
+                    
+                    resourceinstanceid::uuid,
+                    graphid::uuid, graphpublicationid::uuid, principaluser_id::integer
+                FROM staging.group_
+                WHERE staging.group_.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM group_.instances)
+                ORDER BY staging.group_.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO group_.name (
+                    resourceinstanceid, 
+                    tileid, 
+                    
+                    name_content,
+                    name_type, name_language, nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+                    group_name_tileid::uuid, 
+                    
+                    group_name_name_content::jsonb,
+                    group_name_name_type::uuid[], group_name_name_language::uuid[], group_name_nodegroupid::uuid
+                FROM staging.group_
+                WHERE 
+                    staging.group_.group_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)
+                    AND (staging.group_.group_name_name_content IS NOT NULL)
+                    
+                ORDER BY staging.group_.resourceinstanceid
                 
                 ;
                 
