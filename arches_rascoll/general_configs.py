@@ -155,6 +155,13 @@ RSCI_MAPPING_CONFIGS = {
 }
 
 
+
+
+
+#---------------------------------#
+#- PLACE CONFIGS -----------------#
+#---------------------------------#
+
 IMPORT_PLACES_CSV = os.path.join(DATA_DIR, 'gci-all-places.csv')
 
 PLACE_MODEL_UUID = '3dda9f54-d771-11ef-825b-0275dc2ded29'
@@ -260,6 +267,10 @@ PLACE_MAPPING_CONFIGS = {
 
 
 
+#---------------------------------#
+#- RSCI PLACE MAPPING CONFIGS-----#
+#---------------------------------#
+
 IMPORT_RSCI_PLACES_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-places.csv')
 
 RSCI_PLACE_PRODUCTION_TYPE_IDS = ['d1adc747-6773-47c2-8470-a2ef0ab23fb9',]
@@ -339,6 +350,13 @@ RSCI_PLACE_MAPPING_CONFIGS = {
     ],
 }
 
+
+
+#---------------------------------#
+#- RSCI STATEMENT CONFIGS --------#
+#---------------------------------#
+
+
 RSCI_NOTES_STATEMENT_TYPE_IDS = ['9886efe9-c323-49d5-8d32-5c2a214e5630',] # sample description
 RSCI_PHYS_FORM_STATEMENT_TYPE_IDS = ['72c01bf3-60a3-4a09-bc33-ddbd508c145f',] # condition
 
@@ -393,6 +411,70 @@ RSCI_STATEMENTS_CONFIGS = {
     ],
 }
 
+#---------------------------------#
+#- GROUP CONFIGS -----------------#
+#---------------------------------#
+GROUP_MODEL_UUID = '3695ea42-d770-11ef-8f5d-0275dc2ded29'
+GROUP_MODEL_NAME = 'group'
+IMPORT_RAW_GROUP_CSV = os.path.join(DATA_DIR, 'gci-all-groups.csv')
+
+GROUP_DATA = [
+    {
+        'group_uuid': '19f9b6b2-02bf-4018-ae12-ed619d81571a',
+        'group_name': 'National Fire Protection Association (NFPA)',
+    },
+]
+
+GROUP_NAME_TILE_DATA = {
+    "3695fbe0-d770-11ef-8f5d-0275dc2ded29": [PREFERRED_TERM_TYPE_UUID,], # type
+    "3695ec86-d770-11ef-8f5d-0275dc2ded29": None, # source
+    "3695e092-d770-11ef-8f5d-0275dc2ded29": None, # _label
+    "3696269c-d770-11ef-8f5d-0275dc2ded29": [ENG_VALUE_UUID,], # language
+    "3696194a-d770-11ef-8f5d-0275dc2ded29": TILE_DATA_COPY_FLAG,
+}
+
+
+GROUP_MAPPING_CONFIGS = {
+    'model_id': GROUP_MODEL_UUID,
+    'staging_table': GROUP_MODEL_NAME,
+    'model_staging_schema': GROUP_MODEL_NAME,
+    'raw_pk_col': 'group_uuid',
+    'load_path': IMPORT_RAW_GROUP_CSV,
+    'mappings': [
+        {
+            'raw_col': 'group_uuid',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'default_values': [
+                ('graphid', UUID, GROUP_MODEL_UUID,),
+                ('graphpublicationid', UUID, 'e2b081a8-d7f6-11ef-8ff3-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+            ], 
+        },
+        {
+            'raw_col': 'group_name',
+            'targ_table': 'name',
+            'stage_field_prefix': 'group_name_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('type', ARRAY(UUID), [PREFERRED_TERM_TYPE_UUID],),
+                ('language', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('nodegroupid', UUID, '3695cff8-d770-11ef-8f5d-0275dc2ded29',),
+            ],
+            'tile_data': GROUP_NAME_TILE_DATA, 
+        },
+        
+    ],
+}
+
+
 
 
 
@@ -414,6 +496,8 @@ ARCHES_REL_VIEW_PREP_SQLS = [
     f"""
     SELECT __arches_create_resource_model_views('{PLACE_MODEL_UUID}');
     """,
+
+    f"""
+    SELECT __arches_create_resource_model_views('{GROUP_MODEL_UUID}');
+    """,
 ]
-
-
