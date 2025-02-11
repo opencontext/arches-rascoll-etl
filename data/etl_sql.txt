@@ -11,6 +11,10 @@
     
 
 
+    SELECT __arches_create_resource_model_views('e1d0ea1a-d770-11ef-8c40-0275dc2ded29');
+    
+
+
                 INSERT INTO reference_and_sample_collection_item.instances (
                     
                     
@@ -382,6 +386,161 @@
                     AND (staging.group_.group_name_name_content IS NOT NULL)
                     
                 ORDER BY staging.group_.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.instances (
+                    
+                    
+                    
+                    resourceinstanceid,
+                    graphid, graphpublicationid, principaluser_id
+                ) SELECT
+                    
+                    
+                    
+                    resourceinstanceid::uuid,
+                    graphid::uuid, graphpublicationid::uuid, principaluser_id::integer
+                FROM staging.rsci_group_safety
+                WHERE staging.rsci_group_safety.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)
+                ORDER BY staging.rsci_group_safety.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.fire_safety_classification (
+                    resourceinstanceid, 
+                    tileid, 
+                    fire_safety_classification_hold_for, 
+                    fire_safety_classification_classification,
+                    nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+                    tileid::uuid, 
+                    related_objs::jsonb, 
+                    fire_safety_classification_classification::uuid,
+                    nodegroupid::uuid
+                FROM staging.rsci_group_safety
+                WHERE 
+                    staging.rsci_group_safety.tileid::uuid NOT IN (SELECT tileid FROM tiles)
+                    AND (staging.rsci_group_safety.fire_safety_classification_classification IS NOT NULL)
+                    
+                ORDER BY staging.rsci_group_safety.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.health_safety_classification (
+                    resourceinstanceid, 
+                    tileid, 
+                    health_safety_classification_hold_for, 
+                    health_safety_classification_classification,
+                    nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+                    tileid::uuid, 
+                    related_objs::jsonb, 
+                    health_safety_classification_classification::uuid,
+                    nodegroupid::uuid
+                FROM staging.rsci_group_safety
+                WHERE 
+                    staging.rsci_group_safety.tileid::uuid NOT IN (SELECT tileid FROM tiles)
+                    AND (staging.rsci_group_safety.health_safety_classification_classification IS NOT NULL)
+                    
+                ORDER BY staging.rsci_group_safety.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.general_safety_classification (
+                    resourceinstanceid, 
+                    tileid, 
+                    general_safety_classification_hold_for, 
+                    general_safety_classification_classification,
+                    nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+                    tileid::uuid, 
+                    related_objs::jsonb, 
+                    general_safety_classification_classification::uuid,
+                    nodegroupid::uuid
+                FROM staging.rsci_group_safety
+                WHERE 
+                    staging.rsci_group_safety.tileid::uuid NOT IN (SELECT tileid FROM tiles)
+                    AND (staging.rsci_group_safety.general_safety_classification_classification IS NOT NULL)
+                    
+                ORDER BY staging.rsci_group_safety.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.general_safety_classification (
+                    resourceinstanceid, 
+                    tileid, 
+                    general_safety_classification_hold_for, 
+                    general_safety_classification_classification,
+                    nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+                    reactivity_safety_tileid::uuid, 
+                    reactivity_safety_related_objs::jsonb, 
+                    reactivity_safety_general_safety_classification_classification::uuid,
+                    reactivity_safety_nodegroupid::uuid
+                FROM staging.rsci_group_safety
+                WHERE 
+                    staging.rsci_group_safety.reactivity_safety_tileid::uuid NOT IN (SELECT tileid FROM tiles)
+                    AND (staging.rsci_group_safety.reactivity_safety_general_safety_classification_classification IS NOT NULL)
+                    
+                ORDER BY staging.rsci_group_safety.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO person.instances (
+                    
+                    
+                    
+                    resourceinstanceid,
+                    graphid, graphpublicationid, principaluser_id
+                ) SELECT
+                    
+                    
+                    
+                    resourceinstanceid::uuid,
+                    graphid::uuid, graphpublicationid::uuid, principaluser_id::integer
+                FROM staging.person
+                WHERE staging.person.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM person.instances)
+                ORDER BY staging.person.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO person.name (
+                    resourceinstanceid, 
+                    tileid, 
+                    
+                    name_content,
+                    name_type, name_language, nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+                    person_name_tileid::uuid, 
+                    
+                    person_name_name_content::jsonb,
+                    person_name_name_type::uuid[], person_name_name_language::uuid[], person_name_nodegroupid::uuid
+                FROM staging.person
+                WHERE 
+                    staging.person.person_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)
+                    AND (staging.person.person_name_name_content IS NOT NULL)
+                    
+                ORDER BY staging.person.resourceinstanceid
                 
                 ;
                 
