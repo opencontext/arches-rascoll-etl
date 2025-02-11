@@ -425,10 +425,13 @@ GROUP_MODEL_UUID = '36956e50-d770-11ef-8f5d-0275dc2ded29'
 GROUP_MODEL_NAME = 'group_'
 IMPORT_RAW_GROUP_CSV = os.path.join(DATA_DIR, 'gci-all-groups.csv')
 
+# UUID for the NFPA group, to reference for branches about types of safety standards
+NFPA_GROUP_UUID = '19f9b6b2-02bf-4018-ae12-ed619d81571a'
+
 # This is here to start out the gci-all-groups.csv file. Add to that file as needed.
 GROUP_DATA = [
     {
-        'group_uuid': '19f9b6b2-02bf-4018-ae12-ed619d81571a',
+        'group_uuid': NFPA_GROUP_UUID,
         'group_name': 'National Fire Protection Association (NFPA)',
     },
 ]
@@ -482,6 +485,190 @@ GROUP_MAPPING_CONFIGS = {
 }
 
 
+#---------------------------------#
+#- RSCI GROUP SAFETY CONFIGS -----#
+#---------------------------------#
+IMPORT_RSCI_GROUPS_SAFTEY_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-groups-safety.csv')
+# These are the same "is related to" values as used to relate RSCI to the place model
+REL_RSCI_GROUP_REL_SAFETY_TYPE_ID = REL_RSCI_PLACE_REL_TYPE_ID
+REL_RSCI_GROUP_REL_INVERSE_SAFETY_TYPE_ID = REL_RSCI_PLACE_INVERSE_REL_TYPE_ID
+
+
+RSCI_SAFETY_GROUP_MAPPINGS = {
+    'model_id': RSCI_UUID,
+    'staging_table': 'rsci_group_safety',
+    'model_staging_schema': RSCI_MODEL_NAME,
+    'raw_pk_col': 'rsci_uuid',
+    'load_path': IMPORT_RSCI_GROUPS_SAFTEY_CSV,
+    'mappings': [
+        {
+            'raw_col': 'rsci_uuid',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'default_values': [
+                ('graphid', UUID, RSCI_UUID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+            ], 
+        },
+        {
+            'raw_col': 'fire_safety_value_uuid',
+            'targ_table': 'fire_safety_classification',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'fire_safety_classification_classification',
+            'data_type': UUID,
+            'make_tileid': True,
+            'default_values': [
+                ('nodegroupid', UUID, 'bda455bc-d376-11ef-a239-0275dc2ded29',),
+            ],
+            'related_resources': [
+                {
+                    'targ_field': 'fire_safety_classification_hold_for',
+                    'source_field_from_uuid': 'resourceinstanceid',
+                    'source_field_to_uuid': 'group_uuid',
+                    'rel_type_id': REL_RSCI_GROUP_REL_SAFETY_TYPE_ID,
+                    'inverse_rel_type_id': REL_RSCI_GROUP_REL_INVERSE_SAFETY_TYPE_ID,
+                    'rel_nodeid': 'bda5f8e0-d376-11ef-a239-0275dc2ded29', # fire saftey hold for nodeid
+                },
+            ]
+        },
+        {
+            'raw_col': 'health_safety_value_uuid',
+            'targ_table': 'health_safety_classification',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'health_safety_classification_classification',
+            'data_type': UUID,
+            'make_tileid': True,
+            'default_values': [
+                ('nodegroupid', UUID, 'bda25802-d376-11ef-a239-0275dc2ded29',),
+            ],
+            'related_resources': [
+                {
+                    'targ_field': 'health_safety_classification_hold_for',
+                    'source_field_from_uuid': 'resourceinstanceid',
+                    'source_field_to_uuid': 'group_uuid',
+                    'rel_type_id': REL_RSCI_GROUP_REL_SAFETY_TYPE_ID,
+                    'inverse_rel_type_id': REL_RSCI_GROUP_REL_INVERSE_SAFETY_TYPE_ID,
+                    'rel_nodeid': 'bda4e2d4-d376-11ef-a239-0275dc2ded29', # health saftey hold for nodeid
+                },
+            ]
+        },
+        {
+            'raw_col': 'other_safety_value_uuid',
+            'targ_table': 'general_safety_classification',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'general_safety_classification_classification',
+            'data_type': UUID,
+            'make_tileid': True,
+            'default_values': [
+                ('nodegroupid', UUID, 'bda4e2d4-d376-11ef-a239-0275dc2ded29',),
+            ],
+            'related_resources': [
+                {
+                    'targ_field': 'general_safety_classification_hold_for',
+                    'source_field_from_uuid': 'resourceinstanceid',
+                    'source_field_to_uuid': 'group_uuid',
+                    'rel_type_id': REL_RSCI_GROUP_REL_SAFETY_TYPE_ID,
+                    'inverse_rel_type_id': REL_RSCI_GROUP_REL_INVERSE_SAFETY_TYPE_ID,
+                    'rel_nodeid': 'bda5348c-d376-11ef-a239-0275dc2ded29', # general saftey hold for nodeid
+                },
+            ]
+        },
+        {
+            'raw_col': 'reactivity_safety_value_uuid',
+            'targ_table': 'general_safety_classification',
+            'stage_field_prefix': 'reactivity_safety_',
+            'value_transform': copy_value,
+            'targ_field': 'general_safety_classification_classification',
+            'data_type': UUID,
+            'make_tileid': True,
+            'default_values': [
+                ('nodegroupid', UUID, 'bda4e2d4-d376-11ef-a239-0275dc2ded29',),
+            ],
+            'related_resources': [
+                {
+                    'targ_field': 'general_safety_classification_hold_for',
+                    'source_field_from_uuid': 'resourceinstanceid',
+                    'source_field_to_uuid': 'group_uuid',
+                    'rel_type_id': REL_RSCI_GROUP_REL_SAFETY_TYPE_ID,
+                    'inverse_rel_type_id': REL_RSCI_GROUP_REL_INVERSE_SAFETY_TYPE_ID,
+                    'rel_nodeid': 'bda5348c-d376-11ef-a239-0275dc2ded29', # general saftey hold for nodeid
+                },
+            ]
+        },
+    ],
+}
+
+
+
+
+#---------------------------------#
+#- PERSON CONFIGS ----------------#
+#---------------------------------#
+PERSON_MODEL_UUID = 'e1d0ea1a-d770-11ef-8c40-0275dc2ded29'
+PERSON_MODEL_NAME = 'person'
+IMPORT_RAW_PERSON_CSV = os.path.join(DATA_DIR, 'gci-all-persons.csv')
+
+FULLNAME_TYPE_VALUE_UUID = '828a2e14-8976-4d99-96d0-aeb1bd4223cc'
+
+PERSON_NAME_TILE_DATA = {
+    "e1d1d63c-d770-11ef-8c40-0275dc2ded29": [FULLNAME_TYPE_VALUE_UUID,], # type
+    "e1d1d7ea-d770-11ef-8c40-0275dc2ded29": None, # source
+    "e1d1cc64-d770-11ef-8c40-0275dc2ded29": None, # _label
+    "e1d1a70c-d770-11ef-8c40-0275dc2ded29": None, # part
+    "e1d1cb88-d770-11ef-8c40-0275dc2ded29": [ENG_VALUE_UUID,], # language
+    "e1d1ddda-d770-11ef-8c40-0275dc2ded29": TILE_DATA_COPY_FLAG,
+}
+
+PERSON_MAPPING_CONFIGS = {
+    'model_id': PERSON_MODEL_UUID,
+    'staging_table': PERSON_MODEL_NAME,
+    'model_staging_schema': PERSON_MODEL_NAME,
+    'raw_pk_col': 'person_uuid',
+    'load_path': IMPORT_RAW_PERSON_CSV,
+    'mappings': [
+        {
+            'raw_col': 'person_uuid',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'default_values': [
+                ('graphid', UUID, PERSON_MODEL_UUID,),
+                ('graphpublicationid', UUID, '3fd6e10e-d8c6-11ef-9ef7-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+            ], 
+        },
+        {
+            'raw_col': 'person_name',
+            'targ_table': 'name',
+            'stage_field_prefix': 'person_name_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'name_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('name_type', ARRAY(UUID), [FULLNAME_TYPE_VALUE_UUID],),
+                ('name_language', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('nodegroupid', UUID, 'e1d0f244-d770-11ef-8c40-0275dc2ded29',),
+            ],
+            'tile_data': PERSON_NAME_TILE_DATA, 
+        },
+        
+    ],
+}
+
+
+
 
 
 
@@ -491,6 +678,8 @@ ALL_MAPPING_CONFIGS = [
     RSCI_PLACE_MAPPING_CONFIGS,
     RSCI_STATEMENTS_CONFIGS,
     GROUP_MAPPING_CONFIGS,
+    RSCI_SAFETY_GROUP_MAPPINGS,
+    PERSON_MAPPING_CONFIGS,
 ]
 
 
@@ -507,5 +696,8 @@ ARCHES_REL_VIEW_PREP_SQLS = [
 
     f"""
     SELECT __arches_create_resource_model_views('{GROUP_MODEL_UUID}');
+    """,
+    f"""
+    SELECT __arches_create_resource_model_views('{PERSON_MODEL_UUID}');
     """,
 ]

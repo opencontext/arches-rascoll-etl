@@ -1,2 +1,646 @@
 group_uuid,group_name
 19f9b6b2-02bf-4018-ae12-ed619d81571a,National Fire Protection Association (NFPA)
+d1f32bdd-2581-4532-957b-cef19ec0bd21,Ilford Imaging Switzerland GmbH
+59b0f28d-6d0b-4542-8979-bbeaca115abd,Hull
+27a4a8ab-b62c-4e38-835f-92f7f0b090c8,J.L Hamburger
+c8add100-e4a8-4be8-bd2c-ecd073194095,Alois Martan
+49715e42-8630-4b06-8d7a-53c6dd64c219,Bibbiena
+04241a7f-ad59-48f2-881d-e1f0f823e9f8,R. Fullam
+4ecf6a96-54f8-4790-8c55-4655ffdb7bd8,La Campagnie des Ocres
+78906f8e-e687-42f0-8fb6-b1972ba80b37,Avecia
+58b336ba-e18b-49ce-9c91-97284890ffbd,"Tong Ren Tang Pharmacy, Beijing"
+3605096f-bbc7-44b2-bdae-840a267cf497,"Polysciences, Inc."
+ac052912-48ba-42fe-8b9c-0c82ea8b93ce,Mrs. Gooch's Natural Foods
+8edec299-50bb-4d30-95ab-e6f7b4024179,Zimmerman
+8ed6c7c0-cf38-46cb-bde7-2f933f09bac2,LA State
+bfd05c32-ecbf-4937-ba5a-f105c6959a98,Sanford Corp.
+c041b240-601c-4217-8b78-7793c3c6b431,Sigma Chemical Company
+f7a4f651-8c76-40d6-b5b6-1f97063a786f,Brico
+9c9ce173-9566-4330-9324-82e8809de263,Ilford Limited
+49471e83-cf29-4177-9309-2b02c6ee219f,Nanda Wickramasinghe
+2203f6e2-2f6e-47e1-96d9-55fa82789c54,Panpastel
+21e78a1f-1c52-45f5-9f9a-7d6f0198c78d,Gamblin Artist Colors
+b3eb611a-2137-4fcb-9aaa-d02c065b8a35,Verfmolen 'De Kat'
+ab1a59ef-9485-48aa-8439-445dc66fafe9,"Permanent Pigments, Inc."
+05064833-5bdc-4738-b718-f65ab0697bef,Niagara
+dc6c4ca3-e06b-4f94-ab75-1711d8a636ed,JPGM Dec Arts Conservation
+97b4474e-4ddf-4f44-b458-079307ee5556,"Indio Products, Inc."
+dfd2a9b7-f253-45b3-80ed-9de78cf5e041,3M Italia S.P.A.
+7061755a-5f9a-40c3-b45b-4f3345f0ad74,Ellis & Everard
+dba322e7-8e19-4e55-8f90-433eb6dbc81d,"Wei T'o Associates, Inc."
+ecb0153d-c029-48bd-b3ed-ff5d5a255337,Flying Eagle Oil Colours M512
+ce1c13af-2adb-48c0-a436-6946a0365882,Fabbriche Riunite Metalli
+0a84c07d-138c-41e9-be15-b4b114891ae0,Harman Technology Limited
+0658a821-647e-45cb-9620-11fdc2030e9d,Charles Trentelman
+f253dd8e-827e-4ec4-9815-2d717129eec1,H. Schmincke & Company
+027d5987-a0d1-4fb3-9c8d-6fea9361ab68,Sue Gatenby
+e3a212ca-da38-40a4-b1cd-3bdaa08fa97b,Lukas
+8ad18b1d-a2db-44af-9170-e2c36651312d,CPC Int'l Inc. (successor to T. Kingsford & Son)
+33163cf5-54f8-408e-ac3d-db8d5a75ff85,Rohm & Haas
+38ba07e2-cb45-438a-8d96-4de7b2edcf48,David Davis Artist Materials & Services
+43aede8f-07ea-4ac2-921d-80787657c2ad,"Scientific Polymer Products, Inc."
+36685c75-d96b-4bad-a80c-390d2c28710a,Ripon Microslides Laboratory
+93c83ca6-64d2-43b4-b5cd-cca0e3695038,Binney & Smith
+09744f4c-bbf7-4303-86e7-9b4da3d48866,Billings & Stover
+2db20330-cfb5-4b32-b73b-b0ad850f555d,Acrilex Tintas Especiais
+47fb76db-72c3-470a-96a9-b1b8c9d9d095,Pelikan
+727fd676-16a0-428c-a452-595d07a8dc4b,Zecchi
+ba60eaf7-6c56-44fb-a7e8-8d16f3037459,Liquitex Artist Materials
+152730cd-ef56-42dc-8652-8d39d0959265,Testfabrics Inc.
+466a2eaa-a401-4cad-ac9c-596e16f361c1,Canadian Conservation Institute
+a5bda1ef-6e4c-44ca-9f6d-bf3f772df66e,"Roy Trop. Inst., Amsterdam"
+e07b692d-f538-49de-a9b5-5470f35fa767,C. Stavroudis
+08d7e749-8ef3-4652-8c5f-59b860e0cad5,"China Anhui Ink ""Xin Xian, Lao Hu Kaiwen"" Ink factory"
+a2ae4cac-a644-40f2-86c0-00d4b5064355,Rockwool Manufacturing Co.
+ffa0b557-817f-4edc-a498-70a7389cf8f6,Kodak Limited
+edb48f26-cafc-4fb4-9ed8-0ab6e6bb0f92,"Dept. store on Wangfujing St., Beijing"
+c68361b8-6f90-4a7e-b5ec-6e4e766fc824,"Farm in Dunhuang, China"
+20bd8696-b16f-444f-83ce-78d6d6e9d742,Eimer and Amend
+c4932a51-ecf2-4926-9f6d-5b34ce07b2a2,Tolvebra SA
+2b070add-0304-43c0-ac33-ac71382c97f1,The Italian Art Store
+9a90a2a1-b397-4dfb-9685-9453ef6ee699,Ninon
+b67ce9a4-55f0-4ee8-9c0b-f168b32bb8ea,K-Line
+58242f22-3756-41e4-b833-f818f590ae68,Polaroid Corporation
+a7cf9bbe-6a85-4f96-b956-657e35dac704,Forte Photochemical Co.
+66d84c63-1a46-4a0a-a2f3-ea6d772cdd45,Clariant
+6227829a-3fe7-4aa8-bc52-a92278548bce,Berk Ltd.
+1b90b5cc-5570-4eb0-bfc2-f0d87e826119,Phillips
+b6aa5240-d8c4-4bc7-a31c-d7b9b839ef71,M. Bishop
+4cdc9dc8-30be-4423-ac59-a92b6a797851,King Chong Hong
+d30f8a38-98f9-4a78-8ff5-3aecaa7cb58b,Canadian Kodak Co.
+bee82cf9-2824-46c3-8a4f-9700a0a6a988,Swift and Company
+af690254-9cfa-4039-8506-972549805fe9,Shelton Turkey Ranch
+8099abd7-a4e2-474d-9158-d717c79f9d8c,Archer Daniels Midland
+545fd4ef-1c78-494f-aa3a-b47ebf259003,Baker Chemical Company
+c478c273-ff9d-45a9-819c-8fae5fec8381,Rite Aid
+a1e29020-7aa4-46da-87bc-556367f423bc,Hero
+61e4f910-b8e3-41e1-bbf1-c7a768b86989,Imp. by Pacific Veg Oil Corp
+952d22b8-829f-458b-94d9-73bc9dc7036e,Eastman Kodak Co.
+ffc4dcae-3323-44b7-985e-31f920875010,Spilbeck
+1a1853f2-8f27-4d59-adc5-14b5874dbc56,Buehler Ltd.
+50321433-34bd-4eeb-993d-62bfaa228637,IPS Corporation
+0f6b3104-cec2-4f59-8171-6135b2cf1271,Buchner & Son
+c820b5af-0cd6-48c1-ae3d-685ae84ceab7,Paciosi
+a6073ff1-1ada-46e4-8c22-cd27eea1fab1,Istambul
+681e8a9c-3bcf-46c9-a7c1-07f4e232e436,Winsor and Newton
+1eea764f-b103-4097-877d-882d0e235ea4,J. Claire Dean
+762e4fc5-6474-420f-a108-85659825dcfe,Sav-On
+e3b1b57c-f118-457c-aab1-66da34be7c26,"Caribou Mine, Boulder, Co"
+8faf49f0-b89c-4dc5-a607-5c8129329a3c,Kodak Canada Inc.
+59542588-b28b-4655-8818-f20648b7ada4,"Wadsworth, Howland, and Co."
+81c87e99-cbb4-4324-8544-8c7ebb09ad75,Forte Photochemical Co. Ltd.
+878cd179-0cef-4049-98b4-89f0d26b2eb3,Cachet Fine Art Photographic Paper Co.
+d48e5140-ab71-4499-81f5-c9cffbbac9ca,Minox
+b0de53af-064b-418f-b1d3-9dcd891a2cf3,Grumbacher
+e9b1e400-91d9-4d50-b048-7824e58a7fbd,"National Gallery of Art (Washington, DC)"
+69444287-b353-4b19-bbb1-616604314fa7,Kodak Co.
+bbf837fd-3d4b-4fc6-aefe-d5b7a4ab4ae4,Farmers Market
+51331456-2547-4394-9489-fc26afe6adbf,"U.S. National Park Service, Colorado"
+c034b8ad-e12b-4035-aec1-9df4a1882fbb,"Laboratory Chemicals, Frank W. Joel / Bishop''s Stortford / Harts, England"
+eaad3ab4-0fec-4029-a4ed-80b515613ead,Alfa Aesar
+ebea3f4e-452b-4cf8-ad66-1107aea9dc3e,Utrecht Manufacturing Corp.
+26cfd2f8-39bc-43d5-a6d8-2140b9b6ce1b,Theodoros Daris & Co.
+2af39ddf-db58-4ae5-b9a0-abb390bf48da,Australian Museum (Materials Conservation)
+055c52b5-51c2-47b6-b456-bf1156a683be,GPS Agencies Ltd
+aa2d5d1a-fc4e-4bff-b8d6-b1e9b9261a21,GCI Gardens
+4e04d4a5-679d-433a-9617-6a9881d857bc,Schmincke / Kremer
+80881f25-ebf4-4be6-a79b-321583d1ca57,Cachet
+ab210f06-5d3d-4e21-a18d-a2e96bd93391,J. Komsky
+f0a43b47-26d3-4418-a88b-5391dad51b04,3M
+801772c9-50b9-4090-b2b3-63c84d75135c,Ashley's Art
+3b20f22f-e70a-4420-9588-bbe2a460c70d,Omega
+673a45e7-4ed4-4f0d-bde3-c71b079e3ca6,Sté des Produits Chimiques
+afe4be8a-622f-4fe9-bb85-9bf5c90dd8be,Picreator Renaissance Products
+d8916a37-dd7d-4daa-b69f-9a7d963f41b6,Ruth Norton
+e997bf13-5da2-401a-b5f1-61a3591556df,Schachinger
+778ffc15-2829-4d70-8577-8e3f600dd529,A. Portman; (Imported by: Seed and Feeder Co.)
+95a5d13a-21cd-4e30-99bb-063fe69b47ed,Bergger S.A.
+dbcb84f0-b25c-405f-938a-bc3fa3df07e0,H. Schweppe
+e00baddf-66e9-4e10-8152-1847e0541be9,A. Prouss
+d7c00363-5985-4a33-a90f-aaffb572a7de,Qld. Department of Forestry
+3de33c11-57d2-473c-8d59-db4c47383a4b,KKK
+8f38dff5-0b2c-46f2-86fd-53d5b3b8c254,Agfa Ansco
+3072a69d-515a-46d5-9724-8377f78622a9,R. Guilleminot
+48a3e068-78f8-44fa-beb7-7b279a65586f,Bodson & Nelis
+9e023415-7e55-4b0a-bdf4-59319e2ab686,Gama
+6f2fe665-a4b8-4f35-bc92-68bd548f4eb6,Orwo
+dd777075-3974-4161-84f3-c702c6ba0f0e,Yasutomo
+d1e341fb-ada1-438e-83bc-1fdffc6483fc,Pearl Art and Craft Supply
+c2fcd1ad-10f8-4e6f-9fdc-6b3fb06b0881,Beecham Products
+2dad99b7-ce97-4f2e-a43e-2f8c8cf1d7ef,"Shiva, Inc."
+ce2cbc2b-b3f7-4e5e-b60e-7634505dd0a6,Schilling
+92007380-65b3-430f-98a4-2bd8c62c9b50,Speedball Art
+926a3255-7480-49fc-b321-ed7545852399,"Golden Artist Colors, Inc."
+23a6ac28-72d6-4719-bf34-aed040789810,MACO Photo Products
+ea52aaa9-bb14-44e1-825b-38390c4d30e0,Edmund Scientific Corp.
+648cfcf3-a5a7-4836-9457-45211342aaac,Kemtec
+2058f71c-c1aa-4c68-96ce-135620e77c47,Kodak
+fd8eb938-e546-456c-8390-71847c9936b6,Luminos Imaging
+4617977d-576d-4da2-b1cf-8fb94db2d788,J. P. Stephenson Artists' Colourman
+384dba81-4f78-4ef0-aca1-db45d238edd8,Dupont
+8eed6c86-74ac-4ef7-812a-3b5e81724968,Societa Commissionaria di Esportazione
+db30da0b-864c-4f46-b3e7-202c9cdbcd25,Meer Corp.
+7626137d-41d8-460d-b194-dce9f63f5f95,Hercules Powder Co. Inc.
+bda456ae-e182-4928-94ca-9171b9682975,Spencer Kellogg Division of Textron Inc.
+0b098e2a-dfc2-4b9c-a8eb-a2eb115ed708,"Hain Pure Food Company, Inc."
+71efb5c9-e82c-4cb9-9156-90b70b1e3ce0,Via delle Spado
+220ada59-5151-4857-9b65-6579a9d35d7c,"BioSan, New Dimensions Dist."
+068b4a70-dd67-4606-951d-7ac4a77aff6f,JPGM Painting Conservation
+300ba26b-dd23-4c80-acf2-6d810b6becb3,Darko
+38cd69d7-4259-4d36-ad8b-bd956717c3c7,Paintings Conservation
+ddaea4cc-b297-49dd-80db-5ef68122cb76,Alchemist
+2f9b4605-595f-48b5-9f0d-80c78534be93,Zora's Standard Brand Paint Store
+afce3701-44c8-4d04-ae26-4966027b38d8,Larry Dawson
+7bf6b3ce-9a09-4ca7-8b93-0740134a150e,Ilford Imaging Switzerland
+3414254d-24b9-4b51-8e88-40e2636b57ad,Funakubo Enterprises
+0f26453f-c289-48bd-a4f6-9f04a5fb50c1,Designers Dry Colors
+ed098dc9-2a9e-4440-833e-c1f66391fda7,Walkden's
+4d56c36d-b5fe-448d-8d33-ffdb5910da3f,GmbH & Company
+dddec90d-e8ed-44c4-9ac4-475e84c2d7e2,Ilford SA
+8e006931-9631-443e-bec3-a9cbd60fdf5d,Matsuda Super Artists' Oil Colours
+73de4fe7-23f9-42eb-a9d6-2ec020cf1089,Sunland Orchard
+012972d0-55d8-4076-88c1-024f26803497,Eytzinger
+e11414ee-5b35-4879-8093-ddb9fc8fe13e,ground by Hamilton
+47520950-a8ec-4a3b-9e62-c55d50bfd821,F.lli Maimeri & Company
+b85edb97-60ab-45c9-bc71-967b749037fa,Rotary Photographic Co.
+14fb3fd3-6242-427d-9d43-74cb43a4b416,Sam Francis Foundation
+8475de2b-5079-4cd9-b65f-387e6abdd68c,E. Nelson
+152421be-aea3-4a24-be2b-dbdc1a963692,"Cal State Poly Univ, Pomona"
+765cbbd8-66d3-41e5-9479-120fef0c97d9,Rowney
+e9af2588-f5e4-44c3-92c9-ade6f4f6d387,"from Gilsonite, USA"
+3ccf3073-b032-4d02-b2f0-f3d5779498fc,Gamblin Aritists Colors Co.
+1ad34057-6f87-4c22-97a8-208e2fe26d5e,FRITZCHE BROS. INC
+fbf7a1fb-b1f3-4f7b-901d-c3414c757c7c,Rowney & Company
+5eeea7e1-8b4b-4e47-8059-79355bac5bbc,Bayer
+d1b1a39b-dffb-4d36-9f8c-146791efba80,Martin F. Weber Co.
+69d35211-99e3-43b6-9487-910ae392aa3f,Standard Brands Paint Store
+ebd737b9-e4a2-4b41-8227-9d05b3aa82f1,F. Piqué
+5148dd12-5a50-40db-a43a-c2df7acce479,Imported by Samrak Chemical Div.
+100fc7e9-d23d-4a86-b19c-a294ddec8041,Pictor
+a2c72534-e601-4e7e-b954-67ef6e6f35ed,Arista
+3d71347a-e41e-48c7-a4e2-af3ffa8ff08c,Excelsior Photographic
+0ad4f254-e151-4558-8f80-9cec3b34b4fd,USA Government Printing Office
+c32f234d-2dc3-428e-89e8-909a5a01f72a,"Fuji Photo Film, Inc."
+5e6c35f4-7a9e-4e08-b29d-a41dd57dc428,Forte
+1939af9f-6805-44ad-bb9f-76261b705c25,"C. Roberson & Company, Ltd."
+435ec4fe-93f8-4725-8cf1-dc1d10f59ab5,ROUGIE
+296f2fdd-90ed-4e6f-bba1-2460b0c63865,Ploton
+27884717-94cb-41d1-beec-902de354b431,Los Angeles County Museum of Art
+fd1fe6f7-78a7-499d-941b-029001e76f32,Honey Lady
+3d7ed6b7-f672-476c-8c3f-d50e129feb2a,GAMA s.p. C. Budejovice
+dc4b2e90-2a86-4cd0-9bc5-f51a3a00f590,Syntezia
+a981c4ec-07fb-4d9a-9e5c-660dc032b08d,Madderton
+79fc3b38-f6d9-4c1e-8e73-231decb55572,Kindt-Collins Company
+df0706ae-5713-464e-ba0a-22aa5e223469,McCrone Accessories & Components
+08ef3604-caab-4666-a9b0-372f3a25c747,"West Hills, CA"
+f0c07e28-5770-4d85-8b18-93a44eadbd18,"Asahi Oil Colours Co., Ltd."
+5c1ae4e8-ea69-43f3-80de-49663b9142d5,Advance Solvents & Chemical Corp.
+d7ee10aa-eaf0-45b4-add6-0d09a1835d65,Kalle
+93c669d9-97da-4e15-ae66-59bc696183f5,Charles Schoettlin
+dce6810d-856d-429c-beed-2ff7d5ffb728,BASF
+a2f3f277-b9e2-43dd-9534-09b02ff8d5bd,Vendorama
+a223a9c2-c512-4941-87ce-118988260d47,Dick Blick (J. Noble)
+1fcee023-fb51-49cf-a406-c33c3bfecb16,Utrecht Artists' Materials
+0883c589-4b5d-449e-9a7a-3dcce9a0dc8c,Overtone Labs for Durachem
+383bee39-caf8-4039-9bc2-ee399da7aa07,Orchard
+edd7d271-d578-48cc-ada7-bd300cfe4a58,C and P Co
+13329c92-77d7-436d-b077-3fc71882bdd9,Roemberpou
+71b7d836-20ae-4651-93e1-960998f5a34c,Delta Tech. Coatings (for Shiva)
+5b05a4ae-7853-4dc7-a971-31a5787d514e,American Hoechst Corp.
+d236bb86-c55b-4f43-9053-2dbf57d9ea16,Sun
+a3c3758c-0dc4-45e3-b618-b91c5de1d543,Holbein Artist Materials Co.
+54b4239b-634b-4322-a658-dcb48283df4b,The Hygenic Corporation
+e1043aa1-d0d3-410f-9c36-16b1058490bd,Ansco
+ed9626b9-aea1-48ba-bd12-dd92ec026a7f,Union Rubber Inc.
+628564d8-fbc0-4cd9-a4e3-850c98a321ac,Siphon
+4270de52-91eb-47d3-a6df-d8cad24ea317,LA County Arboretum
+248a0db3-239d-41c2-9613-389c655e4591,Efke
+442874bc-36b4-4f5c-86da-9852526cd5ad,Norganic
+9d7a247d-a966-4816-ae53-1b92a612ca6c,Hatfield's Color Shop Inc.
+199f6769-7276-4a56-9e21-c1f0dbcd25fd,"Matheson, Coleman & Bell"
+83afd23e-24b9-4459-b403-48c013abd3ae,Behlen
+5b8a55df-6be8-4964-93da-c9b06e59557a,Paterson Group International
+bc725ca7-741c-4f9c-a1a9-9801b47e4896,"U.S. Customs Lab, Long Beach"
+e33d6c14-65be-4bf2-96bb-a7df726da2a7,Bocour Artist Colors
+18806f22-2c70-462f-a54e-213f79e02030,Sherwin Williams Chemicals
+95617c56-e721-45e1-863c-1a366001deea,C. Roberson and Co.
+2c6921ab-2f89-49ba-bbe2-8a98a70c4a66,Blue Record Regularly
+1d11326a-6e02-4959-a802-c1692687b85b,P. Oliveira
+cef2401f-37d5-4a3d-b0be-bd6ef0f29dfe,Martz Paper Company
+4be73588-e7bc-43c1-970d-04595b715f1d,"Leon Frenkel, Ltd."
+b74fb0e9-55d5-438c-a4c2-d9e39129ab4a,Konica Corporation
+9b5fad58-742c-422c-8133-90aa8d2c5bd3,Landscape
+2fc08f70-7ca9-47cc-99cf-e38e983cfee8,Dassonville Co.
+cb1c1678-fa19-422b-a694-3f82cde9f80d,"Royal Crown Enterprises, Inc."
+845a43e0-fe1c-4ac3-a61d-43274faa3a46,Fernand suarez
+aa1007a8-536c-4ead-9433-b2cca55fbc95,"Osco Drug, Inc."
+ea0332b2-2bf0-479e-9c1f-bc58aff59888,"Artist's Choice; Riley Bower, Inc."
+d4e52062-b845-4139-89e6-76df19b21065,August Ruhl
+e6883de9-22cf-4a0d-9b6d-4a4384058afc,Sterling
+388cfe08-5482-4dcd-af6c-baf6ef730ac1,"McCormick & Company, Inc."
+015a4dec-274a-443f-823f-ff97c4055a4b,A.B.C.
+4a3ca37a-fab9-4e48-9638-79a43f6f38d7,"ICI Americas, Inc. (Uniqema)"
+88ce94e6-e228-433a-a6b8-5a4dd2457a48,Dakota Matrix Minerals
+a8da30de-47f8-4087-93e9-47803f4f40d1,Engelhard
+06d1ca85-694d-47bf-b63b-fd3f25e3edd6,"Bent Eshol, Royal Danish Academy of Fine Arts"
+2a968b13-d27a-401d-861f-a72e403cdd7d,J. Noble
+83be9fd3-c2c1-4470-b6ba-f5aad604adb9,"Permutit Company, New York"
+c497361a-60d7-4c0e-8dfa-f36f02d47409,Felsinea Colori
+382e0a9d-2c30-4c82-9ebd-a039afacc4ce,Heng Produce
+0a945dc1-2021-438a-8687-27ae7c9bf584,"New Dimensions Dist, AZ"
+d852ef52-1c57-4ccd-aea0-ab2873ccd41f,Le Franc & Bourgeois
+e3bc0e8e-bd36-4f0c-b61a-636ced50528e,BeeCee Honey Co.
+d0cb8e19-c5a5-4e29-8248-9e9d2272f741,Johannes & Co. (Private) Ltd.
+ad4983c6-4c20-435f-8b4e-40bcfb25225a,Jethabhai Hirji & Company
+aa2e4de7-0a6d-4bd8-8a56-70ab38176408,Ferrania Imaging Technologies
+6de1d347-911b-422d-a2a0-c01811d7d85f,Wacofin / Heinrich Wagner
+77fa5f48-7278-4b26-8c0a-d2969d9a72e8,Lascaux
+c79c58aa-c45d-4426-882a-f383a6ece87b,RAINPEG
+e58473b5-4209-4c4b-87d3-64bc63a5fbf6,"Salis International, Inc."
+461c3041-9681-415b-b35c-524247a69b77,Agfa Photo
+ba6ddc23-dd24-4162-a5a2-32afda5654f0,World Timbers
+7de2cc98-6682-43ae-b594-62dbbba684d5,S (Chinese)
+84c8f26e-1ee7-435a-afef-3482ee417735,"Face to Face Gallery, Beijing"
+388e2585-ae07-48c6-af78-a21ff75cd02d,P A Hodges
+896845ac-5b4d-490d-97c0-21ad31343821,Cappelle
+e9954005-8413-4566-a71d-a5df9f088133,Standard Brands
+5e8c676d-83de-4f5d-a1ad-196e1ce61afa,Maimeri
+e14a5857-1f31-4299-8348-be1e02c6238a,Loriva
+8ab97d72-b278-4318-9889-ad941a7ec7fc,Pallares Hermanos S.A.; (Imported by Schroeder Bros of CA)
+9de01eed-4af8-4dce-947b-4b53152d35f8,Americana Goods returned
+6c3d2961-3e41-4e4f-816e-e512328894bb,Usine Mathieu
+8204d7db-b446-4d93-b3e3-fef49040d473,Ilford
+86eee1be-4521-4177-a229-46d6ea777953,Walgreen Co.
+736e9de1-93bb-4daf-badc-3655a798dac5,Kono
+54ba81d2-c7ee-44b8-9e1c-d72b1559c950,Aldrich Chemical Company
+76be1918-1445-4199-8567-b4c5f9b6de48,Asahi
+9e140a87-a248-4ca0-a855-865934d28195,HY Pigments
+7e6a8f13-ce02-4b38-99a2-6b6867af8893,Glyco Products Company
+bbe752bc-9482-482f-adc2-715c4a45ea18,Kunstler
+09a6200a-3ef0-4aa2-8f96-ce39414cb7c2,Standard Brand Paints
+ec35bd83-09b2-4297-9a11-5c2b9e884c17,Tropical Apiary
+b1797ae7-5117-4ca3-b70b-26bc05b9af48,Robert Komarek
+17f03d0d-ff7f-4020-aca7-446b962ce038,Carbide & Carbon Chemical Corp.
+3bf1fe24-2b6f-4ace-b05a-5ee7afe386a6,Siphon Art
+b0068339-2123-442e-b5cd-572889fb1db3,"Ceratonia, S.A.; (Imported by Dycol Chemicals Inc.)"
+709c7ed2-2ff8-46c1-bdec-96c14b791cf5,Merrimac Chemical Company
+5aa9e0e7-4dc8-41fa-887c-4e5f54a509ac,Lucky
+d7951f51-f2af-4d63-a188-89f20451945a,Castelfranco
+5e879bbd-86b4-49b9-ab50-3331e71237b6,Zora's
+d6729d41-6137-4922-99bc-d2432dea1d49,Hays
+539b22b8-b11c-40fd-ae97-627ab35dcf3c,Lefranc
+3a67153f-69b5-495d-9db5-fa940cf73e4f,L. Souza
+51e306b2-8734-400c-8f9e-3c5e39eaa05f,Albion
+611ff9c0-41b2-4e0f-b3a1-61b9ec8ea2f0,E. I. du Pont de Nemours & Co.
+904d8112-dd71-4064-ba1c-92fa5c4305f4,Florasil Produtos Vegetais Farmaceuticos Ltda.
+351caf48-1488-4b4e-b1e8-7ab3d7f910d2,"Calavo Foods, Inc"
+e93e7b00-3eef-41ab-b03a-d315f561ea2b,Sanyo
+87c19fe6-1535-44e7-85e3-3dc2f4986902,Brosse-Blaireau
+d22344a8-f09a-4023-bc7e-89b1fdb3884f,"Harrington Brothers, Ltd."
+8029dc6c-b145-4d7c-aabd-f69a7b664ee5,Ilford Anitec SA
+a9239a04-d8d7-462b-abca-2f3eaf286cc2,Cyber Graphics Corp. (Oriental)
+67c06ef7-1ced-440d-bcf3-1127a52ec294,"Michel Garcia (Lauris, France)"
+927e07fd-fc9e-4a2e-8202-1f19b4ba0473,PV Pharmacy
+0c00fd99-e8bd-438a-b766-07e65a2aaa81,American Aristotype Co.
+870f90b9-8166-460b-80aa-39188d32b08e,"Col. Prod. Adv. Bureau, Imp. Inst."
+768f4b91-7fbd-447a-8f93-8abc720394d7,Gleck & Company
+95328ff4-98df-487b-878d-761ee4bcc840,Whiteworth
+26e209e6-cc68-4a3b-9664-b61992ed1342,City Chemical Corporation
+dc4b66d7-52bd-4c24-a8f4-2914ff0afc96,Sureguard
+8f75f8de-d618-478b-b87b-432957abc083,Fisher
+72e036b9-61c5-4015-a2f9-40c52004951b,Acrilex Tintas Especiais S/A
+51d3c742-7277-4153-928b-bd510395c7fe,B&H Photo Video
+8e6f369c-9a69-4ec1-a748-2c2a59aa5a01,Constantino Reyes Valerio
+1dc9661b-8b00-48d5-a8ee-914c15a1bffc,Magruder
+a5422e79-0ac8-4f2c-91da-691c047565b9,J. T. Baker Inc.
+c511d566-a621-44d1-ae3b-43268d553dc6,Clapham's Beeswax Products Ltd
+05578d65-e7f7-4f1b-95dd-e18088759a57,Tate Britain
+aa3eb107-42ca-46ab-9707-604f8c106ba1,Samuel Cabot Incorporated
+0146fbc7-51a8-495b-8805-afd66d0ad6e3,Dilo
+02e099d9-9b08-4be2-b61b-7d7b3ecee54a,CARAN D'ACHE NEOCOLOR II
+1f08d2d7-0183-43c4-9de3-0364fb947676,S.B. Penick & Company
+a6a05fe7-00c3-45a7-9efc-1fa8ffcde586,Duroxan
+10ba0b05-6909-4676-9903-4dfade114bbb,Pfennigs
+7b523ad0-5453-4c79-a70e-aaca0dd52a94,Spectrum Oil Colours
+e6a6493b-6e52-4393-8948-1adaaab601fa,Kremer-Pigmente
+71e2916d-2f9c-47a1-a4fa-7c00f297fdb6,Maimeri & Company
+b663e320-3c30-42f4-ad57-8406822d1bda,Angus Chemical Company (Dow)
+a5e7d799-117b-4476-9635-b89cfb161975,David John Lee
+3736740b-73ff-40eb-832d-d30c1943216b,Lesley Bone
+eb22a31a-f01f-47bd-b9ee-6e3abbd12acc,Ashland Specialty Chemical Co.
+eaf4e7a9-4e4e-43a8-8b69-51bf6ec947b3,Arakawa Chemical
+c9aed6b0-4e94-4b2e-9062-eb9c30e6c45c,N.J. Zinc Company
+d7a77a65-95a4-4481-b165-e994b53590c8,Daler Rowney
+0ff76fae-cba9-41e4-b9f1-8fad8f08b691,Standard Brands Paint Company
+8360d167-5ec5-425a-add2-4b9fd42a799a,Foma
+a85373f9-70ad-41ae-a434-34e8e4940dcd,GAF Corp.
+99887aa9-ce00-45a3-9c0d-943e1c2aa827,Z. Pinney
+803f2239-5ffe-4a7d-a69e-d74141867924,Fieux
+ed5b0bae-4923-41f9-bee3-590ab6e644b4,Newman
+399d60c5-1b95-42e9-a0cb-2dda19460cf3,E. Ordonez
+5db7f0df-1484-41f9-a40e-3ff040a3a56a,Mr. Albert
+7a11fd46-ca95-4c2a-ac6d-b5a3b5858fcb,"Aldrich Chemical Company, Inc."
+3c76b8dc-394f-4f56-825f-78d7943febd6,CIBA - GEIGY Corporation
+41545f14-10e8-445e-8e57-8ca01e349601,"Conservation Materials, Ltd."
+1d28c160-70ce-47e2-b39f-b9646809112e,H. Marcel Guest Ltd.
+010b080a-41a5-4af0-850c-a3b44444d237,T.J. Ronan Co.
+39fe3aca-f8eb-453f-8296-c96470abba12,Dow Chemical Company
+c5d17e6f-fd30-426a-9374-6250ca3eb5d9,M. H. Horowitz
+bb5c8c26-30f5-4c4d-9eb0-37dc1cc81f7f,Max Grumbacher
+dad9c8c3-5ee5-487e-b9ec-58019acb380f,Canadian Grain Commission
+85080b00-046f-4721-b076-42d7e0c72c55,Hans O. Mahn & Co.
+e4c43066-eb31-421d-ac33-ca9ca9e07315,Chen Fu Photo Material
+72f5ae2d-df79-405b-901d-53fddeb738f0,"Ilford Limited, London"
+abf562ec-aace-4c87-960d-a53724ea7ff3,G.H. Links Company
+eb40ddb2-c1e1-4bf5-bd49-f189b1cacbb4,J. Paul Getty Museum (JPGM)
+ca8a5832-03e2-4e6e-9468-0bd284c3b20d,Various
+25741c6e-5fb8-4dc0-8fef-7d14eec5f380,Fotochema
+3f2632e8-adb6-45ee-ae32-d378da5b9320,J. Raphael
+5d329bdb-508f-4bfa-ad03-84798600497d,Conservation Support Systems
+618af69c-d782-42d5-a178-cb30e32bd06b,"Dorsett & Jackson, Inc."
+5b9e3ef4-558d-4d2d-95a8-23d80268421b,Andrei Andreev
+9ae773c1-e006-4b57-be82-454f6f8835bc,J. P. Stephenson
+7b5144ec-e110-480d-8b6c-42505fd835f8,Fuji Photo Film Co.
+bfc56433-1710-4dc1-9ea0-bd5a34966929,Fotospeed
+617c9287-e550-43e8-be69-ba22933f9198,Ram Chemicals
+f4211d92-b0fb-42f0-abef-bf58e92de956,Air Products and Chemicals
+d19561f8-73bb-4237-8233-72d8128e3522,Goldschmidt Chemical Corp.
+32aa6ae2-89e2-456b-b72f-f421dd3cb52b,Pianamiele
+254340cd-da97-45ce-8d91-4f4bf3e04964,Lansco
+e196fbdf-74e5-4791-b8d6-901236a6aab0,L.A. Art Supply
+a3e37be8-d9f7-46f9-a0ed-5dcaf28cb0c5,Natural Food Store
+f949f73f-0d32-4161-a777-85bf2c5a7e52,Porter Chemical Co.
+cf8e4ebd-b64b-4143-a7b4-41d1fe5cf235,H. Kuhn
+c391037b-2735-40fd-95ee-a10cfcc3b244,Tizian Color Company
+2106478b-cdf7-4218-990f-a0362def4852,Gambier Parry
+082ec021-a215-4f30-ab19-328430960825,Dainippon
+4d588d1d-82d3-4762-b660-c411c2f77865,"Lechertier Barbe, Ltd."
+25c8281d-31b6-4dde-9a07-399a39c21440,Gem-O'-Lite Plastics Corp.
+c1201d6b-efe6-429f-a081-678b598a322e,Ashé Artists Materials
+8ed4632e-2fb2-4ae6-8601-49af97c0c089,R&F Handmade Paints
+c9e33d7e-24ea-4f73-9510-eab44b5365ab,S.E. Rykoff & Company
+ed370497-694e-41f6-bc05-7ad88cccd319,Prolene by pro arte
+774d2f73-7266-4c83-842e-cfbcd26c7226,H. Lanke
+f11bb87a-b8c6-40a4-b528-cba161eada9c,Dominion (Canada)
+32bd8635-2328-4f70-9605-49ecab67fe3e,Royal Talens
+bdc5b5af-0d22-4ff1-9b8a-3f4b095d1805,Baxters
+789809b6-1e90-4d33-909e-fcbd122b4789,MaDaNa Manufacturing
+f6f99709-059a-439e-b2fe-de6f86de8548,Reichard-Coulston
+bfee67e5-0a2e-43f3-9fd5-79c61ea2007f,Sudan Import & Export Co.
+9ea91f9d-a6f8-4956-9682-6fe8e118aa96,Paterson Photographic Ltd.
+a812e9c5-cdc5-4ee3-9ceb-c5ca8c194c3f,Unicolor
+2c4ea4a0-48aa-44fd-836e-cc6d174290c0,A.F. Suter & Co.
+75f6c8e0-22ab-44fe-89f2-1b0ab0d6366d,Easy Leaf Co.
+0b1386d1-2b8a-4805-8012-656b4fcdfb9d,Max Grumbacher / Sanford
+5f9ef8fc-bf41-4d2e-8678-64481c84beaf,Spencer Kellog
+2f62492f-39bd-4780-bfb3-5462db7c38da,Adriano Ramos
+d497a642-def4-4194-a5be-5e9c5b9425f6,"Hadassa Export Company, Ltd.; (Imported by: Hathaway Allied Products)"
+04c0b05d-7b40-4c99-9726-4c3b5cdd4e66,"Museum of Modern Art, New York"
+075b72c4-b335-4f8b-a07c-b2a179a4a53e,Seattle Film Works
+6edd427d-4cf5-4481-9ffb-851786790482,Oriental Photo Ind. Co.
+e7f14725-b726-401f-8991-3ef8691864ba,Ecolse
+d7b8cf53-30ce-4695-abd4-f9cc3d4a42f7,Hartman Leather Ltd
+a8236387-3cc5-4948-a579-d1dea4339fec,Weber & Co.
+2077d7c0-77ac-47a7-aae9-afc47093d980,Moraes S/A
+9757ad1c-b68d-4b52-8ac2-b0ab81337ded,Sansui
+3057aac1-5627-49fd-b9f0-02b2133819a0,Binney & Smith Co.
+343dc5be-fe8d-4780-a0a6-7c299ff83f22,Enkaustikos
+ac77fa82-bab0-4878-8f30-6f6d293a8200,Da Vinci
+2ea8413a-0593-4028-b077-c5da3568fb86,Harvard Art Museums
+dfeb4d77-4495-442d-a523-c617f5a53be7,Devoe
+3c2c8a7c-6a1e-4823-b26e-87399f86213d,University of Pittsburgh
+6f799247-9660-473c-9d54-ad89df695ded,"George Rowney & Co., Ltd"
+4e23bd7c-9948-45f5-9938-ca9e5a72752b,Belkis Minerals
+0d18b67d-9a33-4a9d-98ac-d40b096f9df1,Dianippon
+190acd39-bed6-44a5-973d-998fa3ee0481,ISP Technologies
+ff8e9716-0779-4f09-8204-f3cd3b27ce13,Wessen Co.
+060a342d-a489-466d-8bfc-84f53263f0bc,"Howe & French, Inc."
+f4d423d3-eb08-4152-bc4f-261d135e7456,Peabody Museum of Archaeology & Ehtnology
+9392634f-e956-4776-b4a8-a924557a05f8,Getty Conservation Institute (GCI)
+d228e27a-d93b-43b3-9803-c38a39243ace,Robert Gamblin
+d28d3e76-3b7e-4599-834a-14f8bc893116,Vateria Copalifers
+dd5f3a43-1983-4291-b983-4b8b237664bf,Dominion
+0c4992f7-296b-4f6e-8bff-f31de44daf92,Agfa Gevaert
+e15c0bcd-f3ef-4bc8-b950-58556987ae4e,Robertson
+4a7e98c7-c23c-442f-a76e-bb0ca07dabbd,AQUA-TEC / BOCOUR (U.S.)
+619b0aa4-82d7-4dd7-bcb8-dfd72d2c83f9,Wight & Arn
+3185721b-1583-495a-a9cb-b5d974fa4f59,Standard Brands Paints
+2d01f105-e424-4617-b43e-623dd697a99c,Block X
+afd3daf3-e2e2-4278-b289-2414fd6a936e,O.G. Innes Corporation
+84ef8eef-af84-4e47-88f7-fe11d1ac1c84,J D Penberthy
+b9b7655b-0f3d-468a-86f2-03aed06fae7b,Borden Inc.
+597e4ec5-93a8-4628-963d-1a17b67d1dbd,Oriental Photo Co.
+384283e5-d319-4582-8f39-8dee1aca7b43,Creative Products Corporation
+966dd409-85b2-4175-9898-94ae218b74a8,Amsterdam Art
+493b7718-7786-4dc6-8e77-6af31a798082,Russells
+d464462f-9777-4003-9f61-44ed1ff2c36c,Union Carbide Corporation
+9bc5ee6a-ec75-42f3-9a97-314458656280,Anstead
+f6ea4411-5900-415b-9709-3bf83c8c9fa5,"Fang-Huo Pharmacy, Monterey Park, CA"
+63a6759b-b11c-43ed-95b3-be606602f5a3,Heubach
+62785c27-85dc-4268-808d-aaca710ed8a2,Marthe Keller
+3159457d-3516-4ec0-a24c-1a9e77dde563,Foma Bohemia
+aca9cb5c-e708-44d5-8328-a2b7753d648a,M. Derrick
+9e851491-9e30-40f7-ab60-6f5409e258df,Fesandie and Sperrie Inc.
+0c1e2f68-db4d-4e12-8462-3edc689934b4,Cornell University
+014d55b3-87b5-473c-bfe3-833d6b5cb619,Museum Services Corp.
+4ee5888f-5e6a-4f4f-baef-7a1e5f3d32a3,Talas
+4e587e36-7e2a-4928-b127-779117093924,Sabáo Aristolino
+5b9eb5c9-efcb-4618-918e-7965fa829b2e,"Ladco Laboratories, Inc."
+16fb00b9-143c-49c6-aee7-7ab4074ea3b0,Old Holland
+28bbf17d-2a1a-4d16-bda6-a8fa4fc7f43d,S.A.M. Monowar Jahan
+ca6a4e2f-f6e7-4ea6-be46-c7caa2b1862f,"Tong Ren Tang, Beijing"
+54fc44a8-f620-4702-a35d-59940f3d844e,Mino
+4d884ca1-983e-4c62-ab4e-24e31a75f374,Dick Blick Art Materials
+710a2f4c-ba89-4b10-a86b-7207813c2ab5,Hatfield
+3ed9824b-a48d-4e82-8bda-c4423d772598,Binney & Smith (Liquitex)
+d74f350e-0e92-4dde-804c-2c743e689434,Toyo Ink
+10561300-fe6a-44a0-9229-1f4e81360ab4,possibly Kremer
+b285e0b9-6104-441c-bd9a-da6dc625bce8,Blacksun
+b9f4dd2b-ca6e-45c6-85b9-45fcd7e5dd25,Kent Chemicals Ltd.
+618477e1-5d72-4337-9550-8f94e3b32119,J. Kucera
+4bf92126-dd45-4d12-8948-44b6e0fe5fe6,Knox Gelatine Inc.
+21fc6f6f-8010-464d-b010-ed01a423e1f9,SueBee
+57129dc1-052a-412a-98a1-cdf3781baf93,"B&H Photo-Video-Pro Audio, Inc."
+975f159c-ef3d-4ea4-aba2-4056bfe97dbd,Daniel Smith Artist Materials
+ace03008-6401-486a-a4bd-44e05555d29e,White Nights
+85461569-a28e-4d53-a1f3-67a269ad80e5,Hunt
+eff08e0f-0aa7-4d58-8a15-a5050fee8440,Twiggs Co.
+c18d094e-c0d5-4076-860b-370b00e98dbd,Leeben Color
+aed65c30-227d-4563-9a93-4ddf0cb648e4,Waterproof Paint & Varnish Co.
+6289eafd-15d6-4e24-9c69-e42c00fbc440,Luminos Photo Corp.
+8c6b1881-1252-4735-adfe-b36bb7de40d5,Dalco
+84e12210-f167-4f38-8d5c-c53f6d39e9f9,Jojoba Obispo
+7fac1f6c-9b00-416f-a812-50619002c0de,Imp. Kwan Lee Co.
+2c4e5b4b-f469-479a-ae95-9cd0df9d6778,Tokyo National Research Institute of Cultural Properties
+6ffc7f28-e248-46cc-9faf-c5e6f671d74d,Superior Honey Company
+73cc2962-847f-40ae-8fcb-cd972864b960,Kodak Industrie
+d45e719b-50bc-4c4f-aae2-bc3f54f21fbb,Vons
+046ad813-633a-4fd4-be3e-80f706c486e1,High School of Central Art Institute
+70dadd1a-2267-442d-a7b4-6e6e805e0a46,Ilford Imaging UK
+59472cc9-f37b-4f72-9f46-08ec79c1ac24,Alois K. Diethelm
+c8ef9b0d-f0d7-4cb1-b92c-a7a29f5e3d29,R. F. Smith
+b62d23ea-307c-425d-9e4f-a6ae9a808a22,BF Goodrich Chemical Company
+f965b7c3-c018-4d49-b382-f9ae34238e63,Santa Ynez Lavender
+453d61d9-adf8-43e2-b0d7-8a3b592ea2f1,Great Lakes Artist Materials Corporation
+3f76f759-4aec-4de0-83ec-7ad4ffe115d4,Dexter Chemical
+b3380875-4b22-4c47-b3d3-adebd9f3e307,"Lipo Chemicals, Inc."
+a0899756-885b-421c-8a9f-670b360bfe1d,R.P. Cargille Laboratories
+0553fab7-29f4-4a8e-becb-be59a68fab7c,Midwest
+2cf040ce-2bc2-4cfa-9b62-b4083fa39066,Jan Wouters
+c8f84076-ffd3-40ea-8cd5-433b966116a8,J. Klipstein & Co.
+7853aeb8-26ec-4234-be6c-677bd4be59d1,Mitsubishi Imaging Inc.
+f816370e-35af-4b36-8be3-c5b6eafaa8d5,Agfa
+fca68a62-d48e-41bf-8831-6fb454680128,Nujol
+70a0f03c-8a6d-4140-8201-1fe7531da300,"SPI Supplies
+(Div. of Structure Probe Inc.)"
+a0630c97-98db-40d2-9769-2ecdf8861aa4,Rembrandt (Talens)
+4ffe512f-a499-45ab-bb1f-d8c948490e43,Dr. W.P. Bauer
+a706c312-9a36-45ad-9894-e2aa8da8cea5,Fezandie & Sperrle
+951e9b01-649e-43d5-8ce5-a4febdc48988,ICI Americas
+4e3a228b-5b00-4b8d-8c18-3a838422833f,ICI
+556cb554-c6f2-421c-a8a7-352d0274b181,Irish Dairy Board
+ea32351f-c748-4b2b-b612-c274316276bc,"Watts, Ltd."
+a7bee2d9-896e-4b15-a1a2-cbf749cc7c0f,Liquitex
+81c44f8a-0781-400c-bcd0-cc83c89ff8ad,Bibbienna
+2c63c916-9cc2-47bb-82b7-087e30565ca0,Trimount
+4fea3355-5e0a-471b-8f0a-aaaa3a6c8c7c,Fezandie
+b1f7650a-4c52-4e95-bbaf-1062fea6bc8c,BYK Chemie
+fc3895fc-a751-4847-9ff7-4601a73ba0c9,Caelo (Caesar & Loretz)
+d6a78483-218a-4521-87ce-a96aa212fe4f,Kromachen
+16e9733a-3095-4917-865f-673404b305f9,"Goya, C. Kreul"
+21c00914-921f-4d53-9ade-115cbf893be5,J. Vasquez Negrete
+b3223972-5e05-476c-841e-36c612febf82,Amend Drug & Chemical Co.
+25e510d3-40ee-4bc2-a6d3-d81ef47e46c3,F. Weber Company
+2c536ba3-8a99-401f-88e4-92c38f1cd8a7,"Apsaras Medicine Chain Store, Gansu Province"
+a37bc5a6-4463-476f-b5a6-15c04c173fec,Stanford Mall
+e1e777bd-fdc4-4fbf-bf69-0660929b8d80,Haloid Co.
+7a244560-de53-4933-b764-30e180885092,Kibbutz Yad Mordechai
+a76769a1-9291-4cce-bef0-ee9c5808ae6c,Royal
+2bada6e0-4ab6-409d-9391-9f20ff47fd48,"Hopkin & Williams, Ltd."
+840b12d6-8a2e-4204-950c-f0211d93e6c8,Arathoon Sons
+f47d0b34-cdad-4eec-b81e-65c20b14672c,Panda Water Colour
+45e9f65c-1a05-4233-a188-4c5784a56bc4,Kremer Pigments Inc.
+f5a20939-4eb2-48c8-bbc0-c2ad3332d94d,A.J. Van der Linde
+49d30f3f-109c-4a89-ae3f-a7e0ef1dbca7,Renaissance Oil Painting Mediums
+687e9366-c89f-4a82-bf71-5b7d4b6bcb9a,Union Carbide
+ec48d94e-0d9f-4e56-bc7e-33b6bdbfa984,Zone VI
+a59b1b56-fa5c-45ed-a886-26b782d026e5,"Wen Zao shopping center, Beijing"
+a2653685-d579-4c87-b53c-b68b2bfa9e2d,"Rich Art Color, Inc."
+6e399e12-18e7-4433-b8a0-fe61452d2d11,Durable Arts
+b6a9cdbf-7b5d-49c3-9d22-1f32b1394b81,"Konica Minolta Photo Imaging, Inc."
+724a35b5-4c45-4e71-a4a1-a3b8362c4a4a,Pebeo
+1fc06a29-eadb-4254-a396-a60cd10086d4,"Su Bomin, Dunhuang Academy"
+2bff788a-ee3c-4e92-a4cb-39ffffb8427a,Overton Labs for Durachem
+a51be9e5-9117-42bc-825a-5c45779ed308,AP Fitzpatrick
+af25e73a-ffb9-4064-a7af-6b05353e00ff,Bender Hobein
+7cfd7442-f321-4b01-b6d0-b3f494b386ca,UnconventionalLapidarist.com
+f69b5738-2625-49dc-9005-63c865e02515,Fred Aldous Ltd
+fd1ad71b-8296-44d6-8ff5-80f4fa3bb9a7,J. Portell
+176b13c5-8d38-4058-9174-722b90eec875,LA Office Supply Store
+8209a745-48bb-40b9-9cbd-c3a7c8c12d87,Arches
+69009c08-4abe-466c-9cff-51babf98ca7f,Asahi Kusakabe
+0b58f422-281a-4cfe-b9cb-88fd80988323,Hercules Inc. (Aqualon div.)
+5e965e4f-15c5-4bc0-90d3-c9c013b71993,Old Delhi Chemical Market
+e0e5122a-daf0-420d-ae6d-1b2d740191e8,Breitsamer Reineimkerspezialitaten
+30a8f7cc-290c-4e9c-8e3d-3de6fffa9c3a,L. Cornelissen & Son
+1d28fa8e-2e59-448b-80a1-4557cd11081d,The Arbidar Co.
+2913af32-fd7b-47a7-981e-c2065c0dc85c,B.D.H.
+accd5007-3d58-45b8-8f54-876b070b4733,Argentus
+7af3dd09-9f50-4d23-aaa8-46671fbff69b,Findeisen
+84e1e49f-cf2a-44af-afc7-326f418d27ba,Factory of Art Materials
+39ee4fb1-7dbe-4020-8896-cb9c8a9a69da,Freestyle Photo
+d2927f74-faa5-4855-99c9-fca636905d0c,"Kopps Company Incorporated
+(Chem Div PGH19PA)"
+bf713b64-abbc-4c1f-813e-07baaca4942e,Zeneca
+83e5439f-f920-4c6d-8452-b3ef91fa7199,Buonamici
+a689255c-6938-4fdf-bd84-6ca57c0a4e49,J. Hewit & Sons Ltd
+84db0ead-97f8-4898-ae81-6710cf72f3fb,Ilford Photo SA
+91dca304-d93c-470d-b99c-0eb8e2f441c0,S. Ueba & Co.
+4c5a00a1-66fc-47f8-8ad4-3de8ac646a6d,Ilford Imaging UK Limited
+2dd299e2-2231-48a9-bebb-d4d25f195c1c,Schmincke
+a3a37209-1820-41bf-9ad3-9da7ef5f2457,Elmer's
+5d9d9974-7ba8-4124-a426-089fe1a9dabd,"Stanley & Doggett, Inc."
+9661f7fb-87e5-4c6f-a04e-8331f226223f,Boler Petroleum Company
+13902a2a-7acc-4904-9048-6a346919068a,Pompeian Brand
+689cb17d-15b4-47a8-a54d-7504bb287465,Israel Museum
+cae318cd-879d-40fe-8a42-ec4f9bd974a8,Puccio Speroni
+972216da-fa79-4bd7-b275-ddfccadf91ed,"Cerratonia, SA; (Imported by Dycol Chemicals Inc.)"
+80677034-6213-4d2c-a9de-66b15a4fce5c,Real Food Company
+49631292-101c-465c-b7af-9497b6231f48,Stolovsky
+9dca88ff-a382-48b3-8e65-6189f08cd726,Krylon
+847e3f03-583f-4229-aa36-943ecb45605f,E. W. Forbes Collection
+6094adf4-5039-4a45-a691-9c5164c81343,Serva Feinbiochemica
+f12f6fcd-1d84-470f-9057-5ba093065678,encausticpaints.com
+0c46c76b-0651-4711-be68-21043390c1a4,Brambilla
+e0916045-0662-486a-ad0a-c424fdbb6567,Old Delhi Spice Market
+243e6249-7309-41b1-8a3e-c1d287e61b15,Cognis Corporation
+fb76a88e-4742-4552-afd8-e1416e2d5846,Bryan W. Brown A. en P.
+b9b92b8c-eee6-4497-9ef7-cdf384043b90,Cornelissen
+ac554d80-317a-4068-b046-b0b57af2a71f,Sudan Import & Export (Khartoum) Ltd.
+71ab02d5-c9af-4290-b14b-67b5349110ad,Merck
+cbad3c9a-7b90-4a78-8231-a84def9e8a7e,L.A. Art Store
+afee54b7-5c86-44ab-8ca5-aab979918e41,Union Carbide Chemicals and Plastics
+ab3f7400-c446-4203-9480-a41acf1068f8,Easy Leaf
+e437b6f3-369b-4092-8f00-0f03756748d9,Wellington & Ward
+c159904a-5c46-4bba-8b0d-594be35bcd46,Strathmore Paper Co.
+9fc86977-73e4-47b4-b3c0-dcda4ae1733f,Zora's Paint Store
+88dc5d6e-0818-4359-b41a-e196a4be38ab,Marie's Oil Colours
+27320c5d-891f-4ed6-ba63-f3a3181797d5,Dr. Hedenberg
+0d54e998-5b4e-49ba-8792-14509a47398d,Vendex
+6f2ebd01-64ac-471a-bd7d-5ab266f4d28e,Kentmere Photographic Ltd.
+ea80c409-1d74-49a2-9815-66a0b4302faf,Buchner
+b2407407-9073-477d-a9ba-1db1fd2e8d5e,Agfa Gevaert AG
+6926431f-36d8-40ec-81de-b6818137d55e,Ebeseder Talens
+86ff5b4b-e06b-42ca-8ef9-072dd1c30bbc,Ciba
+f05eac18-7e6d-4095-8c08-c4ae5067f756,Marie's Water Colour
+4dac8347-5f30-43c0-a3a7-8467e24ff8f3,L.A. Art Store (Oil)
+a4c9fca5-4ad7-4098-b09d-1ae35c1360d4,Artex Manufacturing Co.
+12f976b1-73c3-4c8a-80df-89d3216bff10,"Ward's Natural Science Establishment, Inc."
+2901a0e7-8b2c-4371-8644-e4c59a81561f,Alba Guerrero
+3642fba2-45bc-4944-b126-d93f3da51126,Allied Corporation
+cab4bb53-00d8-484e-ba52-cca175432515,Scheveningen
+14b86c31-ad33-4ee4-bc39-ae96f3ab8e06,Clay Minerals Society - Univ. of Missouri
+b3a42927-ad86-42b1-a71d-e6a35b68765c,"Younghusband Stephens & Co., Ltd--Barking & Rotherhithe"
+c2a8db58-f2de-4199-888c-05f8599c6a27,P.A.J. Gorin - UFPR
+b39d20c4-9874-4ee2-ba2d-e96e7e466406,encausticsupplies.com
+73d455ea-e7c2-4a09-b721-a860748d8b3b,by Laurie
+9552110a-bf86-4b40-937b-195c6e67f85d,Chardin
+30222982-6d6b-4810-a12f-b307236bb722,Fleischman
+efcbf238-7d55-4c3d-b8f1-a08ab8f1e93a,Ole's Hardware Store
+ab6528b3-18d7-482e-a2a6-399440d2a78d,Rota
+2acda793-95bd-4fcf-bcd3-fe66ad638cf1,C. Kreul
+090067b1-70e9-4b26-9ca8-12859dd65caf,Guillero Corella
+72f46561-bee6-4dee-9b8b-1e4dc8c6d1d2,Alphacolor
+059a8994-c41f-4561-a301-8368d507ff52,Scuea Buonamici
+35274597-cd68-4ce4-ad13-6c0ace08f087,JPGM Antiquities Conservation
+ad8b0ee9-7953-4803-bdac-1a38d428d4fd,E. Porta
+a80d8ad5-c837-4a88-b547-0f92981fb0a8,Dr. Ph. Martin's
+af981582-c8d1-4b4b-b37e-a6a1a61269eb,"Hopkins Pwais & Son, Ltd."
+8361d98f-70ae-483d-9f43-897971acc3ef,Daniel Smith
+c844b24a-e572-430c-bc04-b60994c13f9f,"Hadassa Export Company, Ltd."
+8ff0e4e1-f422-4cb7-969a-7afda8c0ca1c,T. Hollis
+5dc87c82-5010-446c-bb82-9f21bef0d77d,Chemical & Pigment Co.
+5b0a8717-6cea-4bf4-8205-1479584d202a,Bayer AG
+4afa33f3-9348-4545-a342-5607ab59bbe5,"Oriental Photo Ind. Co., Ltd."
+64b2106d-af68-40dd-8940-3b776ccdde4a,"Gane Brothers & Lane, Inc."
+9e707bce-455f-43ca-8443-0866e13d26d7,Machado Araujo S/A
+af51e2a5-35aa-413b-bb62-159efb0ecf61,Aiko's Art Materials Import Inc.
+7df7c503-018b-40c4-88bf-874e3202a7fb,Stafford Allen & Sons; (Imported by CA Compack Foods Inc)
+12e22b22-890f-4b20-a307-5b393e6a4adf,Sennelier
+28c5a630-ee13-407c-a786-53798c44035e,Carolina Biological Supply Company
+2b57987a-cd0e-4ca3-a288-776620d61506,Conservator's Products Company
+6fc0f4a2-e8c6-4e0f-9bcc-91029cbe5346,"Reeves and Sons, Ltd."
+dd6f9cfb-daad-4962-8588-1258241bedeb,Cowleys
+5bfc9cdf-4aef-4d49-a09d-c51984adfdc3,Masury
+9e2f644c-f822-4c0d-955e-c1110d27b5cb,Pohlmeyer Inc.
+ff81f685-201b-4065-bc7d-913e2ab782dd,"Fuji Photo Film Co., Ltd."
+e5d5e7bf-202e-49ae-b6ea-57e757303d71,Omega Color
+f7b565d0-8ebd-4580-b0d1-e60fb0d24cee,Schumacher & Cie
+6c481d70-0272-48a0-931b-af7864995000,Excalibur Mineral Co.
+b69cfd93-5ab5-4340-a5c5-152c072077cf,"Kodak Limited, London"
+93282fe7-d87f-4eb7-b392-0debfc634e22,Mimosa Kiel
+8742ece7-aef1-4633-a136-bc8e51837125,"Baird & Tatlock, Ltd."
+3aaa93a8-9401-40a6-8d20-1d8e1b8373c6,LeFranc & Bourgeois
+dbe974c5-d3e7-49be-b45c-937c165df2e5,Chaparral Mountain Honey Co.
+e3958f5b-a3ed-41a6-9710-42643309ea7d,Morgan Company
+ecad7c1a-2495-4f1e-9c22-4e9a0369f5a7,Arrowhead Mills
