@@ -669,6 +669,258 @@ PERSON_MAPPING_CONFIGS = {
 
 
 
+#---------------------------------#
+#- SET CONFIGS -------------------#
+#---------------------------------#
+SET_MODEL_UUID = 'da0ed58e-d771-11ef-af99-0275dc2ded29'
+SET_MODEL_NAME = 'collection_or_set'
+IMPORT_RAW_SET_CSV = os.path.join(DATA_DIR, 'gci-all-sets.csv')
+
+GCI_REF_COL_SET_UUID = 'e6d28c12-9efa-4d22-8ac9-acdb8a4f6087'
+
+SET_DATA = [
+    {
+        'set_uuid': GCI_REF_COL_SET_UUID, 
+        'set_name': 'Getty Conservation Institute (GCI) Reference Collection',
+    },
+]
+
+SET_NAME_TILE_DATA = {
+    "da0f4e7e-d771-11ef-af99-0275dc2ded29": [PREFERRED_TERM_TYPE_UUID,], # type
+    "da0f3f24-d771-11ef-af99-0275dc2ded29": None, # source
+    "da0f311e-d771-11ef-af99-0275dc2ded29": None, # _label
+    "da0f3740-d771-11ef-af99-0275dc2ded29": [ENG_VALUE_UUID,], # language
+    "da0f5676-d771-11ef-af99-0275dc2ded29": TILE_DATA_COPY_FLAG,
+}
+
+SET_MAPPING_CONFIGS = {
+    'model_id': SET_MODEL_UUID,
+    'staging_table': SET_MODEL_NAME,
+    'model_staging_schema': SET_MODEL_NAME,
+    'raw_pk_col': 'set_uuid',
+    'load_path': IMPORT_RAW_SET_CSV,
+    'mappings': [
+        {
+            'raw_col': 'set_uuid',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'default_values': [
+                ('graphid', UUID, SET_MODEL_UUID,),
+                ('graphpublicationid', UUID, '3fd6e10e-d8c6-11ef-9ef7-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+            ], 
+        },
+        {
+            'raw_col': 'set_name',
+            'targ_table': 'name',
+            'stage_field_prefix': '',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'name_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('name_type', ARRAY(UUID), [PREFERRED_TERM_TYPE_UUID],),
+                ('name_language', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('nodegroupid', UUID, 'da0ef9d8-d771-11ef-af99-0275dc2ded29',),
+            ],
+            'tile_data':SET_NAME_TILE_DATA, 
+        },
+        
+    ],
+}
+
+
+
+
+#---------------------------------#
+#- PROVENANCE ACTIVITY CONFIGS ---#
+#---------------------------------#
+PROV_ACT_MODEL_UUID = '26a55ac6-d772-11ef-825b-0275dc2ded29'
+PROV_ACT_MODEL_NAME = 'provenance_activity'
+
+IMPORT_RAW_PROV_ACT_CSV = os.path.join(DATA_DIR, 'gci-all-provenance-activity.csv')
+
+PROV_ACT_EVENT_TYPE_TRANSFERED_VALUE_UUID = '9435c2af-2773-49d0-b85e-abb3539723da'
+PROV_ACT_ACQUIRE_CARRIED_OUT_BY_NODE_ID = '26a62ed8-d772-11ef-825b-0275dc2ded29'
+PROV_ACT_ACQUIRE_FROM_NODE_ID = '26a60520-d772-11ef-825b-0275dc2ded29'
+PROV_ACT_ACQUIRE_TITLE_OF_NODE_ID = '26a65a98-d772-11ef-825b-0275dc2ded29'
+
+# These are the same "is related to" values as used to relate RSCI to the place model
+REL_PROV_ACT_PERSON_GROUP_REL_TYPE_ID = REL_RSCI_PLACE_REL_TYPE_ID
+REL_PROV_ACT_PERSON_GROUP_REL_INVERSE_TYPE_ID = REL_RSCI_PLACE_INVERSE_REL_TYPE_ID
+
+PROV_ACT_NAME_TILE_DATA = {
+    "26a63fd6-d772-11ef-825b-0275dc2ded29": [PREFERRED_TERM_TYPE_UUID,], # type
+    "26a640bc-d772-11ef-825b-0275dc2ded29": None, # source
+    "26a621fe-d772-11ef-825b-0275dc2ded29": None, # _label
+    "26a61042-d772-11ef-825b-0275dc2ded29": [ENG_VALUE_UUID,], # language
+    "26a6331a-d772-11ef-825b-0275dc2ded29": TILE_DATA_COPY_FLAG,
+}
+
+PROV_ACT_MAPPING_CONFIGS = {
+    'model_id': PROV_ACT_MODEL_UUID,
+    'staging_table': PROV_ACT_MODEL_NAME,
+    'model_staging_schema': PROV_ACT_MODEL_NAME,
+    'raw_pk_col': 'prov_act_uuid',
+    'load_path': IMPORT_RAW_PROV_ACT_CSV,
+    'mappings': [
+        {
+            'raw_col': 'prov_act_uuid',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'default_values': [
+                ('graphid', UUID, PROV_ACT_MODEL_UUID,),
+                ('graphpublicationid', UUID, '3fd6e10e-d8c6-11ef-9ef7-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+            ], 
+        },
+        {
+            'raw_col': 'prov_act_name',
+            'targ_table': 'name',
+            'stage_field_prefix': 'prov_act_name_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('type', ARRAY(UUID), [PREFERRED_TERM_TYPE_UUID],),
+                ('language', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('nodegroupid', UUID, '26a5c4f2-d772-11ef-825b-0275dc2ded29',),
+            ],
+            'tile_data': PROV_ACT_NAME_TILE_DATA, 
+        },
+        {
+            'raw_col': 'prov_act_name',
+            'targ_table': 'acquisition',
+            'stage_field_prefix': 'acquisition_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': '_label',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('nodegroupid', UUID, '26a58b04-d772-11ef-825b-0275dc2ded29',),
+            ],
+            'related_resources': [
+                {
+                    'group_source_field': 'carried_out_by_',
+                    'multi_value': True,
+                    'targ_field': 'carried_out_by',
+                    'source_field_from_uuid': 'resourceinstanceid',
+                    'source_field_to_uuid': 'acq_by_person_1_uuid',
+                    'rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_INVERSE_TYPE_ID,
+                    'rel_nodeid': PROV_ACT_ACQUIRE_CARRIED_OUT_BY_NODE_ID,
+                },
+                {
+                    'group_source_field': 'carried_out_by_',
+                    'multi_value': True,
+                    'targ_field': 'carried_out_by',
+                    'source_field_from_uuid': 'resourceinstanceid',
+                    'source_field_to_uuid': 'acq_by_person_2_uuid',
+                    'rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_INVERSE_TYPE_ID,
+                    'rel_nodeid': PROV_ACT_ACQUIRE_CARRIED_OUT_BY_NODE_ID,
+                },
+                {
+                    'group_source_field': 'carried_out_by_',
+                    'multi_value': True,
+                    'targ_field': 'carried_out_by',
+                    'source_field_from_uuid': 'resourceinstanceid',
+                    'source_field_to_uuid': 'acq_by_group_1_uuid',
+                    'rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_INVERSE_TYPE_ID,
+                    'rel_nodeid': PROV_ACT_ACQUIRE_CARRIED_OUT_BY_NODE_ID,
+                },
+                {
+                    'group_source_field': 'carried_out_by_',
+                    'multi_value': True,
+                    'targ_field': 'carried_out_by',
+                    'source_field_from_uuid': 'resourceinstanceid',
+                    'source_field_to_uuid': 'acq_by_group_2_uuid',
+                    'rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_INVERSE_TYPE_ID,
+                    'rel_nodeid': PROV_ACT_ACQUIRE_CARRIED_OUT_BY_NODE_ID,
+                },
+                {
+                    'group_source_field': 'transferred_title_from_',
+                    'multi_value': True,
+                    'targ_field': 'transferred_title_from',
+                    'source_field_from_uuid': 'resourceinstanceid',
+                    'source_field_to_uuid': 'acq_from_group_1_uuid',
+                    'rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_INVERSE_TYPE_ID,
+                    'rel_nodeid': PROV_ACT_ACQUIRE_FROM_NODE_ID,
+                },
+                {
+                    'group_source_field': 'transferred_title_from_',
+                    'multi_value': True,
+                    'targ_field': 'transferred_title_from',
+                    'source_field_from_uuid': 'resourceinstanceid',
+                    'source_field_to_uuid': 'acq_from_group_2_uuid',
+                    'rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_INVERSE_TYPE_ID,
+                    'rel_nodeid': PROV_ACT_ACQUIRE_FROM_NODE_ID,
+                },
+                {
+                    'group_source_field': 'transferred_title_of_',
+                    'multi_value': True,
+                    'targ_field': 'transferred_title_of',
+                    'source_field_from_uuid': 'resourceinstanceid',
+                    'source_field_to_uuid': 'rsci_uuid',
+                    'rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_INVERSE_TYPE_ID,
+                    'rel_nodeid': PROV_ACT_ACQUIRE_FROM_NODE_ID,
+                },
+            ],
+        },
+        {
+            'raw_col': 'Acquisition Date__begin_of_the_begin',
+            'targ_table': 'acquisition_timespan',
+            'stage_field_prefix': 'acquisition_timespan_',
+            'value_transform': copy_value,
+            'targ_field': 'begin_of_the_begin',
+            'data_type': DateTime,
+            'make_tileid': True,
+            'default_values': [
+                ('nodegroupid', UUID, '26a57510-d772-11ef-825b-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'acquisition_tileid',
+                'targ_tile_field': 'acquisition',
+            },
+            'tile_other_fields': [
+                # Mappings for other fields to includ in the same tile
+                {
+                    'raw_col': 'Acquisition Date__end_of_the_begin',
+                    'targ_field': 'end_of_the_begin',
+                    'data_type': DateTime,
+                    'value_transform': copy_value,
+                },
+                {
+                    'raw_col': 'Acquisition Date__begin_of_the_end',
+                    'targ_field': 'begin_of_the_end',
+                    'data_type': DateTime,
+                    'value_transform': copy_value,
+                },
+                {
+                    'raw_col': 'Acquisition Date__end_of_the_end',
+                    'targ_field': 'end_of_the_end',
+                    'data_type': DateTime,
+                    'value_transform': copy_value,
+                }
+            ],
+        },
+    ],
+}
+
 
 
 
@@ -680,6 +932,8 @@ ALL_MAPPING_CONFIGS = [
     GROUP_MAPPING_CONFIGS,
     RSCI_SAFETY_GROUP_MAPPINGS,
     PERSON_MAPPING_CONFIGS,
+    SET_MAPPING_CONFIGS,
+    PROV_ACT_MAPPING_CONFIGS,
 ]
 
 
@@ -699,5 +953,11 @@ ARCHES_REL_VIEW_PREP_SQLS = [
     """,
     f"""
     SELECT __arches_create_resource_model_views('{PERSON_MODEL_UUID}');
+    """,
+    f"""
+    SELECT __arches_create_resource_model_views('{PROV_ACT_MODEL_UUID}');
+    """,
+    f"""
+    SELECT __arches_create_resource_model_views('{SET_MODEL_UUID}');
     """,
 ]
