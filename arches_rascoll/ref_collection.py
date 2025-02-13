@@ -71,6 +71,19 @@ def make_objs_from_json_strings(df_stage, col_data_types):
     return df_stage
 
 
+def make_transformed_value(act_raw_value, data_type, value_transform):
+    """Makes a transformed value based on the data type and value transform"""
+    if data_type == JSONB \
+        and value_transform == general_configs.copy_value \
+        and isinstance(act_raw_value, str):
+        # We need to convert the string to a JSON object.
+        try:
+            act_raw_value = json.loads(act_raw_value)
+        except json.JSONDecodeError:
+            # If we can't convert the string to JSON, we'll just skip it.
+            return None
+    return value_transform(act_raw_value)
+
 
 def prep_transformed_data(df, configs):
     """Prepares a dataset from the dataframe df for transformation into a staging table"""
@@ -93,21 +106,40 @@ def prep_transformed_data(df, configs):
             if pd.isnull(row[raw_col]):
                 continue
             act_raw_value = row[raw_col]
-            if data_type == JSONB \
-                and value_transform == general_configs.copy_value \
-                and isinstance(act_raw_value, str):
-                # We need to convert the string to a JSON object.
-                try:
-                    act_raw_value = json.loads(act_raw_value)
-                except json.JSONDecodeError:
-                    # If we can't convert the string to JSON, we'll just skip it.
-                    continue
+            # The transformed value will be the value that we will insert into the staging table and
+            # then moved into Arches
+            all_transformed_values = []
+            transformed_value = make_transformed_value(act_raw_value, data_type, value_transform)
+            all_transformed_values.append(transformed_value)
+            if mapping.get('tile_other_fields'):
+                for tile_other_field_config in mapping.get('tile_other_fields', []):
+                    other_raw_col = tile_other_field_config.get('raw_col')
+                    if pd.isnull( row[other_raw_col]):
+                        continue
+                    other_raw_value = row[other_raw_col]
+                    other_data_type = tile_other_field_config.get('data_type')
+                    other_targ_field = tile_other_field_config.get('targ_field')
+                    other_stage_targ_field = f'{stage_field_prefix}{other_targ_field}'
+                    other_value_transform = tile_other_field_config.get('value_transform')
+                    other_transformed_value = make_transformed_value(other_raw_value, other_data_type, other_value_transform)
+                    if other_transformed_value is None:
+                        continue
+                    all_transformed_values.append(other_transformed_value)
+                    dict_rows[raw_pk][other_stage_targ_field] = other_transformed_value
+                    col_data_types[other_stage_targ_field] = other_data_type
+            # Check to see if at least one field has a transformed value.
+            transformed_value_ok = False
+            for transformed_value in all_transformed_values:
+                if transformed_value is not None:
+                    transformed_value_ok = True
+            if not transformed_value_ok:
+                continue
             if mapping.get('make_tileid'):
                 tileid = str(GenUUID.uuid4())
                 staging_tileid = f'{stage_field_prefix}tileid'
                 dict_rows[raw_pk][staging_tileid] = tileid
                 col_data_types[staging_tileid] = UUID
-            dict_rows[raw_pk][stage_targ_field] = value_transform(act_raw_value)
+            dict_rows[raw_pk][stage_targ_field] = transformed_value
             default_values = mapping.get('default_values', [])
             for d_col, d_type, d_val in default_values:
                 default_col = f'{stage_field_prefix}{d_col}'
@@ -115,21 +147,34 @@ def prep_transformed_data(df, configs):
                 dict_rows[raw_pk][default_col] = d_val
             if mapping.get('related_resources'):
                 # We have related resources to populate for this field.
-                source_rel_objs_field = f'{stage_field_prefix}related_objs'
-                col_data_types[source_rel_objs_field] = JSONB
-                rel_objs = []
+                rel_objs = {}
                 for rel_dict in mapping.get('related_resources', []):
                     # We have related resources to populate in a dictionary
+                    # Make a source_rel_objs_field for the related resources. Note that multiple source
+                    # columns can go into the same related resources field, and that they will be
+                    # grouped by the group_source_field.
+                    resource_id = row[rel_dict.get('source_field_to_uuid')]
+                    if pd.isnull(resource_id) or not resource_id or str(resource_id) == 'NaN':
+                        continue
+                    group_source_field = rel_dict.get('group_source_field', '')
+                    source_rel_objs_field = f'{stage_field_prefix}{group_source_field}related_objs'
+                    if not rel_objs.get(source_rel_objs_field):
+                        rel_objs[source_rel_objs_field] = []
                     res_x_res_id = str(GenUUID.uuid4())
                     rel_obj = {
                         # This is the resource instance id that we are linking TO (towards)
-                        "resourceId": row[rel_dict.get('source_field_to_uuid')],
+                        "resourceId": resource_id,
                         "ontologyProperty": rel_dict.get('rel_type_id'),
                         "resourceXresourceId": res_x_res_id,
                         "inverseOntologyProperty": rel_dict.get('inverse_rel_type_id'),
                     }
-                    rel_objs.append(rel_obj)
-                dict_rows[raw_pk][source_rel_objs_field] = rel_objs
+                    rel_objs[source_rel_objs_field].append(rel_obj)
+                for source_rel_objs_field, rel_obj_list in rel_objs.items():
+                    if not rel_obj_list:
+                        continue
+                    col_data_types[source_rel_objs_field] = JSONB
+                    # only add one resource.
+                    dict_rows[raw_pk][source_rel_objs_field] = copy.deepcopy(rel_obj_list[0])
             if not mapping.get('tile_data'):
                 continue
             tile_data_col = f'{stage_field_prefix}tile_data'
@@ -215,70 +260,125 @@ def prepare_all_sql_inserts(
         source_tab = f'{staging_schema}.{staging_table}'
         while start < total_count:
             for mapping in configs.get('mappings'):
+                insert_fields = []
+                not_null_fields = []
+                where_conditions = []
+
+
                 stage_field_prefix = mapping.get('stage_field_prefix')
                 targ_table = mapping.get('targ_table')
                 targ_field = mapping.get('targ_field')
-                resid_field = 'resourceinstanceid, '
-                staging_resid_field = 'resourceinstanceid::uuid, '
+
+                # Add the resourceinstanceid to the insert fields, it should be always present
+                insert_fields.append(
+                    ('resourceinstanceid', 'resourceinstanceid::uuid')
+                )
+
                 limit_offset = f'LIMIT {increment} OFFSET {start}'
                 if targ_field == 'resourceinstanceid':
-                    resid_field = ''
-                    staging_resid_field = ''
                     # We're importing resource instances, so skip the offsets. We'll import them all at once.
                     limit_offset = ''
                     if start > 0:
                         # No need to make duplicate queries for resource instances. We'll do them all at once.
                         continue
+                
+                # We're turning off and not doing the limit_offset thing.
                 limit_offset = ''
-                stage_targ_field = f'{stage_field_prefix}{targ_field}'
-                targ_data_type_sql = utilities.lookup_data_type_sql_str(mapping.get('data_type'))
+
+
                 # Now handle tileid fields. Tileids are made for attribute data added to an resource instance.
                 # They will be used to know that we haven't already added certain tile data to a resource instance.
                 if mapping.get('make_tileid'):
-                    targ_tileid_field = 'tileid, '
+                    targ_tileid_field = 'tileid'
                     staging_tileid_field = f'{stage_field_prefix}tileid'
-                    staging_tileid_select_field = f'{staging_tileid_field}::uuid, '
-                    where_condition = f"""
-                    {source_tab}.{staging_tileid_field}::uuid NOT IN (SELECT tileid FROM tiles)
-                    AND ({source_tab}.{stage_targ_field} IS NOT NULL)
-                    """
+                    staging_tileid_select_field_type = f'{staging_tileid_field}::uuid'
+                    insert_fields.append(
+                        (targ_tileid_field, staging_tileid_select_field_type)
+                    )
+                    where_conditions.append(    
+                        f'({source_tab}.{staging_tileid_select_field_type} NOT IN (SELECT tileid FROM tiles))'
+                    )
+                    where_conditions.append(
+                        f'({source_tab}.{staging_tileid_select_field_type} IS NOT NULL)'
+                    )
                 else:
-                    # We're creating resource instances, so we don't need to worry about tileids
-                    targ_tileid_field = ''
-                    staging_tileid_select_field = ''
-                    where_condition = f'{source_tab}.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM {model_staging_schema}.{targ_table})'
-                # Below defines the staging field and specifies the data type.
+                    where_conditions.append(
+                        f'({source_tab}.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM {model_staging_schema}.{targ_table}))'
+                    )
+
+                # This is for the main data value that goes into the target table. Generally this will be tile data,
+                # except for inserts into the resourceinstance table.
+                stage_targ_field = f'{stage_field_prefix}{targ_field}'
+                targ_data_type_sql = utilities.lookup_data_type_sql_str(mapping.get('data_type'))
                 stage_targ_field_and_type = f'{stage_targ_field}::{targ_data_type_sql}'
+                not_null_fields.append(stage_targ_field_and_type)
                 if mapping.get('source_geojson'):
                     # We need to add a transformation function to change the geojson to a PostGIS geometry.
-                    stage_targ_field_and_type = f"ST_AsText(ST_GeomFromGeoJSON({stage_targ_field}))" 
-                targ_rel_objs_field = ''
-                staging_rel_objs_field_and_type = ''
-                rel_configs = mapping.get('related_resources', [])
-                if rel_configs:
-                    # Set the related objects target and staging source fields. Note that this assumes th same tileid will matter
-                    # for the targ_field and the stage_targ_field_and_type records. 
-                    for rel_dict in rel_configs:
-                        staging_rel_objs_field_and_type = f'{stage_field_prefix}related_objs::jsonb, '
-                        # We have related resources to populate for this field.
-                        targ_rel_objs_field = f"{rel_dict.get('targ_field')}, "
+                    stage_targ_field_and_type = f"ST_AsText(ST_GeomFromGeoJSON({stage_targ_field}))"
+                
+                # Add the target field to the insert fields.
+                act_insert_field = (targ_field, stage_targ_field_and_type)
+                if act_insert_field not in insert_fields:
+                    insert_fields.append(act_insert_field)
+
+                
+                if mapping.get('related_tileid'):
+                    # The current insert is related to a previously inserted tileid. We need to add the tileid for
+                    # the association
+                    rel_tile_config = mapping.get('related_tileid')
+                    targ_relatated_tileid_field = f'{rel_tile_config.get("targ_tile_field")}'
+                    source_related_tileid_field_and_type = f'{rel_tile_config.get("source_tile_field")}::uuid'
+                    insert_fields.append(
+                        (targ_relatated_tileid_field, source_related_tileid_field_and_type)
+                    )
+
+
+                # Now we need to handle related_resources. These are JSONB fields that define relationships between
+                # resource instances.
+                done_source_rel_objs_fields = []
+                for rel_dict in mapping.get('related_resources', []):
+                    group_source_field = rel_dict.get('group_source_field', '')
+                    source_rel_objs_field = f'{stage_field_prefix}{group_source_field}related_objs'
+                    if source_rel_objs_field in done_source_rel_objs_fields:
+                        continue
+                    done_source_rel_objs_fields.append(source_rel_objs_field)
+                    targ_rel_objs_field = rel_dict.get('targ_field')
+                    insert_fields.append(
+                        (targ_rel_objs_field, f'{source_rel_objs_field}::jsonb')
+                    )
+                    not_null_fields.append(f'{source_rel_objs_field}::jsonb')
+
+                # Process configurations for other data fields that belong to this same tileid
+                for tile_other_dict in mapping.get('tile_other_fields', []):
+                    other_targ_field = tile_other_dict.get('targ_field')
+                    other_stage_targ_field = f'{stage_field_prefix}{other_targ_field}'
+                    other_data_type_sql = utilities.lookup_data_type_sql_str(tile_other_dict.get('data_type'))
+                    other_stage_targ_field_and_type = f'{other_stage_targ_field}::{other_data_type_sql}'
+                    not_null_fields.append(other_stage_targ_field_and_type)
+                    insert_fields.append(
+                        (other_targ_field, other_stage_targ_field_and_type)
+                    )
+
+                # Make a not null condition for the insert statement.
+                not_null_condition = ' OR '.join([f'({source_tab}.{not_null_field} IS NOT NULL)' for not_null_field in not_null_fields])
+                not_null_condition = f'({not_null_condition})'
+                where_conditions.append(not_null_condition)
+
+                # Make the where condition for the insert statement.
+                where_condition_sql = ' AND \n'.join(where_conditions)
+
+                targ_fields_sql = ', \n'.join([tf for tf, _ in insert_fields])
+                stage_fields_sql = ', \n'.join([s_field_and_type for _, s_field_and_type in insert_fields])
+
                 # Now we can build the SQL query.
                 sql = f"""
                 INSERT INTO {model_staging_schema}.{targ_table} (
-                    {resid_field}
-                    {targ_tileid_field}
-                    {targ_rel_objs_field}
-                    {targ_field},
-                    {', '.join([f'{col}' for col, _, _ in mapping.get('default_values', [])])}
+                    {targ_fields_sql}
                 ) SELECT
-                    {staging_resid_field}
-                    {staging_tileid_select_field}
-                    {staging_rel_objs_field_and_type}
-                    {stage_targ_field_and_type},
-                    {', '.join([f'{stage_field_prefix}{col}::{general_configs.DATA_TYPES_SQL.get(col_data_type, "uuid[]")}' for col, col_data_type, _ in mapping.get('default_values', [])])
-                }
+                    {stage_fields_sql}
+                
                 FROM {source_tab}
-                WHERE {where_condition}
+                WHERE {where_condition_sql}
                 ORDER BY {source_tab}.resourceinstanceid
                 {limit_offset}
                 ;
@@ -307,9 +407,6 @@ def prepare_all_sql_inserts(
             start += increment
     utilities.save_sql(sqls)
     return sqls 
-
-
-
 
 
 
