@@ -153,13 +153,17 @@ def prep_transformed_data(df, configs):
                     # Make a source_rel_objs_field for the related resources. Note that multiple source
                     # columns can go into the same related resources field, and that they will be
                     # grouped by the group_source_field.
+                    multi_value = rel_dict.get('multi_value', False)
                     resource_id = row[rel_dict.get('source_field_to_uuid')]
                     if pd.isnull(resource_id) or not resource_id or str(resource_id) == 'NaN':
                         continue
                     group_source_field = rel_dict.get('group_source_field', '')
                     source_rel_objs_field = f'{stage_field_prefix}{group_source_field}related_objs'
                     if not rel_objs.get(source_rel_objs_field):
-                        rel_objs[source_rel_objs_field] = []
+                        if multi_value:
+                            rel_objs[source_rel_objs_field] = []
+                        else:
+                            rel_objs[source_rel_objs_field] = {}
                     res_x_res_id = str(GenUUID.uuid4())
                     rel_obj = {
                         # This is the resource instance id that we are linking TO (towards)
@@ -168,13 +172,16 @@ def prep_transformed_data(df, configs):
                         "resourceXresourceId": res_x_res_id,
                         "inverseOntologyProperty": rel_dict.get('inverse_rel_type_id'),
                     }
-                    rel_objs[source_rel_objs_field].append(rel_obj)
-                for source_rel_objs_field, rel_obj_list in rel_objs.items():
-                    if not rel_obj_list:
+                    if multi_value:
+                        rel_objs[source_rel_objs_field].append(rel_obj)
+                    else:
+                        rel_objs[source_rel_objs_field][res_x_res_id] = rel_obj.copy()
+                for source_rel_objs_field, rel_obj_vals in rel_objs.items():
+                    if not rel_obj_vals:
                         continue
                     col_data_types[source_rel_objs_field] = JSONB
                     # only add one resource.
-                    dict_rows[raw_pk][source_rel_objs_field] = copy.deepcopy(rel_obj_list[0])
+                    dict_rows[raw_pk][source_rel_objs_field] = copy.deepcopy(rel_obj_vals)
             if not mapping.get('tile_data'):
                 continue
             tile_data_col = f'{stage_field_prefix}tile_data'
@@ -336,16 +343,31 @@ def prepare_all_sql_inserts(
                 # Now we need to handle related_resources. These are JSONB fields that define relationships between
                 # resource instances.
                 done_source_rel_objs_fields = []
+                rel_dict_i = 0
                 for rel_dict in mapping.get('related_resources', []):
+                    rel_dict_i += 1
+                    multi_value = rel_dict.get('multi_value', False)
                     group_source_field = rel_dict.get('group_source_field', '')
                     source_rel_objs_field = f'{stage_field_prefix}{group_source_field}related_objs'
                     if source_rel_objs_field in done_source_rel_objs_fields:
                         continue
                     done_source_rel_objs_fields.append(source_rel_objs_field)
                     targ_rel_objs_field = rel_dict.get('targ_field')
-                    insert_fields.append(
-                        (targ_rel_objs_field, f'{source_rel_objs_field}::jsonb')
-                    )
+                    if multi_value:
+                        safe_source = f"""
+                        coalesce(
+                            case jsonb_typeof({source_rel_objs_field}) 
+                                when 'array' then {source_rel_objs_field} 
+                                else '[]'::jsonb end
+                            ) as {source_rel_objs_field}_{rel_dict_i}
+                        """
+                        insert_fields.append(
+                            (targ_rel_objs_field, f'{safe_source}')
+                        )
+                    else:
+                        insert_fields.append(
+                            (targ_rel_objs_field, f'{source_rel_objs_field}::jsonb')
+                        )
                     not_null_fields.append(f'{source_rel_objs_field}::jsonb')
 
                 # Process configurations for other data fields that belong to this same tileid

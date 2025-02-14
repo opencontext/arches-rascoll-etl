@@ -527,18 +527,38 @@ prov_act_name_content::jsonb
 tileid, 
 _label, 
 carried_out_by, 
-transferred_title_from
+transferred_title_from, 
+transferred_title_of
                 ) SELECT
                     resourceinstanceid::uuid, 
 acquisition_tileid::uuid, 
 acquisition__label::jsonb, 
-acquisition_carried_out_by_related_objs::jsonb, 
-acquisition_transferred_title_from_related_objs::jsonb
+
+                        jsonb_array_elements(
+                            case jsonb_typeof(acquisition_carried_out_by_related_objs) 
+                                when 'array' then acquisition_carried_out_by_related_objs 
+                                else '[]'::jsonb end
+                            ) as acquisition_carried_out_by_related_objs_1
+                        , 
+
+                        jsonb_array_elements(
+                            case jsonb_typeof(acquisition_transferred_title_from_related_objs) 
+                                when 'array' then acquisition_transferred_title_from_related_objs 
+                                else '[]'::jsonb end
+                            ) as acquisition_transferred_title_from_related_objs_5
+                        , 
+
+                        jsonb_array_elements(
+                            case jsonb_typeof(acquisition_transferred_title_of_related_objs) 
+                                when 'array' then acquisition_transferred_title_of_related_objs 
+                                else '[]'::jsonb end
+                            ) as acquisition_transferred_title_of_related_objs_7
+                        
                 
                 FROM staging.provenance_activity
                 WHERE (staging.provenance_activity.acquisition_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.provenance_activity.acquisition_tileid::uuid IS NOT NULL) AND 
-((staging.provenance_activity.acquisition__label::jsonb IS NOT NULL) OR (staging.provenance_activity.acquisition_carried_out_by_related_objs::jsonb IS NOT NULL) OR (staging.provenance_activity.acquisition_transferred_title_from_related_objs::jsonb IS NOT NULL))
+((staging.provenance_activity.acquisition__label::jsonb IS NOT NULL) OR (staging.provenance_activity.acquisition_carried_out_by_related_objs::jsonb IS NOT NULL) OR (staging.provenance_activity.acquisition_transferred_title_from_related_objs::jsonb IS NOT NULL) OR (staging.provenance_activity.acquisition_transferred_title_of_related_objs::jsonb IS NOT NULL))
                 ORDER BY staging.provenance_activity.resourceinstanceid
                 
                 ;

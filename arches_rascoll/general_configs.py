@@ -750,8 +750,14 @@ PROV_ACT_ACQUIRE_FROM_NODE_ID = '26a60520-d772-11ef-825b-0275dc2ded29'
 PROV_ACT_ACQUIRE_TITLE_OF_NODE_ID = '26a65a98-d772-11ef-825b-0275dc2ded29'
 
 # These are the same "is related to" values as used to relate RSCI to the place model
-REL_PROV_ACT_PERSON_GROUP_REL_TYPE_ID = REL_RSCI_PLACE_REL_TYPE_ID
-REL_PROV_ACT_PERSON_GROUP_REL_INVERSE_TYPE_ID = REL_RSCI_PLACE_INVERSE_REL_TYPE_ID
+REL_PROV_ACT_CARRIED_OUT_BY_REL_TYPE_ID = REL_RSCI_PLACE_REL_TYPE_ID
+REL_PROV_ACT_CARRIED_OUT_BY_REL_INVERSE_TYPE_ID = REL_RSCI_PLACE_INVERSE_REL_TYPE_ID
+REL_PROV_ACT_TRANS_TITLE_FROM_REL_TYPE_ID = REL_RSCI_PLACE_REL_TYPE_ID
+REL_PROV_ACT_TRANS_TITLE_FROM_REL_INVERSE_TYPE_ID = REL_RSCI_PLACE_INVERSE_REL_TYPE_ID
+
+# The transfered title of relationship type is blank
+REL_PROV_ACT_TRANS_TITLE_OF_REL_TYPE_ID = ''
+REL_PROV_ACT_TRANS_TITLE_OF_REL_INVERSE_TYPE_ID = ''
 
 PROV_ACT_NAME_TILE_DATA = {
     "26a63fd6-d772-11ef-825b-0275dc2ded29": [PREFERRED_TERM_TYPE_UUID,], # type
@@ -815,8 +821,8 @@ PROV_ACT_MAPPING_CONFIGS = {
                     'targ_field': 'carried_out_by',
                     'source_field_from_uuid': 'resourceinstanceid',
                     'source_field_to_uuid': 'acq_by_person_1_uuid',
-                    'rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_TYPE_ID,
-                    'inverse_rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_INVERSE_TYPE_ID,
+                    'rel_type_id': REL_PROV_ACT_CARRIED_OUT_BY_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_PROV_ACT_CARRIED_OUT_BY_REL_INVERSE_TYPE_ID,
                     'rel_nodeid': PROV_ACT_ACQUIRE_CARRIED_OUT_BY_NODE_ID,
                 },
                 {
@@ -825,8 +831,8 @@ PROV_ACT_MAPPING_CONFIGS = {
                     'targ_field': 'carried_out_by',
                     'source_field_from_uuid': 'resourceinstanceid',
                     'source_field_to_uuid': 'acq_by_person_2_uuid',
-                    'rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_TYPE_ID,
-                    'inverse_rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_INVERSE_TYPE_ID,
+                    'rel_type_id': REL_PROV_ACT_CARRIED_OUT_BY_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_PROV_ACT_CARRIED_OUT_BY_REL_INVERSE_TYPE_ID,
                     'rel_nodeid': PROV_ACT_ACQUIRE_CARRIED_OUT_BY_NODE_ID,
                 },
                 {
@@ -835,8 +841,8 @@ PROV_ACT_MAPPING_CONFIGS = {
                     'targ_field': 'carried_out_by',
                     'source_field_from_uuid': 'resourceinstanceid',
                     'source_field_to_uuid': 'acq_by_group_1_uuid',
-                    'rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_TYPE_ID,
-                    'inverse_rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_INVERSE_TYPE_ID,
+                    'rel_type_id': REL_PROV_ACT_CARRIED_OUT_BY_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_PROV_ACT_CARRIED_OUT_BY_REL_INVERSE_TYPE_ID,
                     'rel_nodeid': PROV_ACT_ACQUIRE_CARRIED_OUT_BY_NODE_ID,
                 },
                 {
@@ -845,8 +851,8 @@ PROV_ACT_MAPPING_CONFIGS = {
                     'targ_field': 'carried_out_by',
                     'source_field_from_uuid': 'resourceinstanceid',
                     'source_field_to_uuid': 'acq_by_group_2_uuid',
-                    'rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_TYPE_ID,
-                    'inverse_rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_INVERSE_TYPE_ID,
+                    'rel_type_id': REL_PROV_ACT_CARRIED_OUT_BY_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_PROV_ACT_CARRIED_OUT_BY_REL_INVERSE_TYPE_ID,
                     'rel_nodeid': PROV_ACT_ACQUIRE_CARRIED_OUT_BY_NODE_ID,
                 },
                 {
@@ -855,8 +861,8 @@ PROV_ACT_MAPPING_CONFIGS = {
                     'targ_field': 'transferred_title_from',
                     'source_field_from_uuid': 'resourceinstanceid',
                     'source_field_to_uuid': 'acq_from_group_1_uuid',
-                    'rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_TYPE_ID,
-                    'inverse_rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_INVERSE_TYPE_ID,
+                    'rel_type_id': REL_PROV_ACT_TRANS_TITLE_FROM_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_PROV_ACT_TRANS_TITLE_FROM_REL_INVERSE_TYPE_ID,
                     'rel_nodeid': PROV_ACT_ACQUIRE_FROM_NODE_ID,
                 },
                 {
@@ -865,8 +871,8 @@ PROV_ACT_MAPPING_CONFIGS = {
                     'targ_field': 'transferred_title_from',
                     'source_field_from_uuid': 'resourceinstanceid',
                     'source_field_to_uuid': 'acq_from_group_2_uuid',
-                    'rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_TYPE_ID,
-                    'inverse_rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_INVERSE_TYPE_ID,
+                    'rel_type_id': REL_PROV_ACT_TRANS_TITLE_FROM_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_PROV_ACT_TRANS_TITLE_FROM_REL_INVERSE_TYPE_ID,
                     'rel_nodeid': PROV_ACT_ACQUIRE_FROM_NODE_ID,
                 },
                 {
@@ -875,8 +881,8 @@ PROV_ACT_MAPPING_CONFIGS = {
                     'targ_field': 'transferred_title_of',
                     'source_field_from_uuid': 'resourceinstanceid',
                     'source_field_to_uuid': 'rsci_uuid',
-                    'rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_TYPE_ID,
-                    'inverse_rel_type_id': REL_PROV_ACT_PERSON_GROUP_REL_INVERSE_TYPE_ID,
+                    'rel_type_id': REL_PROV_ACT_TRANS_TITLE_OF_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_PROV_ACT_TRANS_TITLE_OF_REL_INVERSE_TYPE_ID,
                     'rel_nodeid': PROV_ACT_ACQUIRE_FROM_NODE_ID,
                 },
             ],
