@@ -790,7 +790,7 @@ PROV_ACT_MAPPING_CONFIGS = {
         },
         {
             'raw_col': 'prov_act_name',
-            'targ_table': 'name',
+            'targ_table': 'prov_name',
             'stage_field_prefix': 'prov_act_name_',
             'value_transform': make_lang_dict_value,
             'targ_field': 'content',
