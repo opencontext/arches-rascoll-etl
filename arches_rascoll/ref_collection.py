@@ -327,6 +327,17 @@ def prepare_all_sql_inserts(
                 act_insert_field = (targ_field, stage_targ_field_and_type)
                 if act_insert_field not in insert_fields:
                     insert_fields.append(act_insert_field)
+                
+
+                # Add the default values to the insert fields.
+                default_values = mapping.get('default_values', [])
+                for d_col, d_type, d_val in default_values:
+                    default_col = f'{stage_field_prefix}{d_col}'
+                    data_type_sql = utilities.lookup_data_type_sql_str(d_type)
+                    default_col_and_type = f'{default_col}::{data_type_sql}'
+                    insert_fields.append(
+                        (d_col, default_col_and_type)
+                    )
 
                 
                 if mapping.get('related_tileid'):
