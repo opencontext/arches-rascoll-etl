@@ -45,3 +45,14 @@ the inserts for resource instances run before you attempt to load tile data.
 ### NOTE: Why don't my Name Descriptors show up in Arches?
 
 It seems there's a problem with the node alias (or something) with various resource model name descriptors in the RASColl application / package. Using the Arches user-interface, navigate to the "functions" and update the descriptor functions for the name. You may have better luck with the alias `<Name_content>` than with the all lowercase `<name_content>`
+
+
+### NOTE: Dump the database
+
+Here's a quick way to dump the Arches-RASColl PostgreSQL database:
+
+```shell
+
+docker exec -it arches bash -c "pg_dump -U postgres -h arches_db -F c -b rascoll > '/arches_data/rascoll.dump'"
+
+```
