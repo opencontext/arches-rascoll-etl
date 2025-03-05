@@ -732,3 +732,52 @@ acquisition_timespan_end_of_the_end::timestamp
                 
                 ;
                 
+
+
+                INSERT INTO reference_and_sample_collection_item.instances (
+                    resourceinstanceid, 
+graphid, 
+graphpublicationid, 
+principaluser_id
+                ) SELECT
+                    resourceinstanceid::uuid, 
+graphid::uuid, 
+graphpublicationid::uuid, 
+principaluser_id::integer
+                
+                FROM staging.rsci_manufacturers
+                WHERE (staging.rsci_manufacturers.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.rsci_manufacturers.resourceinstanceid::uuid IS NOT NULL))
+                ORDER BY staging.rsci_manufacturers.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.production_ (
+                    resourceinstanceid, 
+tileid, 
+production__label, 
+nodegroupid, 
+production_carried_out_by
+                ) SELECT
+                    resourceinstanceid::uuid, 
+tileid::uuid, 
+production__label::jsonb, 
+nodegroupid::uuid, 
+
+                        coalesce(
+                            case jsonb_typeof(production_carried_out_by_related_objs) 
+                                when 'array' then production_carried_out_by_related_objs 
+                                else '[]'::jsonb end
+                            ) as production_carried_out_by_related_objs_1
+                        
+                
+                FROM staging.rsci_manufacturers
+                WHERE (staging.rsci_manufacturers.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_manufacturers.tileid::uuid IS NOT NULL) AND 
+((staging.rsci_manufacturers.production__label::jsonb IS NOT NULL) OR (staging.rsci_manufacturers.production_carried_out_by_related_objs::jsonb IS NOT NULL))
+                ORDER BY staging.rsci_manufacturers.resourceinstanceid
+                
+                ;
+                

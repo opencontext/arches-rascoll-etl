@@ -55,6 +55,12 @@ DATA_TYPES_SQL = {
     ARRAY(UUID): 'uuid[]',
 }
 
+
+REL_LINK_REL_TYPE_ID = 'ac41d9be-79db-4256-b368-2f4559cfbe55'
+REL_LINK_INVERSE_REL_TYPE_ID = 'ac41d9be-79db-4256-b368-2f4559cfbe55'
+
+
+
 def copy_value(value):
     return value
 
@@ -281,8 +287,8 @@ PLACE_MAPPING_CONFIGS = {
 IMPORT_RSCI_PLACES_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-places.csv')
 
 RSCI_PLACE_PRODUCTION_TYPE_IDS = ['d1adc747-6773-47c2-8470-a2ef0ab23fb9',]
-REL_RSCI_PLACE_REL_TYPE_ID = 'ac41d9be-79db-4256-b368-2f4559cfbe55'
-REL_RSCI_PLACE_INVERSE_REL_TYPE_ID = 'ac41d9be-79db-4256-b368-2f4559cfbe55'
+REL_RSCI_PLACE_REL_TYPE_ID = REL_LINK_REL_TYPE_ID
+REL_RSCI_PLACE_INVERSE_REL_TYPE_ID = REL_LINK_INVERSE_REL_TYPE_ID
 REL_RSCI_PLACE_NODEID = 'bda5889c-d376-11ef-a239-0275dc2ded29'
 
 RSCI_PLACE_MAPPING_CONFIGS = {
@@ -490,8 +496,8 @@ GROUP_MAPPING_CONFIGS = {
 #---------------------------------#
 IMPORT_RSCI_GROUPS_SAFTEY_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-groups-safety.csv')
 # These are the same "is related to" values as used to relate RSCI to the place model
-REL_RSCI_GROUP_REL_SAFETY_TYPE_ID = REL_RSCI_PLACE_REL_TYPE_ID
-REL_RSCI_GROUP_REL_INVERSE_SAFETY_TYPE_ID = REL_RSCI_PLACE_INVERSE_REL_TYPE_ID
+REL_RSCI_GROUP_REL_SAFETY_TYPE_ID = REL_LINK_REL_TYPE_ID
+REL_RSCI_GROUP_REL_INVERSE_SAFETY_TYPE_ID = REL_LINK_INVERSE_REL_TYPE_ID
 
 
 RSCI_SAFETY_GROUP_MAPPINGS = {
@@ -750,10 +756,10 @@ PROV_ACT_ACQUIRE_FROM_NODE_ID = '26a60520-d772-11ef-825b-0275dc2ded29'
 PROV_ACT_ACQUIRE_TITLE_OF_NODE_ID = '26a65a98-d772-11ef-825b-0275dc2ded29'
 
 # These are the same "is related to" values as used to relate RSCI to the place model
-REL_PROV_ACT_CARRIED_OUT_BY_REL_TYPE_ID = REL_RSCI_PLACE_REL_TYPE_ID
-REL_PROV_ACT_CARRIED_OUT_BY_REL_INVERSE_TYPE_ID = REL_RSCI_PLACE_INVERSE_REL_TYPE_ID
-REL_PROV_ACT_TRANS_TITLE_FROM_REL_TYPE_ID = REL_RSCI_PLACE_REL_TYPE_ID
-REL_PROV_ACT_TRANS_TITLE_FROM_REL_INVERSE_TYPE_ID = REL_RSCI_PLACE_INVERSE_REL_TYPE_ID
+REL_PROV_ACT_CARRIED_OUT_BY_REL_TYPE_ID = REL_LINK_REL_TYPE_ID
+REL_PROV_ACT_CARRIED_OUT_BY_REL_INVERSE_TYPE_ID = REL_LINK_INVERSE_REL_TYPE_ID
+REL_PROV_ACT_TRANS_TITLE_FROM_REL_TYPE_ID = REL_LINK_REL_TYPE_ID
+REL_PROV_ACT_TRANS_TITLE_FROM_REL_INVERSE_TYPE_ID = REL_LINK_INVERSE_REL_TYPE_ID
 
 # The transfered title of relationship type is blank
 REL_PROV_ACT_TRANS_TITLE_OF_REL_TYPE_ID = ''
@@ -930,6 +936,109 @@ PROV_ACT_MAPPING_CONFIGS = {
 
 
 
+#---------------------------------#
+#- RSCI MANUFACTURER CONFIGS -----#
+#---------------------------------#
+
+PROV_ACT_MODEL_NAME = 'manufacturers'
+IMPORT_RAW_MANU_CSV = os.path.join(DATA_DIR, 'gci-all-manufacturers.csv')
+PRODUCTION_NODE_ID = 'bda43726-d376-11ef-a239-0275dc2ded29'
+
+
+RSCI_MANUFACTURERS_CONFIGS = {
+    'model_id': RSCI_UUID,
+    'staging_table': 'rsci_manufacturers',
+    'model_staging_schema': RSCI_MODEL_NAME,
+    'raw_pk_col': 'rsci_uuid',
+    'load_path': IMPORT_RAW_MANU_CSV,
+    'mappings': [
+        {
+            'raw_col': 'rsci_uuid',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'default_values': [
+                ('graphid', UUID, RSCI_UUID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+            ], 
+        },
+        {
+            'raw_col': 'manu_label',
+            'targ_table': 'production_',
+            'stage_field_prefix': '',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'production__label',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('nodegroupid', UUID, PRODUCTION_NODE_ID,),
+            ],
+            'related_resources': [
+                {
+                    'group_source_field': 'production_carried_out_by_',
+                    'multi_value': True,
+                    'targ_field': 'production_carried_out_by',
+                    'source_field_from_uuid': 'rsci_uuid',
+                    'source_field_to_uuid': 'manu_group_uuid',
+                    'rel_type_id': REL_LINK_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_LINK_INVERSE_REL_TYPE_ID,
+                    'rel_nodeid': PRODUCTION_NODE_ID,
+                },
+            ],
+        },
+    ],
+}
+
+#---------------------------------#
+#- RSCI MATERIAL CONFIGS --------#
+#---------------------------------#
+
+RSCI_MATERIALS_CONFIGS = {
+    'model_id': RSCI_UUID,
+    'staging_table': 'rsci_materials',
+    'model_staging_schema': RSCI_MODEL_NAME,
+    'raw_pk_col': 'rsci_uuid',
+    'mappings': [
+        {
+            'raw_col': 'rsci_uuid',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'default_values': [
+                ('graphid', UUID, RSCI_UUID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+            ], 
+        },
+        {
+            'raw_col': 'Chemical Name',
+            'targ_table': 'material_data_assignment_name',
+            'stage_field_prefix': 'chem_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'material_data_assignment_name_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                # NOTE: TODO make sure we update the name type with an updated controlled vocabulary preflabel
+                ('material_data_assignment_name_type', ARRAY(UUID), [PREFERRED_TERM_TYPE_UUID],),
+                ('material_data_assignment_name_language', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
+            ], 
+        },
+    ],
+}
+
+
+
+
+
 ALL_MAPPING_CONFIGS = [
     RSCI_MAPPING_CONFIGS,
     PLACE_MAPPING_CONFIGS,
@@ -940,6 +1049,7 @@ ALL_MAPPING_CONFIGS = [
     PERSON_MAPPING_CONFIGS,
     SET_MAPPING_CONFIGS,
     PROV_ACT_MAPPING_CONFIGS,
+    RSCI_MANUFACTURERS_CONFIGS ,
 ]
 
 
