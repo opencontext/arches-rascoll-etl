@@ -421,6 +421,20 @@ RSCI_STATEMENTS_CONFIGS = {
                 ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
             ],
         },
+        {
+            'raw_col': 'origination_date_statement',
+            'targ_table': 'production_statement',
+            'stage_field_prefix': '',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'production_statement_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('statement_type', ARRAY(UUID), RSCI_PHYS_FORM_STATEMENT_TYPE_IDS,),
+                ('statement_language_', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('nodegroupid', UUID, 'bda36f9e-d376-11ef-a239-0275dc2ded29',),
+            ],
+        },
     ],
 }
 
@@ -909,7 +923,7 @@ PROV_ACT_MAPPING_CONFIGS = {
                 'targ_tile_field': 'acquisition',
             },
             'tile_other_fields': [
-                # Mappings for other fields to includ in the same tile
+                # Mappings for other fields to include in the same tile
                 {
                     'raw_col': 'Acquisition Date__end_of_the_begin',
                     'targ_field': 'end_of_the_begin',
@@ -988,6 +1002,43 @@ RSCI_MANUFACTURERS_CONFIGS = {
                     'inverse_rel_type_id': REL_LINK_INVERSE_REL_TYPE_ID,
                     'rel_nodeid': PRODUCTION_NODE_ID,
                 },
+            ],
+        },
+        {
+            'raw_col': 'origin_date_begin_of_begin',
+            'targ_table': 'production_time',
+            'stage_field_prefix': 'pt_',
+            'value_transform': copy_value,
+            'targ_field': 'production_time_begin_of_the_begin',
+            'data_type': DateTime,
+            'make_tileid': True,
+            'default_values': [
+                ('nodegroupid', UUID, 'bda37764-d376-11ef-a239-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'tileid',
+                'targ_tile_field': 'production_',
+            },
+            'tile_other_fields': [
+                # Mappings for other fields to include in the same tile
+                {
+                    'raw_col': 'origin_date_end_of_begin',
+                    'targ_field': 'production_time_end_of_the_begin',
+                    'data_type': DateTime,
+                    'value_transform': copy_value,
+                },
+                {
+                    'raw_col': 'origin_date_begin_of_end',
+                    'targ_field': 'production_time_begin_of_the_end',
+                    'data_type': DateTime,
+                    'value_transform': copy_value,
+                },
+                {
+                    'raw_col': 'origin_date_end_of_end',
+                    'targ_field': 'production_time_end_of_the_end',
+                    'data_type': DateTime,
+                    'value_transform': copy_value,
+                }
             ],
         },
     ],

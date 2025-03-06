@@ -23,12 +23,22 @@ def prepare_save_manufacturer_data(
     man_cols = [
         'rsci_uuid',
         'Barcode No.',
+        'origin_date_begin_of_begin',
+        'origin_date_end_of_begin',
+        'origin_date_begin_of_end',
+        'origin_date_end_of_end',
     ] + groups_cols
     first_cols = [
         'rsci_uuid',
         'manu_label',
     ]
     end_cols = [c for _, c in group_name_id_cols]
+    end_cols += [
+        'origin_date_begin_of_begin',
+        'origin_date_end_of_begin',
+        'origin_date_begin_of_end',
+        'origin_date_end_of_end',
+    ]
     df_manu = df[man_cols].copy()
     df_manu['manu_label'] = 'Production of Barcode No. ' + df_manu['Barcode No.'].astype(str)
     df_groups = pd.read_csv(groups_path)

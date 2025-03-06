@@ -368,6 +368,31 @@ physical_form_nodegroupid::uuid
                 
 
 
+                INSERT INTO reference_and_sample_collection_item.production_statement (
+                    resourceinstanceid, 
+tileid, 
+production_statement_content, 
+statement_type, 
+statement_language_, 
+nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+tileid::uuid, 
+production_statement_content::jsonb, 
+statement_type::uuid[], 
+statement_language_::uuid[], 
+nodegroupid::uuid
+                
+                FROM staging.rsci_statements
+                WHERE (staging.rsci_statements.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_statements.tileid::uuid IS NOT NULL) AND 
+((staging.rsci_statements.production_statement_content::jsonb IS NOT NULL))
+                ORDER BY staging.rsci_statements.resourceinstanceid
+                
+                ;
+                
+
+
                 INSERT INTO group_.instances (
                     resourceinstanceid, 
 graphid, 
@@ -777,6 +802,35 @@ nodegroupid::uuid,
                 WHERE (staging.rsci_manufacturers.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.rsci_manufacturers.tileid::uuid IS NOT NULL) AND 
 ((staging.rsci_manufacturers.production__label::jsonb IS NOT NULL) OR (staging.rsci_manufacturers.production_carried_out_by_related_objs::jsonb IS NOT NULL))
+                ORDER BY staging.rsci_manufacturers.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.production_time (
+                    resourceinstanceid, 
+tileid, 
+production_time_begin_of_the_begin, 
+nodegroupid, 
+production_, 
+production_time_end_of_the_begin, 
+production_time_begin_of_the_end, 
+production_time_end_of_the_end
+                ) SELECT
+                    resourceinstanceid::uuid, 
+pt_tileid::uuid, 
+pt_production_time_begin_of_the_begin::timestamp, 
+pt_nodegroupid::uuid, 
+tileid::uuid, 
+pt_production_time_end_of_the_begin::timestamp, 
+pt_production_time_begin_of_the_end::timestamp, 
+pt_production_time_end_of_the_end::timestamp
+                
+                FROM staging.rsci_manufacturers
+                WHERE (staging.rsci_manufacturers.pt_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_manufacturers.pt_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_manufacturers.pt_production_time_begin_of_the_begin::timestamp IS NOT NULL) OR (staging.rsci_manufacturers.pt_production_time_end_of_the_begin::timestamp IS NOT NULL) OR (staging.rsci_manufacturers.pt_production_time_begin_of_the_end::timestamp IS NOT NULL) OR (staging.rsci_manufacturers.pt_production_time_end_of_the_end::timestamp IS NOT NULL))
                 ORDER BY staging.rsci_manufacturers.resourceinstanceid
                 
                 ;
