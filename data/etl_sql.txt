@@ -372,15 +372,15 @@ physical_form_nodegroupid::uuid
                     resourceinstanceid, 
 tileid, 
 production_statement_content, 
-statement_type, 
-statement_language_, 
+production_statement_type, 
+production_statement_language, 
 nodegroupid
                 ) SELECT
                     resourceinstanceid::uuid, 
 tileid::uuid, 
 production_statement_content::jsonb, 
-statement_type::uuid[], 
-statement_language_::uuid[], 
+production_statement_type::uuid[], 
+production_statement_language::uuid[], 
 nodegroupid::uuid
                 
                 FROM staging.rsci_statements

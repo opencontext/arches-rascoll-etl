@@ -430,8 +430,8 @@ RSCI_STATEMENTS_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('statement_type', ARRAY(UUID), RSCI_PHYS_FORM_STATEMENT_TYPE_IDS,),
-                ('statement_language_', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('production_statement_type', ARRAY(UUID), RSCI_PHYS_FORM_STATEMENT_TYPE_IDS,),
+                ('production_statement_language', ARRAY(UUID), [ENG_VALUE_UUID],),
                 ('nodegroupid', UUID, 'bda36f9e-d376-11ef-a239-0275dc2ded29',),
             ],
         },
