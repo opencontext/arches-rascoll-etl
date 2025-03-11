@@ -56,3 +56,38 @@ Here's a quick way to dump the Arches-RASColl PostgreSQL database:
 docker exec -it arches bash -c "pg_dump -U postgres -h arches_db -F c -b rascoll > '/arches_data/rascoll.dump'"
 
 ```
+
+
+### NOTE: Some Function Configurations
+
+Here are some configurations to set display name and descriptions for different resource models
+
+- Reference and Sample Collection Item
+    - Display Name
+        - Name of Object :: <Name_content>
+    - Display Description
+        - Identifier of Object :: Barcode # <Identifier_content>
+
+- Provenance Activity
+    - Display Name
+        - Name of Provenance Activity :: <content>
+    - Display Description
+        - Transfer of Ownership <Transferred Title Of> (led by: <carried out by>)
+
+- Place
+    - Display Name
+        - Name of Place :: <content>
+    - Display Description
+        - External URI for Place :: Gazetteer reference: <external uri>
+
+- Group
+    - Display Name
+        - Name of Group :: <Name_content>
+    - Display Description
+        - Blank
+
+- Person
+    - Display Name
+        - Name of Person :: <Name_content>
+    - Display Description
+        - Blank
