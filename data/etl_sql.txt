@@ -228,7 +228,7 @@ geo_point_nodegroupid::uuid
                 
 
 
-                INSERT INTO reference_and_sample_collection_item.instances (
+                INSERT INTO group_.instances (
                     resourceinstanceid, 
 graphid, 
 graphpublicationid, 
@@ -239,60 +239,125 @@ graphid::uuid,
 graphpublicationid::uuid, 
 principaluser_id::integer
                 
-                FROM staging.rsci_place
-                WHERE (staging.rsci_place.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
-((staging.rsci_place.resourceinstanceid::uuid IS NOT NULL))
-                ORDER BY staging.rsci_place.resourceinstanceid
+                FROM staging.group_
+                WHERE (staging.group_.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM group_.instances)) AND 
+((staging.group_.resourceinstanceid::uuid IS NOT NULL))
+                ORDER BY staging.group_.resourceinstanceid
                 
                 ;
                 
 
 
-                INSERT INTO reference_and_sample_collection_item.production_ (
+                INSERT INTO group_.name (
                     resourceinstanceid, 
 tileid, 
-production_location_geo, 
-production_type, 
-nodegroupid, 
-production_location
+name_content, 
+name_type, 
+name_language, 
+nodegroupid
                 ) SELECT
                     resourceinstanceid::uuid, 
-geo_point_1_tileid::uuid, 
-ST_AsText(ST_GeomFromGeoJSON(geo_point_1_production_location_geo)), 
-geo_point_1_production_type::uuid[], 
-geo_point_1_nodegroupid::uuid, 
-geo_point_1_related_objs::jsonb
+group_name_tileid::uuid, 
+group_name_name_content::jsonb, 
+group_name_name_type::uuid[], 
+group_name_name_language::uuid[], 
+group_name_nodegroupid::uuid
                 
-                FROM staging.rsci_place
-                WHERE (staging.rsci_place.geo_point_1_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_place.geo_point_1_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_place.geo_point_1_production_location_geo::jsonb IS NOT NULL) OR (staging.rsci_place.geo_point_1_related_objs::jsonb IS NOT NULL))
-                ORDER BY staging.rsci_place.resourceinstanceid
+                FROM staging.group_
+                WHERE (staging.group_.group_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.group_.group_name_tileid::uuid IS NOT NULL) AND 
+((staging.group_.group_name_name_content::jsonb IS NOT NULL))
+                ORDER BY staging.group_.resourceinstanceid
                 
                 ;
                 
 
 
-                INSERT INTO reference_and_sample_collection_item.production_ (
+                INSERT INTO person.instances (
                     resourceinstanceid, 
-tileid, 
-production_location_geo, 
-production_type, 
-nodegroupid, 
-production_location
+graphid, 
+graphpublicationid, 
+principaluser_id
                 ) SELECT
                     resourceinstanceid::uuid, 
-geo_point_2_tileid::uuid, 
-ST_AsText(ST_GeomFromGeoJSON(geo_point_2_production_location_geo)), 
-geo_point_2_production_type::uuid[], 
-geo_point_2_nodegroupid::uuid, 
-geo_point_2_related_objs::jsonb
+graphid::uuid, 
+graphpublicationid::uuid, 
+principaluser_id::integer
                 
-                FROM staging.rsci_place
-                WHERE (staging.rsci_place.geo_point_2_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_place.geo_point_2_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_place.geo_point_2_production_location_geo::jsonb IS NOT NULL) OR (staging.rsci_place.geo_point_2_related_objs::jsonb IS NOT NULL))
-                ORDER BY staging.rsci_place.resourceinstanceid
+                FROM staging.person
+                WHERE (staging.person.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM person.instances)) AND 
+((staging.person.resourceinstanceid::uuid IS NOT NULL))
+                ORDER BY staging.person.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO person.name (
+                    resourceinstanceid, 
+tileid, 
+name_content, 
+name_type, 
+name_language, 
+nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+person_name_tileid::uuid, 
+person_name_name_content::jsonb, 
+person_name_name_type::uuid[], 
+person_name_name_language::uuid[], 
+person_name_nodegroupid::uuid
+                
+                FROM staging.person
+                WHERE (staging.person.person_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.person.person_name_tileid::uuid IS NOT NULL) AND 
+((staging.person.person_name_name_content::jsonb IS NOT NULL))
+                ORDER BY staging.person.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO collection_or_set.instances (
+                    resourceinstanceid, 
+graphid, 
+graphpublicationid, 
+principaluser_id
+                ) SELECT
+                    resourceinstanceid::uuid, 
+graphid::uuid, 
+graphpublicationid::uuid, 
+principaluser_id::integer
+                
+                FROM staging.collection_or_set
+                WHERE (staging.collection_or_set.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM collection_or_set.instances)) AND 
+((staging.collection_or_set.resourceinstanceid::uuid IS NOT NULL))
+                ORDER BY staging.collection_or_set.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO collection_or_set.name (
+                    resourceinstanceid, 
+tileid, 
+name_content, 
+name_type, 
+name_language, 
+nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+tileid::uuid, 
+name_content::jsonb, 
+name_type::uuid[], 
+name_language::uuid[], 
+nodegroupid::uuid
+                
+                FROM staging.collection_or_set
+                WHERE (staging.collection_or_set.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.collection_or_set.tileid::uuid IS NOT NULL) AND 
+((staging.collection_or_set.name_content::jsonb IS NOT NULL))
+                ORDER BY staging.collection_or_set.resourceinstanceid
                 
                 ;
                 
@@ -363,76 +428,6 @@ physical_form_nodegroupid::uuid
 (staging.rsci_statements.physical_form_tileid::uuid IS NOT NULL) AND 
 ((staging.rsci_statements.physical_form_statement_content::jsonb IS NOT NULL))
                 ORDER BY staging.rsci_statements.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.production_statement (
-                    resourceinstanceid, 
-tileid, 
-production_statement_content, 
-production_statement_type, 
-production_statement_language, 
-nodegroupid
-                ) SELECT
-                    resourceinstanceid::uuid, 
-tileid::uuid, 
-production_statement_content::jsonb, 
-production_statement_type::uuid[], 
-production_statement_language::uuid[], 
-nodegroupid::uuid
-                
-                FROM staging.rsci_statements
-                WHERE (staging.rsci_statements.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_statements.tileid::uuid IS NOT NULL) AND 
-((staging.rsci_statements.production_statement_content::jsonb IS NOT NULL))
-                ORDER BY staging.rsci_statements.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO group_.instances (
-                    resourceinstanceid, 
-graphid, 
-graphpublicationid, 
-principaluser_id
-                ) SELECT
-                    resourceinstanceid::uuid, 
-graphid::uuid, 
-graphpublicationid::uuid, 
-principaluser_id::integer
-                
-                FROM staging.group_
-                WHERE (staging.group_.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM group_.instances)) AND 
-((staging.group_.resourceinstanceid::uuid IS NOT NULL))
-                ORDER BY staging.group_.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO group_.name (
-                    resourceinstanceid, 
-tileid, 
-name_content, 
-name_type, 
-name_language, 
-nodegroupid
-                ) SELECT
-                    resourceinstanceid::uuid, 
-group_name_tileid::uuid, 
-group_name_name_content::jsonb, 
-group_name_name_type::uuid[], 
-group_name_name_language::uuid[], 
-group_name_nodegroupid::uuid
-                
-                FROM staging.group_
-                WHERE (staging.group_.group_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.group_.group_name_tileid::uuid IS NOT NULL) AND 
-((staging.group_.group_name_name_content::jsonb IS NOT NULL))
-                ORDER BY staging.group_.resourceinstanceid
                 
                 ;
                 
@@ -545,96 +540,6 @@ reactivity_safety_related_objs::jsonb
 (staging.rsci_group_safety.reactivity_safety_tileid::uuid IS NOT NULL) AND 
 ((staging.rsci_group_safety.reactivity_safety_general_safety_classification_classification::uuid IS NOT NULL) OR (staging.rsci_group_safety.reactivity_safety_related_objs::jsonb IS NOT NULL))
                 ORDER BY staging.rsci_group_safety.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO person.instances (
-                    resourceinstanceid, 
-graphid, 
-graphpublicationid, 
-principaluser_id
-                ) SELECT
-                    resourceinstanceid::uuid, 
-graphid::uuid, 
-graphpublicationid::uuid, 
-principaluser_id::integer
-                
-                FROM staging.person
-                WHERE (staging.person.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM person.instances)) AND 
-((staging.person.resourceinstanceid::uuid IS NOT NULL))
-                ORDER BY staging.person.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO person.name (
-                    resourceinstanceid, 
-tileid, 
-name_content, 
-name_type, 
-name_language, 
-nodegroupid
-                ) SELECT
-                    resourceinstanceid::uuid, 
-person_name_tileid::uuid, 
-person_name_name_content::jsonb, 
-person_name_name_type::uuid[], 
-person_name_name_language::uuid[], 
-person_name_nodegroupid::uuid
-                
-                FROM staging.person
-                WHERE (staging.person.person_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.person.person_name_tileid::uuid IS NOT NULL) AND 
-((staging.person.person_name_name_content::jsonb IS NOT NULL))
-                ORDER BY staging.person.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO collection_or_set.instances (
-                    resourceinstanceid, 
-graphid, 
-graphpublicationid, 
-principaluser_id
-                ) SELECT
-                    resourceinstanceid::uuid, 
-graphid::uuid, 
-graphpublicationid::uuid, 
-principaluser_id::integer
-                
-                FROM staging.collection_or_set
-                WHERE (staging.collection_or_set.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM collection_or_set.instances)) AND 
-((staging.collection_or_set.resourceinstanceid::uuid IS NOT NULL))
-                ORDER BY staging.collection_or_set.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO collection_or_set.name (
-                    resourceinstanceid, 
-tileid, 
-name_content, 
-name_type, 
-name_language, 
-nodegroupid
-                ) SELECT
-                    resourceinstanceid::uuid, 
-tileid::uuid, 
-name_content::jsonb, 
-name_type::uuid[], 
-name_language::uuid[], 
-nodegroupid::uuid
-                
-                FROM staging.collection_or_set
-                WHERE (staging.collection_or_set.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.collection_or_set.tileid::uuid IS NOT NULL) AND 
-((staging.collection_or_set.name_content::jsonb IS NOT NULL))
-                ORDER BY staging.collection_or_set.resourceinstanceid
                 
                 ;
                 
@@ -770,10 +675,10 @@ graphid::uuid,
 graphpublicationid::uuid, 
 principaluser_id::integer
                 
-                FROM staging.rsci_manufacturers
-                WHERE (staging.rsci_manufacturers.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
-((staging.rsci_manufacturers.resourceinstanceid::uuid IS NOT NULL))
-                ORDER BY staging.rsci_manufacturers.resourceinstanceid
+                FROM staging.rsci_production
+                WHERE (staging.rsci_production.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.rsci_production.resourceinstanceid::uuid IS NOT NULL))
+                ORDER BY staging.rsci_production.resourceinstanceid
                 
                 ;
                 
@@ -784,25 +689,44 @@ principaluser_id::integer
 tileid, 
 production__label, 
 nodegroupid, 
-production_carried_out_by
+production_type, 
+production_carried_out_by, 
+production_location, 
+production_location_geo
                 ) SELECT
                     resourceinstanceid::uuid, 
-tileid::uuid, 
-production__label::jsonb, 
-nodegroupid::uuid, 
+prod_1_tileid::uuid, 
+prod_1_production__label::jsonb, 
+prod_1_nodegroupid::uuid, 
+prod_1_production_type::uuid[], 
 
                         coalesce(
-                            case jsonb_typeof(production_carried_out_by_related_objs) 
-                                when 'array' then production_carried_out_by_related_objs 
+                            case jsonb_typeof(prod_1_production_carried_out_by_related_objs) 
+                                when 'array' then prod_1_production_carried_out_by_related_objs 
                                 else '[]'::jsonb end
-                            ) as production_carried_out_by_related_objs_1
+                            ) as prod_1_production_carried_out_by_related_objs_1
+                        , 
+
+                        coalesce(
+                            case jsonb_typeof(prod_1_production_location_related_objs) 
+                                when 'array' then prod_1_production_location_related_objs 
+                                else '[]'::jsonb end
+                            ) as prod_1_production_location_related_objs_2
+                        , 
+
+                        CASE 
+                            WHEN prod_1_production_location_geo IS NULL THEN NULL 
+                            WHEN jsonb_typeof(prod_1_production_location_geo) = 'object' 
+                            THEN ST_AsText(ST_GeomFromGeoJSON(prod_1_production_location_geo)) 
+                            ELSE NULL 
+                        END AS prod_1_production_location_geo_geom
                         
                 
-                FROM staging.rsci_manufacturers
-                WHERE (staging.rsci_manufacturers.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_manufacturers.tileid::uuid IS NOT NULL) AND 
-((staging.rsci_manufacturers.production__label::jsonb IS NOT NULL) OR (staging.rsci_manufacturers.production_carried_out_by_related_objs::jsonb IS NOT NULL))
-                ORDER BY staging.rsci_manufacturers.resourceinstanceid
+                FROM staging.rsci_production
+                WHERE (staging.rsci_production.prod_1_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_production.prod_1_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_production.prod_1_production__label::jsonb IS NOT NULL) OR (staging.rsci_production.prod_1_production_carried_out_by_related_objs::jsonb IS NOT NULL) OR (staging.rsci_production.prod_1_production_location_related_objs::jsonb IS NOT NULL) OR (staging.rsci_production.prod_1_production_location_geo::jsonb IS NOT NULL))
+                ORDER BY staging.rsci_production.resourceinstanceid
                 
                 ;
                 
@@ -822,16 +746,43 @@ production_time_end_of_the_end
 pt_tileid::uuid, 
 pt_production_time_begin_of_the_begin::timestamp, 
 pt_nodegroupid::uuid, 
-tileid::uuid, 
+prod_1_tileid::uuid, 
 pt_production_time_end_of_the_begin::timestamp, 
 pt_production_time_begin_of_the_end::timestamp, 
 pt_production_time_end_of_the_end::timestamp
                 
-                FROM staging.rsci_manufacturers
-                WHERE (staging.rsci_manufacturers.pt_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_manufacturers.pt_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_manufacturers.pt_production_time_begin_of_the_begin::timestamp IS NOT NULL) OR (staging.rsci_manufacturers.pt_production_time_end_of_the_begin::timestamp IS NOT NULL) OR (staging.rsci_manufacturers.pt_production_time_begin_of_the_end::timestamp IS NOT NULL) OR (staging.rsci_manufacturers.pt_production_time_end_of_the_end::timestamp IS NOT NULL))
-                ORDER BY staging.rsci_manufacturers.resourceinstanceid
+                FROM staging.rsci_production
+                WHERE (staging.rsci_production.pt_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_production.pt_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_production.pt_production_time_begin_of_the_begin::timestamp IS NOT NULL) OR (staging.rsci_production.pt_production_time_end_of_the_begin::timestamp IS NOT NULL) OR (staging.rsci_production.pt_production_time_begin_of_the_end::timestamp IS NOT NULL) OR (staging.rsci_production.pt_production_time_end_of_the_end::timestamp IS NOT NULL))
+                ORDER BY staging.rsci_production.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.production_statement (
+                    resourceinstanceid, 
+tileid, 
+production_statement_content, 
+production_statement_type, 
+production_statement_language, 
+nodegroupid, 
+production_
+                ) SELECT
+                    resourceinstanceid::uuid, 
+prod_statement_tileid::uuid, 
+prod_statement_production_statement_content::jsonb, 
+prod_statement_production_statement_type::uuid[], 
+prod_statement_production_statement_language::uuid[], 
+prod_statement_nodegroupid::uuid, 
+prod_1_tileid::uuid
+                
+                FROM staging.rsci_production
+                WHERE (staging.rsci_production.prod_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_production.prod_statement_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_production.prod_statement_production_statement_content::jsonb IS NOT NULL))
+                ORDER BY staging.rsci_production.resourceinstanceid
                 
                 ;
                 

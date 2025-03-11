@@ -77,35 +77,3 @@ def prepare_save_geo_data(
     df_all_geo.to_csv(save_path, index=False)
     return df_all_geo
 
-
-def prepare_rsci_place_data(
-    df=None, 
-    raw_path=general_configs.RAW_IMPORT_CSV,
-    geo_path=general_configs.IMPORT_PLACES_CSV,
-    rsci_geo_path=general_configs.IMPORT_RSCI_PLACES_CSV,
-):
-    if df is None:
-        df = pd.read_csv(raw_path)
-    if not os.path.exists(geo_path):
-        df_all_geo = prepare_save_geo_data(
-            df, 
-            raw_path=raw_path,
-            save_path=geo_path,
-        )
-    else:
-        df_all_geo = pd.read_csv(geo_path)
-    keep_cols = ['rsci_uuid', 'specific_place_uri', 'specific_place_uri_2']
-    df_rsci_geo = df[keep_cols].copy()
-    df_rsci_geo.rename(columns={'specific_place_uri': 'specific_place_uri_1'}, inplace=True)
-    copy_geo_cols = ['place_uuid', 'specific_place_uri', 'geo_point']
-    df_geo_trim = df_all_geo[copy_geo_cols].copy()
-    for i in [1, 2]:
-        renames = {col: f'{col}_{i}' for col in df_geo_trim.columns.tolist()}
-        df_act_geo = df_geo_trim.copy()
-        df_act_geo.rename(columns=renames, inplace=True)
-        join_col = f'specific_place_uri_{i}'
-        df_rsci_geo = df_rsci_geo.merge(df_act_geo, how='left', left_on=join_col, right_on=join_col)
-    good_index = (df_rsci_geo['place_uuid_1'].notnull() | df_rsci_geo['place_uuid_2'].notnull())
-    df_rsci_geo = df_rsci_geo[good_index].copy()
-    df_rsci_geo.to_csv(rsci_geo_path, index=False)
-    return df_rsci_geo

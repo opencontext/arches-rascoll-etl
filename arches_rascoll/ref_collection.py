@@ -59,6 +59,7 @@ def make_objs_from_json_strings(df_stage, col_data_types):
                 df_stage[col].notnull() 
                 & df_stage[col].apply(lambda x: isinstance(x, str))
                 & (df_stage[col] != 'NaN')
+                & (df_stage[col] != '""')
             )
             df_stage.loc[~index, col] = ''
             df_stage.loc[index, col] = df_stage[index][col].apply(lambda x: json.loads(x))
@@ -88,6 +89,7 @@ def make_transformed_value(act_raw_value, data_type, value_transform):
 def prep_transformed_data(df, configs):
     """Prepares a dataset from the dataframe df for transformation into a staging table"""
     dict_rows = {}
+
     col_data_types = {}
     for _, row in df.iterrows():
         # Given the small data volumes, I'm not bothering to optimize performance with
@@ -111,6 +113,7 @@ def prep_transformed_data(df, configs):
             all_transformed_values = []
             transformed_value = make_transformed_value(act_raw_value, data_type, value_transform)
             all_transformed_values.append(transformed_value)
+            other_tile_col_values = []
             if mapping.get('tile_other_fields'):
                 for tile_other_field_config in mapping.get('tile_other_fields', []):
                     other_raw_col = tile_other_field_config.get('raw_col')
@@ -125,12 +128,12 @@ def prep_transformed_data(df, configs):
                     if other_transformed_value is None:
                         continue
                     all_transformed_values.append(other_transformed_value)
-                    dict_rows[raw_pk][other_stage_targ_field] = other_transformed_value
+                    other_tile_col_values.append((other_stage_targ_field, other_transformed_value))
                     col_data_types[other_stage_targ_field] = other_data_type
             # Check to see if at least one field has a transformed value.
             transformed_value_ok = False
-            for transformed_value in all_transformed_values:
-                if transformed_value is not None:
+            for a_t_v in all_transformed_values:
+                if a_t_v is not None:
                     transformed_value_ok = True
             if not transformed_value_ok:
                 continue
@@ -140,6 +143,9 @@ def prep_transformed_data(df, configs):
                 dict_rows[raw_pk][staging_tileid] = tileid
                 col_data_types[staging_tileid] = UUID
             dict_rows[raw_pk][stage_targ_field] = transformed_value
+            # Add data gathered from the tile_other_fields. It's nicer to add this AFTER the main transformed value.
+            for other_tile_col, other_tile_val in other_tile_col_values:
+                dict_rows[raw_pk][other_tile_col] = other_tile_val
             default_values = mapping.get('default_values', [])
             for d_col, d_type, d_val in default_values:
                 default_col = f'{stage_field_prefix}{d_col}'
@@ -193,7 +199,7 @@ def prep_transformed_data(df, configs):
                 else:
                     tile_data[key] = copy.deepcopy(val)
             dict_rows[raw_pk][tile_data_col] = tile_data
-    rows = [dict(row) for _, row in dict_rows.items()]
+    rows = [dict(copy.deepcopy(row)) for _, row in dict_rows.items()]
     df_staging = pd.DataFrame(rows)
     return df_staging, col_data_types
 
@@ -388,6 +394,16 @@ def prepare_all_sql_inserts(
                     other_data_type_sql = utilities.lookup_data_type_sql_str(tile_other_dict.get('data_type'))
                     other_stage_targ_field_and_type = f'{other_stage_targ_field}::{other_data_type_sql}'
                     not_null_fields.append(other_stage_targ_field_and_type)
+                    if tile_other_dict.get('source_geojson'):
+                        # Note, add this to the not null fields.
+                        other_stage_targ_field_and_type = f"""
+                        CASE 
+                            WHEN {other_stage_targ_field} IS NULL THEN NULL 
+                            WHEN jsonb_typeof({other_stage_targ_field}) = 'object' 
+                            THEN ST_AsText(ST_GeomFromGeoJSON({other_stage_targ_field})) 
+                            ELSE NULL 
+                        END AS {other_stage_targ_field}_geom
+                        """
                     insert_fields.append(
                         (other_targ_field, other_stage_targ_field_and_type)
                     )
