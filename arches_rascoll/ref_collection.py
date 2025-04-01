@@ -17,10 +17,15 @@ from arches_rascoll import general_configs
 from arches_rascoll import places
 from arches_rascoll import utilities
 
+
 """
 # Use like this in a Python shell:
 
 from arches_rascoll import ref_collection
+from arches_rascoll import concepts
+
+concepts.get_concept_values_by_preflabel('Facet Type')
+
 dfs = ref_collection.prepare_all_transformed_data()
 sqls = ref_collection.prepare_all_sql_inserts()
 

@@ -1,0 +1,225 @@
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+<http://vocab.getty.edu/page/aat/300010788> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "artificial stone"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300010797> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "glass (material)"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300010900> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "metal"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300011845> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "leather"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300011914> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "wood (plant material)"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300012866> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "gum (material)"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300012891> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "balsam (resin)"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300013029> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "dye"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300013109> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "pigments"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300014109> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "paper (fiber product)"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300014190> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "photographic paper"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300014254> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "oil (organic material)"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300014570> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "plastic (material)"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300014585> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "wax"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300014638> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "photographic film"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300014693> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "abrasive"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300014701> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "additive (material)"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300014720> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "binder (material)"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300014801> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "adhesive"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300014974> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "varnish"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300015012> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "ink"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300015091> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "glaze (coating by location)"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300015217> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "solvent"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300015312> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "size (material)"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300015351> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "raw material"@en .
+
+<http://vocab.getty.edu/page/aat/300022552> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "artists' brushes"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300027337> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "sample books"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300080665> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "filler (inert additive)"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300206575> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "protein"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300231565> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "textile materials"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300246925> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "mixtures (materials)"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300378966> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "natural resin"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300378967> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "synthetic resin"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300404632> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "pastel (material)"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300449174> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "natural stone"@en ;
+    skos:topConceptOf <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> .
+
+<http://vocab.getty.edu/page/aat/300015045> a skos:Concept ;
+    skos:broader <http://vocab.getty.edu/page/aat/300015029> ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "watercolor (paint)"@en .
+
+<http://vocab.getty.edu/page/aat/300015050> a skos:Concept ;
+    skos:broader <http://vocab.getty.edu/page/aat/300015029> ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "oil paint (paint)"@en .
+
+<http://vocab.getty.edu/page/aat/300015058> a skos:Concept ;
+    skos:broader <http://vocab.getty.edu/page/aat/300015029> ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "acrylic paint"@en .
+
+<http://vocab.getty.edu/page/aat/300015062> a skos:Concept ;
+    skos:broader <http://vocab.getty.edu/page/aat/300015029> ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "tempera"@en .
+
+<http://vocab.getty.edu/page/aat/300070114> a skos:Concept ;
+    skos:broader <http://vocab.getty.edu/page/aat/300015029> ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "gouache (paint)"@en .
+
+<http://vocab.getty.edu/page/aat/300183750> a skos:Concept ;
+    skos:broader <http://vocab.getty.edu/page/aat/300015029> ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "encaustic paint"@en .
+
+<http://vocab.getty.edu/page/aat/300410261> a skos:Concept ;
+    skos:broader <http://vocab.getty.edu/page/aat/300015029> ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:prefLabel "water miscible oil paint"@en .
+
+<http://vocab.getty.edu/page/aat/300015029> a skos:Concept ;
+    skos:inScheme <http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> ;
+    skos:narrower <http://vocab.getty.edu/page/aat/300015045>,
+        <http://vocab.getty.edu/page/aat/300015050>,
+        <http://vocab.getty.edu/page/aat/300015058>,
+        <http://vocab.getty.edu/page/aat/300015062>,
+        <http://vocab.getty.edu/page/aat/300070114>,
+        <http://vocab.getty.edu/page/aat/300183750>,
+        <http://vocab.getty.edu/page/aat/300410261> ;
+    skos:prefLabel "paint (coating)"@en .
+
+<http://localhost/9da7c289-5063-4c8e-b5c3-aa716fbd81e9> a skos:ConceptScheme ;
+    skos:prefLabel "Scheme from CSV concepts_materials.csv"@en .
+

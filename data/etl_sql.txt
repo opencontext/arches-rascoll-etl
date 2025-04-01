@@ -116,6 +116,29 @@ barcode_no_nodegroupid::uuid
                 
 
 
+                INSERT INTO reference_and_sample_collection_item.facet_type (
+                    resourceinstanceid, 
+tileid, 
+facet_type, 
+facet_type_metatype, 
+nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+tileid::uuid, 
+facet_type::uuid, 
+facet_type_metatype::uuid, 
+nodegroupid::uuid
+                
+                FROM staging.rsci
+                WHERE (staging.rsci.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci.tileid::uuid IS NOT NULL) AND 
+((staging.rsci.facet_type::uuid IS NOT NULL))
+                ORDER BY staging.rsci.resourceinstanceid
+                
+                ;
+                
+
+
                 INSERT INTO place.instances (
                     resourceinstanceid, 
 graphid, 
@@ -456,20 +479,26 @@ principaluser_id::integer
                 INSERT INTO reference_and_sample_collection_item.fire_safety_classification (
                     resourceinstanceid, 
 tileid, 
-fire_safety_classification_classification, 
+fire_safety_classification_type, 
 nodegroupid, 
 fire_safety_classification_hold_for
                 ) SELECT
                     resourceinstanceid::uuid, 
 tileid::uuid, 
-fire_safety_classification_classification::uuid, 
+fire_safety_classification_type::uuid, 
 nodegroupid::uuid, 
-related_objs::jsonb
+
+                        coalesce(
+                            case jsonb_typeof(related_objs) 
+                                when 'array' then related_objs 
+                                else '[]'::jsonb end
+                            ) as related_objs_1
+                        
                 
                 FROM staging.rsci_group_safety
                 WHERE (staging.rsci_group_safety.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.rsci_group_safety.tileid::uuid IS NOT NULL) AND 
-((staging.rsci_group_safety.fire_safety_classification_classification::uuid IS NOT NULL) OR (staging.rsci_group_safety.related_objs::jsonb IS NOT NULL))
+((staging.rsci_group_safety.fire_safety_classification_type::uuid IS NOT NULL) OR (staging.rsci_group_safety.related_objs::jsonb IS NOT NULL))
                 ORDER BY staging.rsci_group_safety.resourceinstanceid
                 
                 ;
@@ -479,20 +508,26 @@ related_objs::jsonb
                 INSERT INTO reference_and_sample_collection_item.health_safety_classification (
                     resourceinstanceid, 
 tileid, 
-health_safety_classification_classification, 
+health_safety_classification_type, 
 nodegroupid, 
 health_safety_classification_hold_for
                 ) SELECT
                     resourceinstanceid::uuid, 
 tileid::uuid, 
-health_safety_classification_classification::uuid, 
+health_safety_classification_type::uuid, 
 nodegroupid::uuid, 
-related_objs::jsonb
+
+                        coalesce(
+                            case jsonb_typeof(related_objs) 
+                                when 'array' then related_objs 
+                                else '[]'::jsonb end
+                            ) as related_objs_1
+                        
                 
                 FROM staging.rsci_group_safety
                 WHERE (staging.rsci_group_safety.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.rsci_group_safety.tileid::uuid IS NOT NULL) AND 
-((staging.rsci_group_safety.health_safety_classification_classification::uuid IS NOT NULL) OR (staging.rsci_group_safety.related_objs::jsonb IS NOT NULL))
+((staging.rsci_group_safety.health_safety_classification_type::uuid IS NOT NULL) OR (staging.rsci_group_safety.related_objs::jsonb IS NOT NULL))
                 ORDER BY staging.rsci_group_safety.resourceinstanceid
                 
                 ;
@@ -502,43 +537,55 @@ related_objs::jsonb
                 INSERT INTO reference_and_sample_collection_item.general_safety_classification (
                     resourceinstanceid, 
 tileid, 
-general_safety_classification_classification, 
+general_safety_classification_type, 
 nodegroupid, 
 general_safety_classification_hold_for
                 ) SELECT
                     resourceinstanceid::uuid, 
 tileid::uuid, 
-general_safety_classification_classification::uuid, 
+general_safety_classification_type::uuid, 
 nodegroupid::uuid, 
-related_objs::jsonb
+
+                        coalesce(
+                            case jsonb_typeof(related_objs) 
+                                when 'array' then related_objs 
+                                else '[]'::jsonb end
+                            ) as related_objs_1
+                        
                 
                 FROM staging.rsci_group_safety
                 WHERE (staging.rsci_group_safety.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.rsci_group_safety.tileid::uuid IS NOT NULL) AND 
-((staging.rsci_group_safety.general_safety_classification_classification::uuid IS NOT NULL) OR (staging.rsci_group_safety.related_objs::jsonb IS NOT NULL))
+((staging.rsci_group_safety.general_safety_classification_type::uuid IS NOT NULL) OR (staging.rsci_group_safety.related_objs::jsonb IS NOT NULL))
                 ORDER BY staging.rsci_group_safety.resourceinstanceid
                 
                 ;
                 
 
 
-                INSERT INTO reference_and_sample_collection_item.general_safety_classification (
+                INSERT INTO reference_and_sample_collection_item.reactivity_safety_classification (
                     resourceinstanceid, 
 tileid, 
-general_safety_classification_classification, 
+reactivity_safety_classification_type, 
 nodegroupid, 
-general_safety_classification_hold_for
+reactivity_safety_classification_hold_for
                 ) SELECT
                     resourceinstanceid::uuid, 
 reactivity_safety_tileid::uuid, 
-reactivity_safety_general_safety_classification_classification::uuid, 
+reactivity_safety_reactivity_safety_classification_type::uuid, 
 reactivity_safety_nodegroupid::uuid, 
-reactivity_safety_related_objs::jsonb
+
+                        coalesce(
+                            case jsonb_typeof(reactivity_safety_related_objs) 
+                                when 'array' then reactivity_safety_related_objs 
+                                else '[]'::jsonb end
+                            ) as reactivity_safety_related_objs_1
+                        
                 
                 FROM staging.rsci_group_safety
                 WHERE (staging.rsci_group_safety.reactivity_safety_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.rsci_group_safety.reactivity_safety_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_group_safety.reactivity_safety_general_safety_classification_classification::uuid IS NOT NULL) OR (staging.rsci_group_safety.reactivity_safety_related_objs::jsonb IS NOT NULL))
+((staging.rsci_group_safety.reactivity_safety_reactivity_safety_classification_type::uuid IS NOT NULL) OR (staging.rsci_group_safety.reactivity_safety_related_objs::jsonb IS NOT NULL))
                 ORDER BY staging.rsci_group_safety.resourceinstanceid
                 
                 ;
@@ -565,7 +612,7 @@ principaluser_id::integer
                 
 
 
-                INSERT INTO provenance_activity.prov_name (
+                INSERT INTO provenance_activity.provenance_activity_name (
                     resourceinstanceid, 
 tileid, 
 content, 

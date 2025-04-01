@@ -103,6 +103,10 @@ RSCI_STATEMENT_TILE_DATA = {
     "bda5c60e-d376-11ef-a239-0275dc2ded29": TILE_DATA_COPY_FLAG,
 }
 
+# the value ID for the metatype concept "Facet Type"
+RSCI_FACET_METATYPE_UUID = 'b8a24689-9ee3-4639-bc5b-a0e70e31f71f'
+# the value ID for the facet type 'reference collection items'
+RSCI_FACET_TYPE_UUID = 'f697d7f2-4956-4b14-8910-c7ca673e74ca'
 
 
 RSCI_MAPPING_CONFIGS = {
@@ -168,6 +172,19 @@ RSCI_MAPPING_CONFIGS = {
             ],
             'tile_data': RSCI_STATEMENT_TILE_DATA,
         },
+        {
+            'raw_col': 'facet_type_value_uuid',
+            'targ_table': 'facet_type',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'facet_type',
+            'data_type': UUID,
+            'make_tileid': True,
+            'default_values': [
+                ('facet_type_metatype', UUID, RSCI_FACET_METATYPE_UUID,),
+                ('nodegroupid', UUID, 'e9b8d73c-09b7-11f0-b84f-0275dc2ded29',),
+            ],
+        }
     ],
 }
 
@@ -575,7 +592,7 @@ RSCI_SAFETY_GROUP_MAPPINGS = {
             'targ_table': 'fire_safety_classification',
             'stage_field_prefix': '',
             'value_transform': copy_value,
-            'targ_field': 'fire_safety_classification_classification',
+            'targ_field': 'fire_safety_classification_type',
             'data_type': UUID,
             'make_tileid': True,
             'default_values': [
@@ -584,6 +601,7 @@ RSCI_SAFETY_GROUP_MAPPINGS = {
             'related_resources': [
                 {
                     'targ_field': 'fire_safety_classification_hold_for',
+                    'multi_value': True,
                     'source_field_from_uuid': 'resourceinstanceid',
                     'source_field_to_uuid': 'group_uuid',
                     'rel_type_id': REL_RSCI_GROUP_REL_SAFETY_TYPE_ID,
@@ -597,7 +615,7 @@ RSCI_SAFETY_GROUP_MAPPINGS = {
             'targ_table': 'health_safety_classification',
             'stage_field_prefix': '',
             'value_transform': copy_value,
-            'targ_field': 'health_safety_classification_classification',
+            'targ_field': 'health_safety_classification_type',
             'data_type': UUID,
             'make_tileid': True,
             'default_values': [
@@ -606,6 +624,7 @@ RSCI_SAFETY_GROUP_MAPPINGS = {
             'related_resources': [
                 {
                     'targ_field': 'health_safety_classification_hold_for',
+                    'multi_value': True,
                     'source_field_from_uuid': 'resourceinstanceid',
                     'source_field_to_uuid': 'group_uuid',
                     'rel_type_id': REL_RSCI_GROUP_REL_SAFETY_TYPE_ID,
@@ -619,7 +638,7 @@ RSCI_SAFETY_GROUP_MAPPINGS = {
             'targ_table': 'general_safety_classification',
             'stage_field_prefix': '',
             'value_transform': copy_value,
-            'targ_field': 'general_safety_classification_classification',
+            'targ_field': 'general_safety_classification_type',
             'data_type': UUID,
             'make_tileid': True,
             'default_values': [
@@ -628,6 +647,7 @@ RSCI_SAFETY_GROUP_MAPPINGS = {
             'related_resources': [
                 {
                     'targ_field': 'general_safety_classification_hold_for',
+                    'multi_value': True,
                     'source_field_from_uuid': 'resourceinstanceid',
                     'source_field_to_uuid': 'group_uuid',
                     'rel_type_id': REL_RSCI_GROUP_REL_SAFETY_TYPE_ID,
@@ -638,23 +658,24 @@ RSCI_SAFETY_GROUP_MAPPINGS = {
         },
         {
             'raw_col': 'reactivity_safety_value_uuid',
-            'targ_table': 'general_safety_classification',
+            'targ_table': 'reactivity_safety_classification',
             'stage_field_prefix': 'reactivity_safety_',
             'value_transform': copy_value,
-            'targ_field': 'general_safety_classification_classification',
+            'targ_field': 'reactivity_safety_classification_type',
             'data_type': UUID,
             'make_tileid': True,
             'default_values': [
-                ('nodegroupid', UUID, 'bda4e2d4-d376-11ef-a239-0275dc2ded29',),
+                ('nodegroupid', UUID, '459b071e-fdf6-11ef-966f-0275dc2ded29',),
             ],
             'related_resources': [
                 {
-                    'targ_field': 'general_safety_classification_hold_for',
+                    'targ_field': 'reactivity_safety_classification_hold_for',
+                    'multi_value': True,
                     'source_field_from_uuid': 'resourceinstanceid',
                     'source_field_to_uuid': 'group_uuid',
                     'rel_type_id': REL_RSCI_GROUP_REL_SAFETY_TYPE_ID,
                     'inverse_rel_type_id': REL_RSCI_GROUP_REL_INVERSE_SAFETY_TYPE_ID,
-                    'rel_nodeid': 'bda5348c-d376-11ef-a239-0275dc2ded29', # general saftey hold for nodeid
+                    'rel_nodeid': '459b071e-fdf6-11ef-966f-0275dc2ded29', # reactivity saftey hold for nodeid
                 },
             ]
         },
@@ -718,7 +739,7 @@ PROV_ACT_MAPPING_CONFIGS = {
         },
         {
             'raw_col': 'prov_act_name',
-            'targ_table': 'prov_name',
+            'targ_table': 'provenance_activity_name',
             'stage_field_prefix': 'prov_act_name_',
             'value_transform': make_lang_dict_value,
             'targ_field': 'content',
@@ -866,6 +887,9 @@ IMPORT_RAW_PROD_CSV = os.path.join(DATA_DIR, 'gci-all-production.csv')
 PRODUCTION_NODE_ID = 'bda43726-d376-11ef-a239-0275dc2ded29'
 
 RSCI_PLACE_PRODUCTION_TYPE_IDS = ['d1adc747-6773-47c2-8470-a2ef0ab23fb9',]
+
+# value id for the 'producer description' statement type
+RSCI_PLACE_PRODUCTION_STATEMENT_TYPE_IDS = ['3ecf81da-9f76-4714-a4d6-30209ad25291',]
 REL_RSCI_PLACE_REL_TYPE_ID = REL_LINK_REL_TYPE_ID
 REL_RSCI_PLACE_INVERSE_REL_TYPE_ID = REL_LINK_INVERSE_REL_TYPE_ID
 REL_RSCI_PLACE_NODEID = 'bda5889c-d376-11ef-a239-0275dc2ded29'
@@ -997,7 +1021,7 @@ RSCI_PRODUCTION_CONFIGS = {
                 'targ_tile_field': 'production_',
             },
             'default_values': [
-                ('production_statement_type', ARRAY(UUID), RSCI_PHYS_FORM_STATEMENT_TYPE_IDS,),
+                ('production_statement_type', ARRAY(UUID), RSCI_PLACE_PRODUCTION_STATEMENT_TYPE_IDS,),
                 ('production_statement_language', ARRAY(UUID), [ENG_VALUE_UUID],),
                 ('nodegroupid', UUID, 'bda36f9e-d376-11ef-a239-0275dc2ded29',),
             ],
@@ -1008,6 +1032,12 @@ RSCI_PRODUCTION_CONFIGS = {
 #---------------------------------#
 #- RSCI MATERIAL CONFIGS --------#
 #---------------------------------#
+
+# The name type for "chemical name"
+RSCI_MATERIAL_CHEM_NAME_TYPES = ['91b68412-5cef-47b1-bb9d-bb204a2defad',]
+
+CONCEPTS_MATERIALS_CSV = os.path.join(DATA_DIR, 'concepts_materials.csv')
+CONCEPTS_MATERIALS_RDF = os.path.join(DATA_DIR, 'concepts_materials.rdf')
 
 RSCI_MATERIALS_CONFIGS = {
     'model_id': RSCI_UUID,
@@ -1039,7 +1069,7 @@ RSCI_MATERIALS_CONFIGS = {
             'make_tileid': True,
             'default_values': [
                 # NOTE: TODO make sure we update the name type with an updated controlled vocabulary preflabel
-                ('material_data_assignment_name_type', ARRAY(UUID), [PREFERRED_TERM_TYPE_UUID],),
+                ('material_data_assignment_name_type', ARRAY(UUID), RSCI_MATERIAL_CHEM_NAME_TYPES,),
                 ('material_data_assignment_name_language', ARRAY(UUID), [ENG_VALUE_UUID],),
                 ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
             ], 
