@@ -1039,6 +1039,10 @@ RSCI_MATERIAL_CHEM_NAME_TYPES = ['91b68412-5cef-47b1-bb9d-bb204a2defad',]
 CONCEPTS_MATERIALS_CSV = os.path.join(DATA_DIR, 'concepts_materials.csv')
 CONCEPTS_MATERIALS_RDF = os.path.join(DATA_DIR, 'concepts_materials.rdf')
 
+# The concepts for "object type"
+CONCEPTS_OBJECT_TYPE_CSV = os.path.join(DATA_DIR, 'concepts_object_type.csv')
+CONCEPTS_OBJECT_TYPE_RDF = os.path.join(DATA_DIR, 'concepts_object_type.rdf')
+
 RSCI_MATERIALS_CONFIGS = {
     'model_id': RSCI_UUID,
     'staging_table': 'rsci_materials',

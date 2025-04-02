@@ -1,0 +1,47 @@
+Sample Type Entry,Count,prefLabel,uri,parent_prefLabel,parent_uri
+Abrasive,2,abrasive,http://vocab.getty.edu/page/aat/300014693,,
+Adhesive,28,adhesive,http://vocab.getty.edu/page/aat/300014801,,
+Brush,17,artists' brushes,http://vocab.getty.edu/page/aat/300022552,,
+Dye,639,dye,http://vocab.getty.edu/page/aat/300013029,,
+Fabric / Textile,229,textile materials,http://vocab.getty.edu/page/aat/300231565,,
+Filler,81,filler (inert additive),http://vocab.getty.edu/page/aat/300080665,,
+Film,260,photographic film,http://vocab.getty.edu/page/aat/300014638,,
+Glass,66,glass (material),http://vocab.getty.edu/page/aat/300010797,,
+Glaze,3,glaze (coating by location),http://vocab.getty.edu/page/aat/300015091,,
+Gum,340,gum (material),http://vocab.getty.edu/page/aat/300012866,,
+Ink,248,ink,http://vocab.getty.edu/page/aat/300015012,,
+Leather,43,leather,http://vocab.getty.edu/page/aat/300011845,,
+Medium,94,binder (material),http://vocab.getty.edu/page/aat/300014720,,
+Metal,61,metal,http://vocab.getty.edu/page/aat/300010900,,
+Natural Resin,389,natural resin,http://vocab.getty.edu/page/aat/300378966,,
+Oil,276,oil (organic material),http://vocab.getty.edu/page/aat/300014254,,
+Oleoresin / Balsam,38,balsam (resin),http://vocab.getty.edu/page/aat/300012891,,
+Other,111,other material,,,
+Paint Additive,103,additive (material),http://vocab.getty.edu/page/aat/300014701,,
+"Paint, acrylic",409,acrylic paint,http://vocab.getty.edu/page/aat/300015058,paint (coating),http://vocab.getty.edu/page/aat/300015029
+"Paint, encaustic",149,encaustic paint,http://vocab.getty.edu/page/aat/300183750,paint (coating),http://vocab.getty.edu/page/aat/300015029
+"Paint, gouache",25,gouache (paint),http://vocab.getty.edu/page/aat/300070114,paint (coating),http://vocab.getty.edu/page/aat/300015029
+"Paint, oil-based",507,oil paint (paint),http://vocab.getty.edu/page/aat/300015050,paint (coating),http://vocab.getty.edu/page/aat/300015029
+"Paint, oil-based, water mixable",527,water miscible oil paint,http://vocab.getty.edu/page/aat/300410261,paint (coating),http://vocab.getty.edu/page/aat/300015029
+"Paint, other",98,paint (coating),http://vocab.getty.edu/page/aat/300015029,,
+"Paint, tempera",49,tempera,http://vocab.getty.edu/page/aat/300015062,paint (coating),http://vocab.getty.edu/page/aat/300015029
+"Paint, watercolor",286,watercolor (paint),http://vocab.getty.edu/page/aat/300015045,paint (coating),http://vocab.getty.edu/page/aat/300015029
+Paper,29,paper (fiber product),http://vocab.getty.edu/page/aat/300014109,,
+Pastel,37,pastel (material),http://vocab.getty.edu/page/aat/300404632,,
+Photographic Paper,377,photographic paper,http://vocab.getty.edu/page/aat/300014190,,
+Pigment,2309,pigments,http://vocab.getty.edu/page/aat/300013109,,
+Plastic,1,plastic (material),http://vocab.getty.edu/page/aat/300014570,,
+Prepared mixture,1235,mixtures (materials),http://vocab.getty.edu/page/aat/300246925,,
+Protein,291,protein,http://vocab.getty.edu/page/aat/300206575,,
+,,raw material,http://vocab.getty.edu/page/aat/300015351,,
+Raw Material - inorganic,283,raw material - inorganic,,raw material,http://vocab.getty.edu/page/aat/300015351
+"Raw Material - organic (seed, nut, etc.)",356,raw material - organic,,raw material,http://vocab.getty.edu/page/aat/300015351
+Sample Book,5,sample books,http://vocab.getty.edu/page/aat/300027337,,
+Size,1,size (material),http://vocab.getty.edu/page/aat/300015312,,
+Solvent,13,solvent,http://vocab.getty.edu/page/aat/300015217,,
+"Stone, artificial",17,artificial stone,http://vocab.getty.edu/page/aat/300010788,,
+"Stone, natural",2280,natural stone,http://vocab.getty.edu/page/aat/300449174,,
+Synthetic Resin,209,synthetic resin,http://vocab.getty.edu/page/aat/300378967,,
+Varnish,119,varnish,http://vocab.getty.edu/page/aat/300014974,,
+Wax,165,wax,http://vocab.getty.edu/page/aat/300014585,,
+Wood,742,wood (plant material),http://vocab.getty.edu/page/aat/300011914,,
