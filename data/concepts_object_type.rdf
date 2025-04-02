@@ -4,47 +4,13 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:skos="http://www.w3.org/2004/02/skos/core#"
 >
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300027337">
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300014974">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">sample books</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
+    <skos:prefLabel xml:lang="en">varnish</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300010900">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">metal</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300070114">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">gouache (paint)</skos:prefLabel>
-    <skos:broader rdf:resource="http://vocab.getty.edu/page/aat/300015029"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300015217">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">solvent</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300014693">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">abrasive</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300015029">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">paint (coating)</skos:prefLabel>
-    <skos:narrower rdf:resource="http://vocab.getty.edu/page/aat/300015058"/>
-    <skos:narrower rdf:resource="http://vocab.getty.edu/page/aat/300183750"/>
-    <skos:narrower rdf:resource="http://vocab.getty.edu/page/aat/300070114"/>
-    <skos:narrower rdf:resource="http://vocab.getty.edu/page/aat/300015050"/>
-    <skos:narrower rdf:resource="http://vocab.getty.edu/page/aat/300410261"/>
-    <skos:narrower rdf:resource="http://vocab.getty.edu/page/aat/300015062"/>
-    <skos:narrower rdf:resource="http://vocab.getty.edu/page/aat/300015045"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f">
+  <rdf:Description rdf:about="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
     <skos:prefLabel xml:lang="en">Scheme from CSV concepts_object_type.csv</skos:prefLabel>
     <dcterms:title xml:lang="en">Scheme from CSV concepts_object_type.csv</dcterms:title>
@@ -67,6 +33,7 @@
     <skos:hasTopConcept rdf:resource="http://vocab.getty.edu/page/aat/300014254"/>
     <skos:hasTopConcept rdf:resource="http://vocab.getty.edu/page/aat/300012891"/>
     <skos:hasTopConcept rdf:resource="http://vocab.getty.edu/page/aat/300014701"/>
+    <skos:hasTopConcept rdf:resource="http://vocab.getty.edu/page/aat/300015029"/>
     <skos:hasTopConcept rdf:resource="http://vocab.getty.edu/page/aat/300014109"/>
     <skos:hasTopConcept rdf:resource="http://vocab.getty.edu/page/aat/300404632"/>
     <skos:hasTopConcept rdf:resource="http://vocab.getty.edu/page/aat/300014190"/>
@@ -84,220 +51,263 @@
     <skos:hasTopConcept rdf:resource="http://vocab.getty.edu/page/aat/300014585"/>
     <skos:hasTopConcept rdf:resource="http://vocab.getty.edu/page/aat/300011914"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300183750">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">encaustic paint</skos:prefLabel>
-    <skos:broader rdf:resource="http://vocab.getty.edu/page/aat/300015029"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300014720">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">binder (material)</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-  </rdf:Description>
   <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300410261">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
     <skos:prefLabel xml:lang="en">water miscible oil paint</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
     <skos:broader rdf:resource="http://vocab.getty.edu/page/aat/300015029"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300014801">
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300080665">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">adhesive</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
+    <skos:prefLabel xml:lang="en">filler (inert additive)</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300014190">
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300011914">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">photographic paper</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
+    <skos:prefLabel xml:lang="en">wood (plant material)</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300015312">
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300014693">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">size (material)</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
+    <skos:prefLabel xml:lang="en">abrasive</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300010788">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">artificial stone</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300015029">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">paint (coating)</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:narrower rdf:resource="http://vocab.getty.edu/page/aat/300015058"/>
+    <skos:narrower rdf:resource="http://vocab.getty.edu/page/aat/300183750"/>
+    <skos:narrower rdf:resource="http://vocab.getty.edu/page/aat/300070114"/>
+    <skos:narrower rdf:resource="http://vocab.getty.edu/page/aat/300015050"/>
+    <skos:narrower rdf:resource="http://vocab.getty.edu/page/aat/300410261"/>
+    <skos:narrower rdf:resource="http://vocab.getty.edu/page/aat/300015062"/>
+    <skos:narrower rdf:resource="http://vocab.getty.edu/page/aat/300015045"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300010797">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
     <skos:prefLabel xml:lang="en">glass (material)</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300449174">
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300022552">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">natural stone</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
+    <skos:prefLabel xml:lang="en">artists' brushes</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300015351">
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300012866">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">raw material</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
+    <skos:prefLabel xml:lang="en">gum (material)</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300378967">
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300011845">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">synthetic resin</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
+    <skos:prefLabel xml:lang="en">leather</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300246925">
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300206575">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">mixtures (materials)</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
+    <skos:prefLabel xml:lang="en">protein</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300013109">
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300015312">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">pigments</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300015091">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">glaze (coating by location)</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300014254">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">oil (organic material)</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300014109">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">paper (fiber product)</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300014974">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">varnish</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
+    <skos:prefLabel xml:lang="en">size (material)</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300015058">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
     <skos:prefLabel xml:lang="en">acrylic paint</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:broader rdf:resource="http://vocab.getty.edu/page/aat/300015029"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300015351">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">raw material</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300015045">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">watercolor (paint)</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:broader rdf:resource="http://vocab.getty.edu/page/aat/300015029"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300012891">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">balsam (resin)</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300014109">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">paper (fiber product)</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300246925">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">mixtures (materials)</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300015012">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">ink</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300378967">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">synthetic resin</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300014801">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">adhesive</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300015091">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">glaze (coating by location)</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300014190">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">photographic paper</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300183750">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">encaustic paint</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
     <skos:broader rdf:resource="http://vocab.getty.edu/page/aat/300015029"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300014570">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
     <skos:prefLabel xml:lang="en">plastic (material)</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300010788">
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300013109">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">artificial stone</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
+    <skos:prefLabel xml:lang="en">pigments</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300015062">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">tempera</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:broader rdf:resource="http://vocab.getty.edu/page/aat/300015029"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300404632">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">pastel (material)</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300070114">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">gouache (paint)</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:broader rdf:resource="http://vocab.getty.edu/page/aat/300015029"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300015217">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">solvent</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300449174">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">natural stone</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300014720">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">binder (material)</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300014585">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">wax</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300013029">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
     <skos:prefLabel xml:lang="en">dye</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300011914">
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300378966">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">wood (plant material)</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
+    <skos:prefLabel xml:lang="en">natural resin</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300012866">
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300014254">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">gum (material)</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
+    <skos:prefLabel xml:lang="en">oil (organic material)</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300027337">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">sample books</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300010900">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:prefLabel xml:lang="en">metal</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300015050">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
     <skos:prefLabel xml:lang="en">oil paint (paint)</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
     <skos:broader rdf:resource="http://vocab.getty.edu/page/aat/300015029"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300231565">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
     <skos:prefLabel xml:lang="en">textile materials</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300022552">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">artists' brushes</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300014701">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">additive (material)</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300014585">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">wax</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300015012">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">ink</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300015062">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">tempera</skos:prefLabel>
-    <skos:broader rdf:resource="http://vocab.getty.edu/page/aat/300015029"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300011845">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">leather</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300080665">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">filler (inert additive)</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300206575">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">protein</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300378966">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">natural resin</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300014638">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
     <skos:prefLabel xml:lang="en">photographic film</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300012891">
+  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300014701">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">balsam (resin)</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300404632">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">pastel (material)</skos:prefLabel>
-    <skos:topConceptOf rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-    <skos:inScheme rdf:resource="http://localhost/4052e6b0-9979-42f9-bef4-ab19197a496f"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://vocab.getty.edu/page/aat/300015045">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:prefLabel xml:lang="en">watercolor (paint)</skos:prefLabel>
-    <skos:broader rdf:resource="http://vocab.getty.edu/page/aat/300015029"/>
+    <skos:prefLabel xml:lang="en">additive (material)</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
+    <skos:topConceptOf rdf:resource="http://localhost/9c4d113c-75f3-470d-ba36-1a499138ee8b"/>
   </rdf:Description>
 </rdf:RDF>

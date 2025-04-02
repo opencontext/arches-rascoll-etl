@@ -41,6 +41,7 @@ def prepare_skos_graph_from_concepts_csv(
     )
     for i, row in df[p_index].iterrows():
         parent_concept_uri = row['parent_uri']
+        parent_concept_uri = str(parent_concept_uri).strip()
         parent_pref_label = row['parent_prefLabel']
         if parent_concept_uri in entities:
             # this concept has already been added to the graph
@@ -48,16 +49,20 @@ def prepare_skos_graph_from_concepts_csv(
         parent_concept = URIRef(parent_concept_uri)
         g.add((parent_concept, RDF.type, SKOS.Concept))
         g.add((parent_concept, SKOS.prefLabel, Literal(parent_pref_label, lang="en")))
+        g.add((parent_concept, SKOS.inScheme, scheme))
         entities[parent_concept_uri] = parent_concept
     
     # Now check to see if the parent concept has a parent concept
     for i, row in df[p_index].iterrows():
         parent_concept_uri = row['parent_uri']
+        parent_concept_uri = str(parent_concept_uri).strip()
         p_p_index = df['uri'] == parent_concept_uri
         p_p_concept = None
         if not df[p_p_index].empty:
             p_p_concept_uri = df[p_p_index]['parent_uri'].values[0]
-            p_p_concept = entities.get(p_p_concept_uri)
+            if p_p_concept_uri != parent_concept_uri:
+                # The parent of a parent needs to have a different URI
+                p_p_concept = entities.get(p_p_concept_uri)
         if not p_p_concept:
             # this concept has no parent concept, add it as a top level concept
             g.add((parent_concept, SKOS.topConceptOf, scheme))
@@ -68,6 +73,7 @@ def prepare_skos_graph_from_concepts_csv(
             # this concept has a parent concept, so add the relationship
             g.add((parent_concept, SKOS.broader, p_p_concept))
             g.add((p_p_concept, SKOS.narrower, parent_concept))
+            g.add((p_p_concept, SKOS.inScheme, scheme))
 
     # add all of the main concepts to the graph
     act_index = (
@@ -76,13 +82,15 @@ def prepare_skos_graph_from_concepts_csv(
     )
     for i, row in df[act_index].iterrows():
         concept_uri = row['uri']
+        concept_uri = str(concept_uri).strip()
         pref_label = row['prefLabel']
         if concept_uri in entities:
             # this concept has already been added to the graph
-            continue
+            pass
         act_concept = URIRef(concept_uri)
         g.add((act_concept, RDF.type, SKOS.Concept))
         g.add((act_concept, SKOS.prefLabel, Literal(pref_label, lang="en")))
+        g.add((act_concept, SKOS.inScheme, scheme))
         entities[concept_uri] = act_concept
         # check to see if the concept has a parent concept
         parent_concept_uri = row['parent_uri']
@@ -95,7 +103,7 @@ def prepare_skos_graph_from_concepts_csv(
             # this concept has no parent concept, add it as a top level concept
             g.add((act_concept, SKOS.topConceptOf, scheme))
             g.add((scheme, SKOS.hasTopConcept, act_concept))
-            g.add((act_concept, SKOS.inScheme, scheme))
+            # g.add((act_concept, SKOS.inScheme, scheme))
     return g
 
 
@@ -105,7 +113,7 @@ def prepare_save_skos_rdf_graph_from_csv(
     scheme_uri=None,
     scheme_label=None,
     overwrite_rdf=False,
-    format='turtle',
+    format='xml',
 ):
     """Prepare and save the RDF graph."""
     if os.path.exists(rdf_file_path) and not overwrite_rdf:
