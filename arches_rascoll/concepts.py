@@ -10,6 +10,18 @@ from arches_rascoll import general_configs
 from arches_rascoll import utilities
 
 
+"""
+# testing
+
+from arches_rascoll import general_configs
+from arches_rascoll import concepts
+
+csv_file_path = general_configs.CONCEPTS_OBJECT_TYPE_CSV
+rdf_file_path = general_configs.CONCEPTS_OBJECT_TYPE_RDF
+
+"""
+
+
 def get_parent_concept_uri_for_concept_uri(
     df,
     concept_uri,
