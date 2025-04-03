@@ -79,7 +79,8 @@ def make_objs_from_json_strings(df_stage, col_data_types):
 
 def make_transformed_value(act_raw_value, data_type, value_transform):
     """Makes a transformed value based on the data type and value transform"""
-    if data_type == JSONB \
+    mapped_data_type = utilities.lookup_data_type_sql_str(data_type)
+    if mapped_data_type in ['jsonb', 'uuid[]'] \
         and value_transform == general_configs.copy_value \
         and isinstance(act_raw_value, str):
         # We need to convert the string to a JSON object.
@@ -94,7 +95,6 @@ def make_transformed_value(act_raw_value, data_type, value_transform):
 def prep_transformed_data(df, configs):
     """Prepares a dataset from the dataframe df for transformation into a staging table"""
     dict_rows = {}
-
     col_data_types = {}
     for _, row in df.iterrows():
         # Given the small data volumes, I'm not bothering to optimize performance with
@@ -104,6 +104,10 @@ def prep_transformed_data(df, configs):
             dict_rows[raw_pk] = {}
         for mapping in configs.get('mappings'):
             raw_col = mapping.get('raw_col')
+            if (configs.get('staging_table') == 'rsci_materials_object_types') \
+               and (raw_col == 'object_type_value_uuids'):
+                # import pdb; pdb.set_trace()
+                pass
             stage_field_prefix = mapping.get('stage_field_prefix')
             value_transform = mapping.get('value_transform')
             targ_field = mapping.get('targ_field')

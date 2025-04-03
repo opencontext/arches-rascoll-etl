@@ -1043,11 +1043,14 @@ CONCEPTS_MATERIALS_RDF = os.path.join(DATA_DIR, 'concepts_materials.rdf')
 CONCEPTS_OBJECT_TYPE_CSV = os.path.join(DATA_DIR, 'concepts_object_type.csv')
 CONCEPTS_OBJECT_TYPE_RDF = os.path.join(DATA_DIR, 'concepts_object_type.rdf')
 
-RSCI_MATERIALS_CONFIGS = {
+IMPORT_RAW_RSCI_MATERIALS_OBJ_TYPE_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-matterials-object-types.csv')
+
+RSCI_MATERIALS_OBJECT_TYPE_CONFIGS = {
     'model_id': RSCI_UUID,
-    'staging_table': 'rsci_materials',
+    'staging_table': 'rsci_materials_object_types',
     'model_staging_schema': RSCI_MODEL_NAME,
     'raw_pk_col': 'rsci_uuid',
+    'load_path': IMPORT_RAW_RSCI_MATERIALS_OBJ_TYPE_CSV,
     'mappings': [
         {
             'raw_col': 'rsci_uuid',
@@ -1078,6 +1081,19 @@ RSCI_MATERIALS_CONFIGS = {
                 ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
             ], 
         },
+        {
+            'raw_col': 'object_type_value_uuids',
+            'targ_table': 'object_type',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'object_type',
+            'data_type': ARRAY(UUID),
+            'make_tileid': True,
+            'default_values': [
+                ('object_type_metatype', UUID, 'f1345047-ec81-4fec-90be-e108f0642f23',),
+                ('nodegroupid', UUID, 'bda3b60c-d376-11ef-a239-0275dc2ded29',),
+            ], 
+        },
     ],
 }
 
@@ -1098,6 +1114,9 @@ ALL_MAPPING_CONFIGS = [
     RSCI_SAFETY_GROUP_MAPPINGS,
     PROV_ACT_MAPPING_CONFIGS,
     RSCI_PRODUCTION_CONFIGS,
+
+    # Materials and object type.
+    RSCI_MATERIALS_OBJECT_TYPE_CONFIGS, 
 ]
 
 

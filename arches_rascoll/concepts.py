@@ -19,6 +19,11 @@ from arches_rascoll import concepts
 csv_file_path = general_configs.CONCEPTS_OBJECT_TYPE_CSV
 rdf_file_path = general_configs.CONCEPTS_OBJECT_TYPE_RDF
 
+g = concepts.prepare_save_skos_rdf_graph_from_csv(
+    csv_file_path=csv_file_path,
+    rdf_file_path=rdf_file_path,
+    format='xml',
+)
 """
 
 
@@ -180,6 +185,8 @@ def get_concept_values_by_preflabel(
     """Get a conceptid, concept_uri, and preflabel
     and various valueids by a preflabel."""
     engine = utilities.create_engine(db_url)
+    pref_label = str(pref_label).strip()
+    pref_label = pref_label.replace("'", "''")
     sql = f"""
     SELECT
         vpf.conceptid,

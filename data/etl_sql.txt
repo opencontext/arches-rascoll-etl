@@ -833,3 +833,71 @@ prod_1_tileid::uuid
                 
                 ;
                 
+
+
+                INSERT INTO reference_and_sample_collection_item.instances (
+                    resourceinstanceid, 
+graphid, 
+graphpublicationid, 
+principaluser_id
+                ) SELECT
+                    resourceinstanceid::uuid, 
+graphid::uuid, 
+graphpublicationid::uuid, 
+principaluser_id::integer
+                
+                FROM staging.rsci_materials_object_types
+                WHERE (staging.rsci_materials_object_types.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.rsci_materials_object_types.resourceinstanceid::uuid IS NOT NULL))
+                ORDER BY staging.rsci_materials_object_types.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.material_data_assignment_name (
+                    resourceinstanceid, 
+tileid, 
+material_data_assignment_name_content, 
+material_data_assignment_name_type, 
+material_data_assignment_name_language, 
+nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+chem_tileid::uuid, 
+chem_material_data_assignment_name_content::jsonb, 
+chem_material_data_assignment_name_type::uuid[], 
+chem_material_data_assignment_name_language::uuid[], 
+chem_nodegroupid::uuid
+                
+                FROM staging.rsci_materials_object_types
+                WHERE (staging.rsci_materials_object_types.chem_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_materials_object_types.chem_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_materials_object_types.chem_material_data_assignment_name_content::jsonb IS NOT NULL))
+                ORDER BY staging.rsci_materials_object_types.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.object_type (
+                    resourceinstanceid, 
+tileid, 
+object_type, 
+object_type_metatype, 
+nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+tileid::uuid, 
+object_type::uuid[], 
+object_type_metatype::uuid, 
+nodegroupid::uuid
+                
+                FROM staging.rsci_materials_object_types
+                WHERE (staging.rsci_materials_object_types.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_materials_object_types.tileid::uuid IS NOT NULL) AND 
+((staging.rsci_materials_object_types.object_type::uuid[] IS NOT NULL))
+                ORDER BY staging.rsci_materials_object_types.resourceinstanceid
+                
+                ;
+                
