@@ -16,7 +16,7 @@ Metal,61,metal,http://vocab.getty.edu/page/aat/300010900,,
 Natural Resin,389,natural resin,http://vocab.getty.edu/page/aat/300378966,,
 Oil,276,oil (organic material),http://vocab.getty.edu/page/aat/300014254,,
 Oleoresin / Balsam,38,balsam (resin),http://vocab.getty.edu/page/aat/300012891,,
-Other,111,other material,,,
+Other,111,other material,http://localhost/6136cd09-d8b0-4611-89c0-b2903636daaa,,
 Paint Additive,103,additive (material),http://vocab.getty.edu/page/aat/300014701,,
 "Paint, acrylic",409,acrylic paint,http://vocab.getty.edu/page/aat/300015058,paint (coating),http://vocab.getty.edu/page/aat/300015029
 "Paint, encaustic",149,encaustic paint,http://vocab.getty.edu/page/aat/300183750,paint (coating),http://vocab.getty.edu/page/aat/300015029
@@ -34,8 +34,8 @@ Plastic,1,plastic (material),http://vocab.getty.edu/page/aat/300014570,,
 Prepared mixture,1235,mixtures (materials),http://vocab.getty.edu/page/aat/300246925,,
 Protein,291,protein,http://vocab.getty.edu/page/aat/300206575,,
 ,,raw material,http://vocab.getty.edu/page/aat/300015351,,
-Raw Material - inorganic,283,raw material - inorganic,,raw material,http://vocab.getty.edu/page/aat/300015351
-"Raw Material - organic (seed, nut, etc.)",356,raw material - organic,,raw material,http://vocab.getty.edu/page/aat/300015351
+Raw Material - inorganic,283,raw material - inorganic,http://localhost/be3e9497-2318-4618-adf8-4d8ed05c73ba,raw material,http://vocab.getty.edu/page/aat/300015351
+"Raw Material - organic (seed, nut, etc.)",356,raw material - organic,http://localhost/be3e9497-2318-4b40c64b2-e624-4ef6-89fb-1419ec8faa12,raw material,http://vocab.getty.edu/page/aat/300015351
 Sample Book,5,sample books,http://vocab.getty.edu/page/aat/300027337,,
 Size,1,size (material),http://vocab.getty.edu/page/aat/300015312,,
 Solvent,13,solvent,http://vocab.getty.edu/page/aat/300015217,,
