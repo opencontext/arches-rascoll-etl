@@ -1082,6 +1082,19 @@ RSCI_MATERIALS_OBJECT_TYPE_CONFIGS = {
             ], 
         },
         {
+            'raw_col': 'mixture_type_value_uuids',
+            'targ_table': 'mixture_type',
+            'stage_field_prefix': 'mix_',
+            'value_transform': copy_value,
+            'targ_field': 'mixture_type',
+            'data_type': ARRAY(UUID),
+            'make_tileid': True,
+            'default_values': [
+                ('mixture_type_metatype', UUID, 'b9ec8ea4-c678-40e8-8668-bf71828fd6a6',),
+                ('nodegroupid', UUID, '53f96a86-0908-11f0-9f70-0275dc2ded29',),
+            ], 
+        },
+        {
             'raw_col': 'object_type_value_uuids',
             'targ_table': 'object_type',
             'stage_field_prefix': '',
