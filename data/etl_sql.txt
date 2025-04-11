@@ -880,6 +880,54 @@ chem_nodegroupid::uuid
                 
 
 
+                INSERT INTO reference_and_sample_collection_item.statement (
+                    resourceinstanceid, 
+tileid, 
+statement_content, 
+statement_type, 
+statement_language_, 
+nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+gbif_tileid::uuid, 
+gbif_statement_content::jsonb, 
+gbif_statement_type::uuid[], 
+gbif_statement_language_::uuid[], 
+gbif_nodegroupid::uuid
+                
+                FROM staging.rsci_materials_object_types
+                WHERE (staging.rsci_materials_object_types.gbif_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_materials_object_types.gbif_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_materials_object_types.gbif_statement_content::jsonb IS NOT NULL))
+                ORDER BY staging.rsci_materials_object_types.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.mixture_type (
+                    resourceinstanceid, 
+tileid, 
+mixture_type, 
+mixture_type_metatype, 
+nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+mix_tileid::uuid, 
+mix_mixture_type::uuid[], 
+mix_mixture_type_metatype::uuid, 
+mix_nodegroupid::uuid
+                
+                FROM staging.rsci_materials_object_types
+                WHERE (staging.rsci_materials_object_types.mix_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_materials_object_types.mix_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_materials_object_types.mix_mixture_type::uuid[] IS NOT NULL))
+                ORDER BY staging.rsci_materials_object_types.resourceinstanceid
+                
+                ;
+                
+
+
                 INSERT INTO reference_and_sample_collection_item.object_type (
                     resourceinstanceid, 
 tileid, 

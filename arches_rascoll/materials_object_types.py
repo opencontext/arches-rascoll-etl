@@ -44,11 +44,21 @@ def prepare_rsci_materials_object_types_data(
     keep_cols = [
         'rsci_uuid', 
         'Chemical Name',
+        'gbif_canonical_name',
+        'gbif_uri',
         'Mixture Type',
         'Sample Type',
         'Typical Use',
     ]
     df_rsci_mot = df[keep_cols].copy()
+    # Add a GBIF statement column
+    df_rsci_mot['gbif_statement'] = ''
+    act_index = ~df_rsci_mot['gbif_uri'].isnull()
+    df_rsci_mot.loc[act_index, 'gbif_statement'] = df_rsci_mot[act_index].apply(
+        lambda row: f"{row['gbif_canonical_name']} ({row['gbif_uri']})",
+        axis=1
+    )
+    # Now add columns for value UUIDs to concepts.
     df_rsci_mot['sample_type_value_uuid'] = ''
     df_rsci_mot['typical_use_value_uuid'] = ''
     col_vals = [

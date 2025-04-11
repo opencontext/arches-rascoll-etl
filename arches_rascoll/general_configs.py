@@ -1081,6 +1081,20 @@ RSCI_MATERIALS_OBJECT_TYPE_CONFIGS = {
                 ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
             ], 
         },
+         {
+            'raw_col': 'gbif_statement',
+            'targ_table': 'statement',
+            'stage_field_prefix': 'gbif_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'statement_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('statement_type', ARRAY(UUID), ['0fccc7ca-50fd-4b67-abcd-aff15396cbfa'],),
+                ('statement_language_', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
+            ], 
+        },
         {
             'raw_col': 'mixture_type_value_uuids',
             'targ_table': 'mixture_type',
