@@ -19,12 +19,38 @@ from arches_rascoll import concepts
 csv_file_path = general_configs.CONCEPTS_OBJECT_TYPE_CSV
 rdf_file_path = general_configs.CONCEPTS_OBJECT_TYPE_RDF
 
-g = concepts.prepare_save_skos_rdf_graph_from_csv(
+g, new_entities = concepts.prepare_save_skos_rdf_graph_from_csv(
     csv_file_path=csv_file_path,
     rdf_file_path=rdf_file_path,
     format='xml',
 )
+ent_str = concepts.output_new_skos_concepts(new_entities)
 """
+
+def output_new_skos_concepts(
+    new_entities,
+    output_path=general_configs.NEW_CONCEPTS_OBJECT_TYPE_RDF,
+):
+    """Output the new SKOS concepts to a CSV file."""
+    if not os.path.exists(output_path):
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    ent_strs = []
+    for new_entity in new_entities:
+        ent_str = f"""
+        <skos:narrower>
+            <skos:Concept rdf:about="{new_entity['uri']}">
+            <skos:prefLabel xml:lang="en">{new_entity['pref_label']}</skos:prefLabel>
+            <skos:inScheme rdf:resource="http://localhost:8000/b73e741b-46da-496c-8960-55cc1007bec4"/>
+            </skos:Concept>
+        </skos:narrower>
+        """
+        ent_strs.append(ent_str)
+    output = '\n'.join(ent_strs)
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write(output)
+    f.close()
+    return output
+
 
 
 def get_parent_concept_uri_for_concept_uri(
@@ -65,7 +91,7 @@ def prepare_skos_graph_from_concepts_csv(
     g.add((scheme, DCTERMS.title, Literal(scheme_label, lang="en")))
 
     entities = {}
-
+    entities_pref_labels = {}
     # Add all the child concepts to the graph
     c_index = (
         ~df['prefLabel'].isnull()
@@ -75,6 +101,7 @@ def prepare_skos_graph_from_concepts_csv(
         concept_uri = row['uri']
         concept_uri = str(concept_uri).strip()
         pref_label = row['prefLabel']
+        entities_pref_labels[concept_uri] = pref_label
         if concept_uri in entities:
             # this concept has already been added to the graph
             pass
@@ -93,6 +120,7 @@ def prepare_skos_graph_from_concepts_csv(
         parent_concept_uri = row['parent_uri']
         parent_concept_uri = str(parent_concept_uri).strip()
         parent_pref_label = row['parent_prefLabel']
+        entities_pref_labels[parent_concept_uri] = parent_pref_label 
         if parent_concept_uri in entities:
             # this concept has already been added to the graph
             continue
@@ -121,7 +149,24 @@ def prepare_skos_graph_from_concepts_csv(
             g.add((concept, SKOS.broader, parent_concept))
             g.add((parent_concept, SKOS.narrower, concept))
             g.add((parent_concept, SKOS.inScheme, scheme))
-    return g
+    
+    new_entities = []
+    for uri, pref_label in entities_pref_labels.items():
+        # check to see if the uri already exists in Arches
+        exist_obj = get_concept_values_by_uri(
+            concept_uri=uri,
+            db_url=general_configs.ARCHES_DB_URL,
+        )
+        if exist_obj:
+            # this concept already exists in Arches, so skip it
+            continue
+        new_entities.append(
+            {
+                'uri': uri,
+                'pref_label': pref_label,
+            }
+        )
+    return g, new_entities
 
 
 def prepare_save_skos_rdf_graph_from_csv(
@@ -136,15 +181,14 @@ def prepare_save_skos_rdf_graph_from_csv(
     if os.path.exists(rdf_file_path) and not overwrite_rdf:
         g = Graph()
         g.parse(rdf_file_path)
-        return g
-    g = prepare_skos_graph_from_concepts_csv(
+        return g, None
+    g, new_entities = prepare_skos_graph_from_concepts_csv(
         csv_file_path,
         scheme_uri=scheme_uri,
         scheme_label=scheme_label,
     )
     g.serialize(rdf_file_path, format=format)
-    return g
-
+    return g, new_entities
 
 
 def get_concept_values_by_uri(

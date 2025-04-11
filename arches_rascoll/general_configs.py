@@ -1042,6 +1042,7 @@ CONCEPTS_MATERIALS_RDF = os.path.join(DATA_DIR, 'concepts_materials.rdf')
 # The concepts for "object type"
 CONCEPTS_OBJECT_TYPE_CSV = os.path.join(DATA_DIR, 'concepts_object_type.csv')
 CONCEPTS_OBJECT_TYPE_RDF = os.path.join(DATA_DIR, 'concepts_object_type.rdf')
+NEW_CONCEPTS_OBJECT_TYPE_RDF = os.path.join(DATA_DIR, 'new_concepts_object_type.rdf')
 
 IMPORT_RAW_RSCI_MATERIALS_OBJ_TYPE_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-matterials-object-types.csv')
 
