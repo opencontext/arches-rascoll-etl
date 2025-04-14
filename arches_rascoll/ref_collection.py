@@ -15,6 +15,7 @@ from sqlalchemy.dialects.postgresql import UUID, ARRAY, JSONB
 
 from arches_rascoll import general_configs
 from arches_rascoll import places
+from arches_rascoll import sql_functions
 from arches_rascoll import utilities
 
 
@@ -271,7 +272,10 @@ def prepare_all_sql_inserts(
     increment=15000,
     add_tile_update_sqls=False,
 ):
-    sqls = []
+    sqls = [
+        'CREATE SCHEMA IF NOT EXISTS "staging";',
+        sql_functions.POSTGRESQL_PERFORMANCE_FIX,
+    ]
     if relational_views_sqls:
         # Add the SQL statements for the relational views.
         sqls += relational_views_sqls
@@ -295,6 +299,15 @@ def prepare_all_sql_inserts(
                 insert_fields.append(
                     ('resourceinstanceid', 'resourceinstanceid::uuid')
                 )
+                if general_configs.ARCHES_V8 and targ_field == 'resourceinstanceid':
+                    # We're importing resource instances, so we need to add the lifecycle state id for
+                    # Arches version 8
+                    insert_fields.append(
+                        (
+                            'resource_instance_lifecycle_state_id', 
+                            f"'{general_configs.ARCHES_V8_RESOURCE_INSTANCE_LIFECYCLE_STATE_ID }'::uuid AS state_id"
+                        )
+                    )
 
                 limit_offset = f'LIMIT {increment} OFFSET {start}'
                 if targ_field == 'resourceinstanceid':
@@ -463,6 +476,10 @@ def prepare_all_sql_inserts(
                 """
                 sqls.append(tile_sql)
             start += increment
+    
+    sqls.append(
+        sql_functions.POSTGRESQL_AFTER_ETL_FUNCTION
+    )
     utilities.save_sql(sqls)
     return sqls 
 

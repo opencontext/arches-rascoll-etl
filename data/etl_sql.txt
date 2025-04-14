@@ -1,3 +1,123 @@
+CREATE SCHEMA IF NOT EXISTS "staging";
+
+
+create or replace function __arches_tile_view_update() returns trigger as $$
+declare
+    view_namespace text;
+    group_id uuid;
+    graph_id uuid;
+    parent_id uuid;
+    tile_id uuid;
+    transaction_id uuid;
+    json_data json;
+    old_json_data jsonb;
+    edit_type text;
+begin
+    select graphid into graph_id from nodes where nodeid = group_id;
+    view_namespace = format('%s.%s', tg_table_schema, tg_table_name);
+    select obj_description(view_namespace::regclass, 'pg_class') into group_id;
+    if (TG_OP = 'DELETE') then
+        select tiledata into old_json_data from tiles where tileid = old.tileid;
+        delete from resource_x_resource where tileid = old.tileid;
+        delete from public.tiles where tileid = old.tileid;
+        insert into bulk_index_queue (resourceinstanceid, createddate)
+            values (old.resourceinstanceid, current_timestamp) on conflict do nothing;
+        insert into edit_log (
+            resourceclassid,
+            resourceinstanceid,
+            nodegroupid,
+            tileinstanceid,
+            edittype,
+            oldvalue,
+            timestamp,
+            note,
+            transactionid
+        ) values (
+            graph_id,
+            old.resourceinstanceid,
+            group_id,
+            old.tileid,
+            'tile delete',
+            old_json_data,
+            now(),
+            'loaded via SQL backend',
+            public.uuid_generate_v1mc()
+        );
+        return old;
+    else
+        select __arches_get_json_data_for_view(new, tg_table_schema, tg_table_name) into json_data;
+        select __arches_get_parent_id_for_view(new, tg_table_schema, tg_table_name) into parent_id;
+        tile_id = new.tileid;
+        if (new.transactionid is null) then
+            transaction_id = public.uuid_generate_v1mc();
+        else
+            transaction_id = new.transactionid;
+        end if;
+
+        if (TG_OP = 'UPDATE') then
+            select tiledata into old_json_data from tiles where tileid = tile_id;
+            edit_type = 'tile edit';
+            if (transaction_id = old.transactionid) then
+                transaction_id = public.uuid_generate_v1mc();
+            end if;
+            update public.tiles
+            set tiledata = json_data,
+                nodegroupid = group_id,
+                parenttileid = parent_id,
+                resourceinstanceid = new.resourceinstanceid
+            where tileid = new.tileid;
+        elsif (TG_OP = 'INSERT') then
+            old_json_data = null;
+            edit_type = 'tile create';
+            if tile_id is null then
+                tile_id = public.uuid_generate_v1mc();
+            end if;
+            insert into public.tiles(
+                tileid,
+                tiledata,
+                nodegroupid,
+                parenttileid,
+                resourceinstanceid
+            ) values (
+                tile_id,
+                json_data,
+                group_id,
+                parent_id,
+                new.resourceinstanceid
+            );
+        end if;
+        perform __arches_refresh_tile_resource_relationships(tile_id);
+        insert into bulk_index_queue (resourceinstanceid, createddate)
+            values (new.resourceinstanceid, current_timestamp) on conflict do nothing;
+        insert into edit_log (
+            resourceclassid,
+            resourceinstanceid,
+            nodegroupid,
+            tileinstanceid,
+            edittype,
+            newvalue,
+            oldvalue,
+            timestamp,
+            note,
+            transactionid
+        ) values (
+            graph_id,
+            new.resourceinstanceid,
+            group_id,
+            tile_id,
+            edit_type,
+            json_data::jsonb,
+            old_json_data,
+            now(),
+            'loaded via SQL backend',
+            transaction_id
+        );
+        return new;
+    end if;
+    end;
+$$ language plpgsql;
+
+
 
     SELECT __arches_create_resource_model_views('bda239c6-d376-11ef-a239-0275dc2ded29');
     
@@ -25,11 +145,13 @@
 
                 INSERT INTO reference_and_sample_collection_item.instances (
                     resourceinstanceid, 
+resource_instance_lifecycle_state_id, 
 graphid, 
 graphpublicationid, 
 principaluser_id
                 ) SELECT
                     resourceinstanceid::uuid, 
+'7e3cce56-fbfb-4a4b-8e83-59b9f9e7cb75'::uuid AS state_id, 
 graphid::uuid, 
 graphpublicationid::uuid, 
 principaluser_id::integer
@@ -141,11 +263,13 @@ nodegroupid::uuid
 
                 INSERT INTO place.instances (
                     resourceinstanceid, 
+resource_instance_lifecycle_state_id, 
 graphid, 
 graphpublicationid, 
 principaluser_id
                 ) SELECT
                     resourceinstanceid::uuid, 
+'7e3cce56-fbfb-4a4b-8e83-59b9f9e7cb75'::uuid AS state_id, 
 graphid::uuid, 
 graphpublicationid::uuid, 
 principaluser_id::integer
@@ -253,11 +377,13 @@ geo_point_nodegroupid::uuid
 
                 INSERT INTO group_.instances (
                     resourceinstanceid, 
+resource_instance_lifecycle_state_id, 
 graphid, 
 graphpublicationid, 
 principaluser_id
                 ) SELECT
                     resourceinstanceid::uuid, 
+'7e3cce56-fbfb-4a4b-8e83-59b9f9e7cb75'::uuid AS state_id, 
 graphid::uuid, 
 graphpublicationid::uuid, 
 principaluser_id::integer
@@ -298,11 +424,13 @@ group_name_nodegroupid::uuid
 
                 INSERT INTO person.instances (
                     resourceinstanceid, 
+resource_instance_lifecycle_state_id, 
 graphid, 
 graphpublicationid, 
 principaluser_id
                 ) SELECT
                     resourceinstanceid::uuid, 
+'7e3cce56-fbfb-4a4b-8e83-59b9f9e7cb75'::uuid AS state_id, 
 graphid::uuid, 
 graphpublicationid::uuid, 
 principaluser_id::integer
@@ -343,11 +471,13 @@ person_name_nodegroupid::uuid
 
                 INSERT INTO collection_or_set.instances (
                     resourceinstanceid, 
+resource_instance_lifecycle_state_id, 
 graphid, 
 graphpublicationid, 
 principaluser_id
                 ) SELECT
                     resourceinstanceid::uuid, 
+'7e3cce56-fbfb-4a4b-8e83-59b9f9e7cb75'::uuid AS state_id, 
 graphid::uuid, 
 graphpublicationid::uuid, 
 principaluser_id::integer
@@ -388,11 +518,13 @@ nodegroupid::uuid
 
                 INSERT INTO reference_and_sample_collection_item.instances (
                     resourceinstanceid, 
+resource_instance_lifecycle_state_id, 
 graphid, 
 graphpublicationid, 
 principaluser_id
                 ) SELECT
                     resourceinstanceid::uuid, 
+'7e3cce56-fbfb-4a4b-8e83-59b9f9e7cb75'::uuid AS state_id, 
 graphid::uuid, 
 graphpublicationid::uuid, 
 principaluser_id::integer
@@ -458,11 +590,13 @@ physical_form_nodegroupid::uuid
 
                 INSERT INTO reference_and_sample_collection_item.instances (
                     resourceinstanceid, 
+resource_instance_lifecycle_state_id, 
 graphid, 
 graphpublicationid, 
 principaluser_id
                 ) SELECT
                     resourceinstanceid::uuid, 
+'7e3cce56-fbfb-4a4b-8e83-59b9f9e7cb75'::uuid AS state_id, 
 graphid::uuid, 
 graphpublicationid::uuid, 
 principaluser_id::integer
@@ -594,11 +728,13 @@ reactivity_safety_nodegroupid::uuid,
 
                 INSERT INTO provenance_activity.instances (
                     resourceinstanceid, 
+resource_instance_lifecycle_state_id, 
 graphid, 
 graphpublicationid, 
 principaluser_id
                 ) SELECT
                     resourceinstanceid::uuid, 
+'7e3cce56-fbfb-4a4b-8e83-59b9f9e7cb75'::uuid AS state_id, 
 graphid::uuid, 
 graphpublicationid::uuid, 
 principaluser_id::integer
@@ -713,11 +849,13 @@ acquisition_timespan_end_of_the_end::timestamp
 
                 INSERT INTO reference_and_sample_collection_item.instances (
                     resourceinstanceid, 
+resource_instance_lifecycle_state_id, 
 graphid, 
 graphpublicationid, 
 principaluser_id
                 ) SELECT
                     resourceinstanceid::uuid, 
+'7e3cce56-fbfb-4a4b-8e83-59b9f9e7cb75'::uuid AS state_id, 
 graphid::uuid, 
 graphpublicationid::uuid, 
 principaluser_id::integer
@@ -837,11 +975,13 @@ prod_1_tileid::uuid
 
                 INSERT INTO reference_and_sample_collection_item.instances (
                     resourceinstanceid, 
+resource_instance_lifecycle_state_id, 
 graphid, 
 graphpublicationid, 
 principaluser_id
                 ) SELECT
                     resourceinstanceid::uuid, 
+'7e3cce56-fbfb-4a4b-8e83-59b9f9e7cb75'::uuid AS state_id, 
 graphid::uuid, 
 graphpublicationid::uuid, 
 principaluser_id::integer
@@ -874,6 +1014,31 @@ chem_nodegroupid::uuid
                 WHERE (staging.rsci_materials_object_types.chem_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.rsci_materials_object_types.chem_tileid::uuid IS NOT NULL) AND 
 ((staging.rsci_materials_object_types.chem_material_data_assignment_name_content::jsonb IS NOT NULL))
+                ORDER BY staging.rsci_materials_object_types.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.name (
+                    resourceinstanceid, 
+tileid, 
+name_content, 
+name_type_, 
+name_language_, 
+nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+gbif_name_tileid::uuid, 
+gbif_name_name_content::jsonb, 
+gbif_name_name_type_::uuid[], 
+gbif_name_name_language_::uuid[], 
+gbif_name_nodegroupid::uuid
+                
+                FROM staging.rsci_materials_object_types
+                WHERE (staging.rsci_materials_object_types.gbif_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_materials_object_types.gbif_name_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_materials_object_types.gbif_name_name_content::jsonb IS NOT NULL))
                 ORDER BY staging.rsci_materials_object_types.resourceinstanceid
                 
                 ;
@@ -928,24 +1093,299 @@ mix_nodegroupid::uuid
                 
 
 
-                INSERT INTO reference_and_sample_collection_item.object_type (
+                INSERT INTO reference_and_sample_collection_item.material (
                     resourceinstanceid, 
 tileid, 
-object_type, 
-object_type_metatype, 
+material, 
 nodegroupid
                 ) SELECT
                     resourceinstanceid::uuid, 
-tileid::uuid, 
-object_type::uuid[], 
-object_type_metatype::uuid, 
-nodegroupid::uuid
+mat_tileid::uuid, 
+mat_material::uuid[], 
+mat_nodegroupid::uuid
                 
                 FROM staging.rsci_materials_object_types
-                WHERE (staging.rsci_materials_object_types.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_materials_object_types.tileid::uuid IS NOT NULL) AND 
-((staging.rsci_materials_object_types.object_type::uuid[] IS NOT NULL))
+                WHERE (staging.rsci_materials_object_types.mat_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_materials_object_types.mat_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_materials_object_types.mat_material::uuid[] IS NOT NULL))
                 ORDER BY staging.rsci_materials_object_types.resourceinstanceid
                 
                 ;
                 
+
+
+                INSERT INTO reference_and_sample_collection_item.instances (
+                    resourceinstanceid, 
+resource_instance_lifecycle_state_id, 
+graphid, 
+graphpublicationid, 
+principaluser_id
+                ) SELECT
+                    resourceinstanceid::uuid, 
+'7e3cce56-fbfb-4a4b-8e83-59b9f9e7cb75'::uuid AS state_id, 
+graphid::uuid, 
+graphpublicationid::uuid, 
+principaluser_id::integer
+                
+                FROM staging.rsci_components
+                WHERE (staging.rsci_components.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.rsci_components.resourceinstanceid::uuid IS NOT NULL))
+                ORDER BY staging.rsci_components.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.has_part (
+                    resourceinstanceid, 
+tileid, 
+part_type, 
+nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+comp1_tileid::uuid, 
+comp1_part_type::uuid, 
+comp1_nodegroupid::uuid
+                
+                FROM staging.rsci_components
+                WHERE (staging.rsci_components.comp1_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_components.comp1_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_components.comp1_part_type::uuid IS NOT NULL))
+                ORDER BY staging.rsci_components.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.part_statement (
+                    resourceinstanceid, 
+tileid, 
+part_statement_content, 
+part_statement_type, 
+part_statement_language, 
+nodegroupid, 
+has_part
+                ) SELECT
+                    resourceinstanceid::uuid, 
+comp1_statement_tileid::uuid, 
+comp1_statement_part_statement_content::jsonb, 
+comp1_statement_part_statement_type::uuid[], 
+comp1_statement_part_statement_language::uuid[], 
+comp1_statement_nodegroupid::uuid, 
+comp1_tileid::uuid
+                
+                FROM staging.rsci_components
+                WHERE (staging.rsci_components.comp1_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_components.comp1_statement_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_components.comp1_statement_part_statement_content::jsonb IS NOT NULL))
+                ORDER BY staging.rsci_components.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.part_dimension (
+                    resourceinstanceid, 
+tileid, 
+part_dimension_value_, 
+part_dimension_type_, 
+part_dimension_unit, 
+nodegroupid, 
+has_part
+                ) SELECT
+                    resourceinstanceid::uuid, 
+comp1_n_tileid::uuid, 
+comp1_n_part_dimension_value_::numeric, 
+comp1_n_part_dimension_type_::uuid, 
+comp1_n_part_dimension_unit::uuid, 
+comp1_n_nodegroupid::uuid, 
+comp1_tileid::uuid
+                
+                FROM staging.rsci_components
+                WHERE (staging.rsci_components.comp1_n_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_components.comp1_n_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_components.comp1_n_part_dimension_value_::numeric IS NOT NULL))
+                ORDER BY staging.rsci_components.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.part_dimension_name (
+                    resourceinstanceid, 
+tileid, 
+part_dimension_name_content_, 
+part_dimension_name_type_, 
+part_dimension_name_language_, 
+nodegroupid, 
+part_dimension
+                ) SELECT
+                    resourceinstanceid::uuid, 
+comp1_p_tileid::uuid, 
+comp1_p_part_dimension_name_content_::jsonb, 
+comp1_p_part_dimension_name_type_::uuid[], 
+comp1_p_part_dimension_name_language_::uuid[], 
+comp1_p_nodegroupid::uuid, 
+comp1_n_tileid::uuid
+                
+                FROM staging.rsci_components
+                WHERE (staging.rsci_components.comp1_p_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_components.comp1_p_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_components.comp1_p_part_dimension_name_content_::jsonb IS NOT NULL))
+                ORDER BY staging.rsci_components.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.has_part (
+                    resourceinstanceid, 
+tileid, 
+part_type, 
+nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+comp2_tileid::uuid, 
+comp2_part_type::uuid, 
+comp2_nodegroupid::uuid
+                
+                FROM staging.rsci_components
+                WHERE (staging.rsci_components.comp2_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_components.comp2_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_components.comp2_part_type::uuid IS NOT NULL))
+                ORDER BY staging.rsci_components.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.part_statement (
+                    resourceinstanceid, 
+tileid, 
+part_statement_content, 
+part_statement_type, 
+part_statement_language, 
+nodegroupid, 
+has_part
+                ) SELECT
+                    resourceinstanceid::uuid, 
+comp2_statement_tileid::uuid, 
+comp2_statement_part_statement_content::jsonb, 
+comp2_statement_part_statement_type::uuid[], 
+comp2_statement_part_statement_language::uuid[], 
+comp2_statement_nodegroupid::uuid, 
+comp2_tileid::uuid
+                
+                FROM staging.rsci_components
+                WHERE (staging.rsci_components.comp2_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_components.comp2_statement_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_components.comp2_statement_part_statement_content::jsonb IS NOT NULL))
+                ORDER BY staging.rsci_components.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.part_dimension (
+                    resourceinstanceid, 
+tileid, 
+part_dimension_value_, 
+part_dimension_type_, 
+part_dimension_unit, 
+nodegroupid, 
+has_part
+                ) SELECT
+                    resourceinstanceid::uuid, 
+comp2_n_tileid::uuid, 
+comp2_n_part_dimension_value_::numeric, 
+comp2_n_part_dimension_type_::uuid, 
+comp2_n_part_dimension_unit::uuid, 
+comp2_n_nodegroupid::uuid, 
+comp2_tileid::uuid
+                
+                FROM staging.rsci_components
+                WHERE (staging.rsci_components.comp2_n_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_components.comp2_n_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_components.comp2_n_part_dimension_value_::numeric IS NOT NULL))
+                ORDER BY staging.rsci_components.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.part_dimension_name (
+                    resourceinstanceid, 
+tileid, 
+part_dimension_name_content_, 
+part_dimension_name_type_, 
+part_dimension_name_language_, 
+nodegroupid, 
+part_dimension
+                ) SELECT
+                    resourceinstanceid::uuid, 
+comp2_p_tileid::uuid, 
+comp2_p_part_dimension_name_content_::jsonb, 
+comp2_p_part_dimension_name_type_::uuid[], 
+comp2_p_part_dimension_name_language_::uuid[], 
+comp2_p_nodegroupid::uuid, 
+comp2_n_tileid::uuid
+                
+                FROM staging.rsci_components
+                WHERE (staging.rsci_components.comp2_p_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_components.comp2_p_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_components.comp2_p_part_dimension_name_content_::jsonb IS NOT NULL))
+                ORDER BY staging.rsci_components.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.has_part (
+                    resourceinstanceid, 
+tileid, 
+part_type, 
+nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+comp3_tileid::uuid, 
+comp3_part_type::uuid, 
+comp3_nodegroupid::uuid
+                
+                FROM staging.rsci_components
+                WHERE (staging.rsci_components.comp3_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_components.comp3_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_components.comp3_part_type::uuid IS NOT NULL))
+                ORDER BY staging.rsci_components.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.part_statement (
+                    resourceinstanceid, 
+tileid, 
+part_statement_content, 
+part_statement_type, 
+part_statement_language, 
+nodegroupid, 
+has_part
+                ) SELECT
+                    resourceinstanceid::uuid, 
+comp3_statement_tileid::uuid, 
+comp3_statement_part_statement_content::jsonb, 
+comp3_statement_part_statement_type::uuid[], 
+comp3_statement_part_statement_language::uuid[], 
+comp3_statement_nodegroupid::uuid, 
+comp3_tileid::uuid
+                
+                FROM staging.rsci_components
+                WHERE (staging.rsci_components.comp3_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_components.comp3_statement_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_components.comp3_statement_part_statement_content::jsonb IS NOT NULL))
+                ORDER BY staging.rsci_components.resourceinstanceid
+                
+                ;
+                
+
+
+select * from refresh_geojson_geometries();

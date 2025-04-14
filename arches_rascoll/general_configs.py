@@ -8,13 +8,17 @@ import uuid as GenUUID
 
 from sqlalchemy import create_engine
 from sqlalchemy.sql import text
-from sqlalchemy.types import JSON, Float, Text, DateTime, Integer
+from sqlalchemy.types import JSON, Float, Text, DateTime, Integer, Numeric
 from sqlalchemy.dialects.postgresql import UUID, ARRAY, JSONB
 
 
 # Note, the database credentials in the DB URL are set to the default values for a local Arches install, 
 # these should be changed to match your own database and set with the ARCHES_DB_URL environment variable.
 ARCHES_DB_URL = os.getenv('ARCHES_DB_URL', 'postgresql://postgres:postgis@127.0.0.1:5434/rascoll')
+
+ARCHES_V8 = True
+# UUID of the resource_instance_lifecycle_state_id for the Arches 8.0.0 release
+ARCHES_V8_RESOURCE_INSTANCE_LIFECYCLE_STATE_ID = '7e3cce56-fbfb-4a4b-8e83-59b9f9e7cb75'
 
 current_directory = os.getcwd()
 DATA_DIR = os.getenv('RASCOLL_ETL_DIR', os.path.join(current_directory, 'data'))
@@ -50,6 +54,7 @@ DATA_TYPES_SQL = {
     UUID: 'uuid',
     Integer: 'integer',
     Float: 'float',
+    Numeric: 'numeric',
     Text: 'text',
     DateTime: 'timestamp',
     ARRAY(UUID): 'uuid[]',
@@ -1035,6 +1040,7 @@ RSCI_PRODUCTION_CONFIGS = {
 
 # The name type for "chemical name"
 RSCI_MATERIAL_CHEM_NAME_TYPES = ['91b68412-5cef-47b1-bb9d-bb204a2defad',]
+RSCI_GBIF_NAME_TYPES = ['983b7351-17ec-47d7-a42a-c6444dc91df4',]
 
 CONCEPTS_MATERIALS_CSV = os.path.join(DATA_DIR, 'concepts_materials.csv')
 CONCEPTS_MATERIALS_RDF = os.path.join(DATA_DIR, 'concepts_materials.rdf')
@@ -1082,6 +1088,20 @@ RSCI_MATERIALS_OBJECT_TYPE_CONFIGS = {
                 ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
             ], 
         },
+        {
+            'raw_col': 'gbif_canonical_name',
+            'targ_table': 'name',
+            'stage_field_prefix': 'gbif_name_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'name_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('name_type_', ARRAY(UUID), RSCI_GBIF_NAME_TYPES,),
+                ('name_language_', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
+            ], 
+        },
          {
             'raw_col': 'gbif_statement',
             'targ_table': 'statement',
@@ -1111,22 +1131,227 @@ RSCI_MATERIALS_OBJECT_TYPE_CONFIGS = {
         },
         {
             'raw_col': 'object_type_value_uuids',
-            'targ_table': 'object_type',
-            'stage_field_prefix': '',
+            'targ_table': 'material',
+            'stage_field_prefix': 'mat_',
             'value_transform': copy_value,
-            'targ_field': 'object_type',
+            'targ_field': 'material',
             'data_type': ARRAY(UUID),
             'make_tileid': True,
             'default_values': [
-                ('object_type_metatype', UUID, 'f1345047-ec81-4fec-90be-e108f0642f23',),
-                ('nodegroupid', UUID, 'bda3b60c-d376-11ef-a239-0275dc2ded29',),
+                ('nodegroupid', UUID, 'bda47b64-d376-11ef-a239-0275dc2ded29',),
             ], 
         },
     ],
 }
 
 
+#---------------------------------#
+#- RSCI COMPONENT CONFIGS --------#
+#---------------------------------#
 
+# The statement type preflabel valueid for 'brief text' and 'materials/technique description'
+# RSCI_PART_STATEMENT_TYPES = ['72202a9f-1551-4cbc-9c7a-73c02321f3ea', '7100d304-bc56-4e4c-bc3a-fa3ec539d979',]
+RSCI_PART_STATEMENT_TYPES = ['72202a9f-1551-4cbc-9c7a-73c02321f3ea',]
+
+# The preflabel valueid for the concept "weight (heaviness attribute)"
+RSCI_PART_DIMENSION_TYPE = 'f729dd3e-c92c-4ebc-95d1-7e765c5606eb'
+
+# The preflabel valueid for the concept "grams (measurements)"
+RSCI_PART_GRAMS_VALUE_UUID = '01bba78f-94ab-4d6f-9a53-e76575b85531'
+
+# The preflabel valueid for the concept "components (objects parts)" 
+RSCI_PART_TYPE_VALUE_UUID = '52a5d486-7cb2-4369-b0b1-2fec4f5ffdbf'
+
+IMPORT_RAW_RSCI_COMPONENTS_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-components.csv')
+
+RSCI_COMPONENT_CONFIGS = {
+    'model_id': RSCI_UUID,
+    'staging_table': 'rsci_components',
+    'model_staging_schema': RSCI_MODEL_NAME,
+    'raw_pk_col': 'rsci_uuid',
+    'load_path': IMPORT_RAW_RSCI_COMPONENTS_CSV,
+    'mappings': [
+        {
+            'raw_col': 'rsci_uuid',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'default_values': [
+                ('graphid', UUID, RSCI_UUID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+            ], 
+        },
+        {
+            'raw_col': 'comp1_part_type_uuid',
+            'targ_table': 'has_part',
+            'stage_field_prefix': 'comp1_',
+            'value_transform': copy_value,
+            'targ_field': 'part_type',
+            'data_type': UUID,
+            'make_tileid': True,
+            'default_values': [
+                ('nodegroupid', UUID, '6ee83594-08e4-11f0-81c1-0275dc2ded29',),
+            ], 
+        },
+        {
+            'raw_col': 'Component1',
+            'targ_table': 'part_statement',
+            'stage_field_prefix': 'comp1_statement_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'part_statement_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                # NOTE: TODO make sure we update the name type with an updated controlled vocabulary preflabel
+                ('part_statement_type', ARRAY(UUID), RSCI_PART_STATEMENT_TYPES ,),
+                ('part_statement_language', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'comp1_tileid',
+                'targ_tile_field': 'has_part',
+            },  
+        },
+        {
+            'raw_col': 'comp1_n',
+            'targ_table': 'part_dimension',
+            'stage_field_prefix': 'comp1_n_',
+            'value_transform': copy_value,
+            'targ_field': 'part_dimension_value_',
+            'data_type': Numeric,
+            'make_tileid': True,
+            'default_values': [
+                ('part_dimension_type_', UUID, RSCI_PART_DIMENSION_TYPE,),
+                ('part_dimension_unit', UUID, RSCI_PART_GRAMS_VALUE_UUID,),
+                ('nodegroupid', UUID, '6ee8420a-08e4-11f0-81c1-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'comp1_tileid',
+                'targ_tile_field': 'has_part',
+            },
+        },
+        {
+            'raw_col': 'comp1_p',
+            'targ_table': 'part_dimension_name',
+            'stage_field_prefix': 'comp1_p_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'part_dimension_name_content_',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('part_dimension_name_type_', ARRAY(UUID), [],),
+                ('part_dimension_name_language_', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('nodegroupid', UUID, '6ee839cc-08e4-11f0-81c1-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'comp1_n_tileid',
+                'targ_tile_field': 'part_dimension',
+            },
+        },
+        {
+            'raw_col': 'comp2_part_type_uuid',
+            'targ_table': 'has_part',
+            'stage_field_prefix': 'comp2_',
+            'value_transform': copy_value,
+            'targ_field': 'part_type',
+            'data_type': UUID,
+            'make_tileid': True,
+            'default_values': [
+                ('nodegroupid', UUID, '6ee83594-08e4-11f0-81c1-0275dc2ded29',),
+            ], 
+        },
+        {
+            'raw_col': 'Component2',
+            'targ_table': 'part_statement',
+            'stage_field_prefix': 'comp2_statement_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'part_statement_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                # NOTE: TODO make sure we update the name type with an updated controlled vocabulary preflabel
+                ('part_statement_type', ARRAY(UUID), RSCI_PART_STATEMENT_TYPES ,),
+                ('part_statement_language', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'comp2_tileid',
+                'targ_tile_field': 'has_part',
+            },  
+        },
+        {
+            'raw_col': 'comp2_n',
+            'targ_table': 'part_dimension',
+            'stage_field_prefix': 'comp2_n_',
+            'value_transform': copy_value,
+            'targ_field': 'part_dimension_value_',
+            'data_type': Numeric,
+            'make_tileid': True,
+            'default_values': [
+                ('part_dimension_type_', UUID, RSCI_PART_DIMENSION_TYPE,),
+                ('part_dimension_unit', UUID, RSCI_PART_GRAMS_VALUE_UUID,),
+                ('nodegroupid', UUID, '6ee8420a-08e4-11f0-81c1-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'comp2_tileid',
+                'targ_tile_field': 'has_part',
+            },
+        },
+        {
+            'raw_col': 'comp2_p',
+            'targ_table': 'part_dimension_name',
+            'stage_field_prefix': 'comp2_p_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'part_dimension_name_content_',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('part_dimension_name_type_', ARRAY(UUID), [],),
+                ('part_dimension_name_language_', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('nodegroupid', UUID, '6ee839cc-08e4-11f0-81c1-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'comp2_n_tileid',
+                'targ_tile_field': 'part_dimension',
+            },
+        },
+        {
+            'raw_col': 'comp3_part_type_uuid',
+            'targ_table': 'has_part',
+            'stage_field_prefix': 'comp3_',
+            'value_transform': copy_value,
+            'targ_field': 'part_type',
+            'data_type': UUID,
+            'make_tileid': True,
+            'default_values': [
+                ('nodegroupid', UUID, '6ee83594-08e4-11f0-81c1-0275dc2ded29',),
+            ], 
+        },
+        {
+            'raw_col': 'Component3',
+            'targ_table': 'part_statement',
+            'stage_field_prefix': 'comp3_statement_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'part_statement_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                # NOTE: TODO make sure we update the name type with an updated controlled vocabulary preflabel
+                ('part_statement_type', ARRAY(UUID), RSCI_PART_STATEMENT_TYPES ,),
+                ('part_statement_language', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'comp3_tileid',
+                'targ_tile_field': 'has_part',
+            },  
+        },
+    ],
+}
 
 
 ALL_MAPPING_CONFIGS = [
@@ -1145,6 +1370,7 @@ ALL_MAPPING_CONFIGS = [
 
     # Materials and object type.
     RSCI_MATERIALS_OBJECT_TYPE_CONFIGS, 
+    RSCI_COMPONENT_CONFIGS,
 ]
 
 
