@@ -69,12 +69,18 @@ def make_objs_from_json_strings(df_stage, col_data_types):
             )
             df_stage.loc[~index, col] = ''
             df_stage.loc[index, col] = df_stage[index][col].apply(lambda x: json.loads(x))
+            index = df_stage[col] == '""'
+            df_stage.loc[index, col] = ''
         elif mapped_data_type == 'uuid[]':
             index = (
                 df_stage[col].notnull() 
             )
             df_stage.loc[~index, col] = ''
             df_stage.loc[index, col] = df_stage[index][col].apply(lambda x: json.loads(x))
+            index = df_stage[col] == '""'
+            df_stage.loc[index, col] = ''
+            index = df_stage[col] == '[]'
+            df_stage.loc[index, col] = ''
     return df_stage
 
 
@@ -276,6 +282,11 @@ def prepare_all_sql_inserts(
         'CREATE SCHEMA IF NOT EXISTS "staging";',
         sql_functions.POSTGRESQL_PERFORMANCE_FIX,
     ]
+    if general_configs.ARCHES_V8:
+        sqls.append(
+            sql_functions.ARCHES_V8_RESOURCE_INSTANCE_FUNCTION_FIX
+        )
+
     if relational_views_sqls:
         # Add the SQL statements for the relational views.
         sqls += relational_views_sqls

@@ -4,6 +4,113 @@ import uuid as GenUUID
 from arches_rascoll import general_configs
 
 
+ARCHES_V8_RESOURCE_INSTANCE_FUNCTION_FIX = """
+-- FUNCTION: public.__arches_instance_view_update()
+
+-- DROP FUNCTION IF EXISTS public.__arches_instance_view_update();
+
+CREATE OR REPLACE FUNCTION public.__arches_instance_view_update()
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
+AS $BODY$
+                declare
+                    view_namespace text;
+                    model_id uuid;
+                    instance_id uuid;
+                    transaction_id uuid;
+                    edit_type text;
+                begin
+                    view_namespace = format('%s.%s', tg_table_schema, tg_table_name);
+                    select obj_description(view_namespace::regclass, 'pg_class') into model_id;
+                    if (TG_OP = 'DELETE') then
+                        delete from public.resource_instances where resourceinstanceid = old.resourceinstanceid;
+                        insert into bulk_index_queue (resourceinstanceid, createddate)
+                            values (old.resourceinstanceid, current_timestamp) on conflict do nothing;
+                        insert into edit_log (
+                            resourceclassid,
+                            resourceinstanceid,
+                            edittype,
+                            timestamp,
+                            note,
+                            transactionid
+                        ) values (
+                            model_id,
+                            old.resourceinstanceid,
+                            'delete',
+                            now(),
+                            'loaded via SQL backend',
+                            public.uuid_generate_v1mc()
+                        );
+                        return old;
+                    else
+                        instance_id = new.resourceinstanceid;
+                        if instance_id is null then
+                            instance_id = public.uuid_generate_v1mc();
+                        end if;
+
+                        if (new.transactionid is null) then
+                            transaction_id = public.uuid_generate_v1mc();
+                        else
+                            transaction_id = new.transactionid;
+                        end if;
+
+                        if (TG_OP = 'UPDATE') then
+                            edit_type = 'edit';
+                            if (transaction_id = old.transactionid) then
+                                transaction_id = public.uuid_generate_v1mc();
+                            end if;
+                            update public.resource_instances
+                            set createdtime = new.createdtime,
+                                legacyid = new.legacyid
+                            where resourceinstanceid = instance_id;
+                        elsif (TG_OP = 'INSERT') then
+                            edit_type = 'create';
+                            insert into public.resource_instances(
+                                resourceinstanceid,
+                                graphid,
+                                legacyid,
+                                createdtime,
+								 resource_instance_lifecycle_state_id
+                            ) values (
+                                instance_id,
+                                model_id,
+                                new.legacyid,
+                                now(),
+								'f75bb034-36e3-4ab4-8167-f520cf0b4c58'::uuid
+                            );
+                        end if;
+                        insert into bulk_index_queue (resourceinstanceid, createddate)
+                            values (instance_id, current_timestamp) on conflict do nothing;
+                        insert into edit_log (
+                            resourceclassid,
+                            resourceinstanceid,
+                            edittype,
+                            timestamp,
+                            note,
+                            transactionid
+                        ) values (
+                            model_id,
+                            instance_id,
+                            edit_type,
+                            now(),
+                            'loaded via SQL backend',
+                            transaction_id
+                        );
+                        return new;
+                    end if;
+                end;
+            
+$BODY$;
+
+ALTER FUNCTION public.__arches_instance_view_update()
+    OWNER TO postgres;
+"""
+
+
+
+
 POSTGRESQL_PERFORMANCE_FIX = """
 create or replace function __arches_tile_view_update() returns trigger as $$
 declare
