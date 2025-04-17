@@ -281,6 +281,8 @@ def prepare_all_sql_inserts(
     sqls = [
         'CREATE SCHEMA IF NOT EXISTS "staging";',
         sql_functions.POSTGRESQL_PERFORMANCE_FIX,
+        sql_functions.UPDATE_NODE_GROUP_CARDINALITY,
+        sql_functions.UPDATE_COLOR_NODE_GROUP_CARDINALITY,
     ]
     if general_configs.ARCHES_V8:
         sqls.append(

@@ -52,10 +52,22 @@ def prepare_rsci_component_data(
     ]
     for col, not_null_cols in part_type_cols:
         df_rsci_comps[col] = ''
-        act_index = ~df_rsci_comps[not_null_cols[0]].isnull()
+        act_index = (
+            ~df_rsci_comps[not_null_cols[0]].isnull()
+            &(df_rsci_comps[not_null_cols[0]] != '')
+            &(df_rsci_comps[not_null_cols[0]] != 'NaN')
+            &(df_rsci_comps[not_null_cols[0]] != 'nan')
+            &(df_rsci_comps[not_null_cols[0]] != '""')
+        )
         if len(not_null_cols) > 1:
             for not_null_col in not_null_cols[1:]:
-                act_index = act_index | ~df_rsci_comps[not_null_col].isnull()
+                act_index = act_index | (
+                    ~df_rsci_comps[not_null_col].isnull()
+                    &(df_rsci_comps[not_null_col] != '')
+                    &(df_rsci_comps[not_null_col] != 'NaN') 
+                    &(df_rsci_comps[not_null_col] != 'nan')
+                    &(df_rsci_comps[not_null_col] != '""')
+                )
         df_rsci_comps.loc[act_index, col] = general_configs.RSCI_PART_TYPE_VALUE_UUID
     good_index = (
         (df_rsci_comps['comp1_part_type_uuid'].notnull() & (df_rsci_comps['comp1_part_type_uuid'] != ''))

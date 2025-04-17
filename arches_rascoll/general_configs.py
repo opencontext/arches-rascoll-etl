@@ -19,6 +19,7 @@ ARCHES_DB_URL = os.getenv('ARCHES_DB_URL', 'postgresql://postgres:postgis@127.0.
 ARCHES_V8 = True
 # UUID of the resource_instance_lifecycle_state_id for the Arches 8.0.0 release
 ARCHES_V8_RESOURCE_INSTANCE_LIFECYCLE_STATE_ID = '7e3cce56-fbfb-4a4b-8e83-59b9f9e7cb75'
+# ARCHES_V8_RESOURCE_INSTANCE_LIFECYCLE_STATE_ID =  '9375c9a7-dad2-4f14-a5c1-d7e329fdde4f'
 
 current_directory = os.getcwd()
 DATA_DIR = os.getenv('RASCOLL_ETL_DIR', os.path.join(current_directory, 'data'))
@@ -1354,6 +1355,102 @@ RSCI_COMPONENT_CONFIGS = {
 }
 
 
+#---------------------------------#
+#- RSCI COLORS CONFIGS -----------#
+#---------------------------------#
+
+COLOR_CONCEPT_MAPPINGS_CSV = os.path.join(DATA_DIR, 'color_concept_mappings.csv')
+IMPORT_RAW_RSCI_COLORS_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-colors.csv')
+
+ALTERNATE_TITLES_VALUE_ID = '1a0dbab5-aab1-4d4e-a4f5-9267ab382fa2'
+
+RSCI_COLORS_CONFIGS = {
+    'model_id': RSCI_UUID,
+    'staging_table': 'rsci_colors',
+    'model_staging_schema': RSCI_MODEL_NAME,
+    'raw_pk_col': 'rsci_uuid',
+    'load_path': IMPORT_RAW_RSCI_COLORS_CSV ,
+    'mappings': [
+        {
+            'raw_col': 'rsci_uuid',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'default_values': [
+                ('graphid', UUID, RSCI_UUID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+            ], 
+        },
+        {
+            'raw_col': 'Color',
+            'targ_table': 'has_color',
+            'stage_field_prefix': 'color_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'color_name_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('color_name_type', ARRAY(UUID), [ALTERNATE_TITLES_VALUE_ID,],),
+                ('color_name_language', UUID, ENG_VALUE_UUID,),
+                ('nodegroupid', UUID, '3aff54bc-0f3b-11f0-aa84-02460e9d2217',),
+            ], 
+        },
+        {
+            'raw_col': 'color_a_type_uuid',
+            'targ_table': 'has_color',
+            'stage_field_prefix': 'color_a_',
+            'value_transform': copy_value,
+            'targ_field': 'color_type',
+            'data_type': UUID,
+            'make_tileid': True,
+            'default_values': [
+                ('nodegroupid', UUID, '3aff54bc-0f3b-11f0-aa84-02460e9d2217',),
+            ], 
+        },
+        {
+            'raw_col': 'color_b_type_uuid',
+            'targ_table': 'has_color',
+            'stage_field_prefix': 'color_b_',
+            'value_transform': copy_value,
+            'targ_field': 'color_type',
+            'data_type': UUID,
+            'make_tileid': True,
+            'default_values': [
+                ('nodegroupid', UUID, '3aff54bc-0f3b-11f0-aa84-02460e9d2217',),
+            ], 
+        },
+        {
+            'raw_col': 'color_c_type_uuid',
+            'targ_table': 'has_color',
+            'stage_field_prefix': 'color_c_',
+            'value_transform': copy_value,
+            'targ_field': 'color_type',
+            'data_type': UUID,
+            'make_tileid': True,
+            'default_values': [
+                ('nodegroupid', UUID, '3aff54bc-0f3b-11f0-aa84-02460e9d2217',),
+            ], 
+        },
+        {
+            'raw_col': 'color_d_type_uuid',
+            'targ_table': 'has_color',
+            'stage_field_prefix': 'color_d_',
+            'value_transform': copy_value,
+            'targ_field': 'color_type',
+            'data_type': UUID,
+            'make_tileid': True,
+            'default_values': [
+                ('nodegroupid', UUID, '3aff54bc-0f3b-11f0-aa84-02460e9d2217',),
+            ], 
+        },
+    ],
+}
+
+
 ALL_MAPPING_CONFIGS = [
     # Create resource instances for different models
     RSCI_MAPPING_CONFIGS,
@@ -1371,6 +1468,9 @@ ALL_MAPPING_CONFIGS = [
     # Materials and object type.
     RSCI_MATERIALS_OBJECT_TYPE_CONFIGS, 
     RSCI_COMPONENT_CONFIGS,
+
+    # Colors
+    RSCI_COLORS_CONFIGS,
 ]
 
 

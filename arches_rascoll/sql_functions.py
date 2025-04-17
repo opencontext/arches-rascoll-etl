@@ -229,6 +229,18 @@ begin
 $$ language plpgsql;
 """
 
+UPDATE_NODE_GROUP_CARDINALITY = """
+UPDATE node_groups
+SET cardinality = 'n'
+WHERE nodegroupid = '6ee83594-08e4-11f0-81c1-0275dc2ded29';
+"""
+
+UPDATE_COLOR_NODE_GROUP_CARDINALITY ="""
+UPDATE node_groups
+SET cardinality = 'n'
+WHERE nodegroupid = '3aff54bc-0f3b-11f0-aa84-02460e9d2217';
+"""
+
 
 POSTGRESQL_AFTER_ETL_FUNCTION = """
 select * from refresh_geojson_geometries();

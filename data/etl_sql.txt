@@ -119,6 +119,116 @@ $$ language plpgsql;
 
 
 
+UPDATE node_groups
+SET cardinality = 'n'
+WHERE nodegroupid = '6ee83594-08e4-11f0-81c1-0275dc2ded29';
+
+
+
+-- FUNCTION: public.__arches_instance_view_update()
+
+-- DROP FUNCTION IF EXISTS public.__arches_instance_view_update();
+
+CREATE OR REPLACE FUNCTION public.__arches_instance_view_update()
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
+AS $BODY$
+                declare
+                    view_namespace text;
+                    model_id uuid;
+                    instance_id uuid;
+                    transaction_id uuid;
+                    edit_type text;
+                begin
+                    view_namespace = format('%s.%s', tg_table_schema, tg_table_name);
+                    select obj_description(view_namespace::regclass, 'pg_class') into model_id;
+                    if (TG_OP = 'DELETE') then
+                        delete from public.resource_instances where resourceinstanceid = old.resourceinstanceid;
+                        insert into bulk_index_queue (resourceinstanceid, createddate)
+                            values (old.resourceinstanceid, current_timestamp) on conflict do nothing;
+                        insert into edit_log (
+                            resourceclassid,
+                            resourceinstanceid,
+                            edittype,
+                            timestamp,
+                            note,
+                            transactionid
+                        ) values (
+                            model_id,
+                            old.resourceinstanceid,
+                            'delete',
+                            now(),
+                            'loaded via SQL backend',
+                            public.uuid_generate_v1mc()
+                        );
+                        return old;
+                    else
+                        instance_id = new.resourceinstanceid;
+                        if instance_id is null then
+                            instance_id = public.uuid_generate_v1mc();
+                        end if;
+
+                        if (new.transactionid is null) then
+                            transaction_id = public.uuid_generate_v1mc();
+                        else
+                            transaction_id = new.transactionid;
+                        end if;
+
+                        if (TG_OP = 'UPDATE') then
+                            edit_type = 'edit';
+                            if (transaction_id = old.transactionid) then
+                                transaction_id = public.uuid_generate_v1mc();
+                            end if;
+                            update public.resource_instances
+                            set createdtime = new.createdtime,
+                                legacyid = new.legacyid
+                            where resourceinstanceid = instance_id;
+                        elsif (TG_OP = 'INSERT') then
+                            edit_type = 'create';
+                            insert into public.resource_instances(
+                                resourceinstanceid,
+                                graphid,
+                                legacyid,
+                                createdtime,
+								 resource_instance_lifecycle_state_id
+                            ) values (
+                                instance_id,
+                                model_id,
+                                new.legacyid,
+                                now(),
+								'f75bb034-36e3-4ab4-8167-f520cf0b4c58'::uuid
+                            );
+                        end if;
+                        insert into bulk_index_queue (resourceinstanceid, createddate)
+                            values (instance_id, current_timestamp) on conflict do nothing;
+                        insert into edit_log (
+                            resourceclassid,
+                            resourceinstanceid,
+                            edittype,
+                            timestamp,
+                            note,
+                            transactionid
+                        ) values (
+                            model_id,
+                            instance_id,
+                            edit_type,
+                            now(),
+                            'loaded via SQL backend',
+                            transaction_id
+                        );
+                        return new;
+                    end if;
+                end;
+            
+$BODY$;
+
+ALTER FUNCTION public.__arches_instance_view_update()
+    OWNER TO postgres;
+
+
+
     SELECT __arches_create_resource_model_views('bda239c6-d376-11ef-a239-0275dc2ded29');
     
 
@@ -1383,6 +1493,137 @@ comp3_tileid::uuid
 (staging.rsci_components.comp3_statement_tileid::uuid IS NOT NULL) AND 
 ((staging.rsci_components.comp3_statement_part_statement_content::jsonb IS NOT NULL))
                 ORDER BY staging.rsci_components.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.instances (
+                    resourceinstanceid, 
+resource_instance_lifecycle_state_id, 
+graphid, 
+graphpublicationid, 
+principaluser_id
+                ) SELECT
+                    resourceinstanceid::uuid, 
+'7e3cce56-fbfb-4a4b-8e83-59b9f9e7cb75'::uuid AS state_id, 
+graphid::uuid, 
+graphpublicationid::uuid, 
+principaluser_id::integer
+                
+                FROM staging.rsci_colors
+                WHERE (staging.rsci_colors.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.rsci_colors.resourceinstanceid::uuid IS NOT NULL))
+                ORDER BY staging.rsci_colors.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.has_color (
+                    resourceinstanceid, 
+tileid, 
+color_name_content, 
+color_name_type, 
+color_name_language, 
+nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+color_tileid::uuid, 
+color_color_name_content::jsonb, 
+color_color_name_type::uuid[], 
+color_color_name_language::uuid, 
+color_nodegroupid::uuid
+                
+                FROM staging.rsci_colors
+                WHERE (staging.rsci_colors.color_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_colors.color_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_colors.color_color_name_content::jsonb IS NOT NULL))
+                ORDER BY staging.rsci_colors.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.has_color (
+                    resourceinstanceid, 
+tileid, 
+color_type, 
+nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+color_a_tileid::uuid, 
+color_a_color_type::uuid, 
+color_a_nodegroupid::uuid
+                
+                FROM staging.rsci_colors
+                WHERE (staging.rsci_colors.color_a_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_colors.color_a_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_colors.color_a_color_type::uuid IS NOT NULL))
+                ORDER BY staging.rsci_colors.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.has_color (
+                    resourceinstanceid, 
+tileid, 
+color_type, 
+nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+color_b_tileid::uuid, 
+color_b_color_type::uuid, 
+color_b_nodegroupid::uuid
+                
+                FROM staging.rsci_colors
+                WHERE (staging.rsci_colors.color_b_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_colors.color_b_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_colors.color_b_color_type::uuid IS NOT NULL))
+                ORDER BY staging.rsci_colors.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.has_color (
+                    resourceinstanceid, 
+tileid, 
+color_type, 
+nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+color_c_tileid::uuid, 
+color_c_color_type::uuid, 
+color_c_nodegroupid::uuid
+                
+                FROM staging.rsci_colors
+                WHERE (staging.rsci_colors.color_c_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_colors.color_c_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_colors.color_c_color_type::uuid IS NOT NULL))
+                ORDER BY staging.rsci_colors.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.has_color (
+                    resourceinstanceid, 
+tileid, 
+color_type, 
+nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+color_d_tileid::uuid, 
+color_d_color_type::uuid, 
+color_d_nodegroupid::uuid
+                
+                FROM staging.rsci_colors
+                WHERE (staging.rsci_colors.color_d_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_colors.color_d_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_colors.color_d_color_type::uuid IS NOT NULL))
+                ORDER BY staging.rsci_colors.resourceinstanceid
                 
                 ;
                 
