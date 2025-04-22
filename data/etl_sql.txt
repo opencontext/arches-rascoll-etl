@@ -1194,15 +1194,36 @@ mixture_type_metatype,
 nodegroupid
                 ) SELECT
                     resourceinstanceid::uuid, 
-mix_tileid::uuid, 
-mix_mixture_type::uuid[], 
-mix_mixture_type_metatype::uuid, 
-mix_nodegroupid::uuid
+tileid::uuid, 
+mixture_type::uuid[], 
+mixture_type_metatype::uuid, 
+nodegroupid::uuid
                 
                 FROM staging.rsci_materials_object_types
-                WHERE (staging.rsci_materials_object_types.mix_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_materials_object_types.mix_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_materials_object_types.mix_mixture_type::uuid[] IS NOT NULL))
+                WHERE (staging.rsci_materials_object_types.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_materials_object_types.tileid::uuid IS NOT NULL) AND 
+((staging.rsci_materials_object_types.mixture_type::uuid[] IS NOT NULL))
+                ORDER BY staging.rsci_materials_object_types.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.attribute_type (
+                    resourceinstanceid, 
+tileid, 
+attribute_type, 
+nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+atribs_tileid::uuid, 
+atribs_attribute_type::uuid[], 
+atribs_nodegroupid::uuid
+                
+                FROM staging.rsci_materials_object_types
+                WHERE (staging.rsci_materials_object_types.atribs_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_materials_object_types.atribs_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_materials_object_types.atribs_attribute_type::uuid[] IS NOT NULL))
                 ORDER BY staging.rsci_materials_object_types.resourceinstanceid
                 
                 ;

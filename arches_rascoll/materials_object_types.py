@@ -23,11 +23,18 @@ df_rsci_mot = materials_object_types.prepare_rsci_materials_object_types_data()
 
 """
 
+
+
 MIXTURE_TYPE_PREF_LABELS_DICT = {
     'Inorganic - inorganic': 'inorganic - inorganic mixture',
     'Organic - inorganic': 'organic - inorganic mixture',
     'Organic - organic': 'organic - organic mixture',
     'Other (i.e. many components)': 'multi-component mixture',
+}
+
+NATURAL_SYNTHETIC_MAPPING_TO_PREF_LABELS_DICT = {
+    'Natural': 'natural',
+    'Synthetic': 'synthetic',
 }
 
 
@@ -47,6 +54,7 @@ def prepare_rsci_materials_object_types_data(
         'gbif_canonical_name',
         'gbif_uri',
         'Mixture Type',
+        'Natural/Synthetic',
         'Sample Type',
         'Typical Use',
     ]
@@ -63,6 +71,7 @@ def prepare_rsci_materials_object_types_data(
     df_rsci_mot['typical_use_value_uuid'] = ''
     col_vals = [
         ('mixture_type_value_uuid', 'mixture_type_pref_label', 'Mixture Type', ),
+        ('attributes_value_uuid', 'attributes_pref_label', 'Natural/Synthetic', ),
         ('sample_type_value_uuid', 'sample_type_pref_label', 'Sample Type', ),
         ('typical_use_value_uuid', 'typical_use_pref_label', 'Typical Use', ),
     ]
@@ -80,6 +89,9 @@ def prepare_rsci_materials_object_types_data(
             if uuid_col == 'mixture_type_value_uuid':
                 # get the pref_label from a configuration dictionary
                 pref_label = MIXTURE_TYPE_PREF_LABELS_DICT.get(val)
+            elif uuid_col == 'attributes_value_uuid':
+                # get the pref_label from a configuration dictionary
+                pref_label = NATURAL_SYNTHETIC_MAPPING_TO_PREF_LABELS_DICT.get(val)
             else:
                 con_index = (df_con['Sample Type Entry'] == val)
                 if df_con[con_index].empty:
@@ -95,18 +107,23 @@ def prepare_rsci_materials_object_types_data(
                 continue
             value_uuid = con_dict['preflabel_valueid']
             df_rsci_mot.loc[act_index, uuid_col] = str(value_uuid)
-    # Make a list of the mixture type value UUIDs
-    df_rsci_mot['mixture_type_value_uuids'] = ''
-    act_index = df_rsci_mot['mixture_type_value_uuid'].str.len() > 0
-    df_rsci_mot.loc[act_index, 'mixture_type_value_uuids'] = df_rsci_mot[act_index].apply(
-        lambda row: [row['mixture_type_value_uuid']],
-        axis=1
-    )
-    act_index = ~(df_rsci_mot['mixture_type_value_uuids'] == '')
-    df_rsci_mot.loc[act_index, 'mixture_type_value_uuids'] = df_rsci_mot[act_index].apply(
-        lambda row: json.dumps(row['mixture_type_value_uuids']), 
-        axis=1
-    )
+    # Make a list of the mixture type and the attributes value UUIDs
+    single_val_to_list_cols = [
+        ('mixture_type_value_uuid', 'mixture_type_value_uuids', ),
+        ('attributes_value_uuid', 'attributes_value_uuids', ),
+    ]
+    for uuid_col, list_col in single_val_to_list_cols:
+        df_rsci_mot[list_col] = ''
+        act_index = df_rsci_mot[uuid_col].str.len() > 0
+        df_rsci_mot.loc[act_index, list_col] = df_rsci_mot[act_index].apply(
+            lambda row: [row[uuid_col]],
+            axis=1
+        )
+        act_index = ~(df_rsci_mot[list_col] == '')
+        df_rsci_mot.loc[act_index, list_col] = df_rsci_mot[act_index].apply(
+            lambda row: json.dumps(row[list_col]), 
+            axis=1
+        )
     # Combine the sample type and typical use value UUIDs into a list
     df_rsci_mot['object_type_value_uuids'] = ''
     act_index = (

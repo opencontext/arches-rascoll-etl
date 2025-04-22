@@ -42,6 +42,15 @@ Execute the SQL statements in the `etl_sql.txt` file. The order of operations ma
 the inserts for resource instances run before you attempt to load tile data.
 
 
+### Run Management Command
+
+Execute the following management command to "publish" the newly ETL'd records:
+
+```shell
+docker exec -it arches python manage.py graph publish --update -ui
+```
+
+
 ### NOTE: Why don't my Name Descriptors show up in Arches?
 
 It seems there's a problem with the node alias (or something) with various resource model name descriptors in the RASColl application / package. Using the Arches user-interface, navigate to the "functions" and update the descriptor functions for the name. You may have better luck with the alias `<Name_content>` than with the all lowercase `<name_content>`
@@ -53,7 +62,7 @@ Here's a quick way to dump the Arches-RASColl PostgreSQL database:
 
 ```shell
 
-docker exec -it arches bash -c "pg_dump -U postgres -h arches_db -F c -b rascoll > '/arches_data/rascoll.dump'"
+docker exec -it arches bash -c "pg_dump -U postgres -h arches_db -F c -b rascoll > '/arches_data/rascoll_v8.dump'"
 
 ```
 
@@ -91,3 +100,10 @@ Here are some configurations to set display name and descriptions for different 
         - Name of Person :: <Name_content>
     - Display Description
         - Blank
+
+
+
+Notes: Color type color (simple)
+
+Current location has the default of current location description uuid
+
