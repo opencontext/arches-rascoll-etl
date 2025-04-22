@@ -47,6 +47,8 @@ the inserts for resource instances run before you attempt to load tile data.
 Execute the following management command to "publish" the newly ETL'd records:
 
 ```shell
+# Do Migrations
+docker exec -it arches python manage.py migrate afrc
 docker exec -it arches python manage.py graph publish --update -ui
 ```
 
@@ -62,6 +64,7 @@ Here's a quick way to dump the Arches-RASColl PostgreSQL database:
 
 ```shell
 
+# Make a database dump
 docker exec -it arches bash -c "pg_dump -U postgres -h arches_db -F c -b rascoll > '/arches_data/rascoll_v8.dump'"
 
 ```
