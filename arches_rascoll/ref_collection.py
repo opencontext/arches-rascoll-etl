@@ -186,14 +186,11 @@ def prep_transformed_data(df, configs):
                             rel_objs[source_rel_objs_field] = []
                         else:
                             rel_objs[source_rel_objs_field] = {}
-                    res_x_res_id = str(GenUUID.uuid4())
-                    rel_obj = {
-                        # This is the resource instance id that we are linking TO (towards)
-                        "resourceId": resource_id,
-                        "ontologyProperty": rel_dict.get('rel_type_id'),
-                        "resourceXresourceId": res_x_res_id,
-                        "inverseOntologyProperty": rel_dict.get('inverse_rel_type_id'),
-                    }
+                    rel_obj, res_x_res_id = utilities.make_related_object_dict_and_res_x_res_id(
+                        resource_id=resource_id,
+                        rel_type_id=rel_dict.get('rel_type_id'),
+                        inverse_rel_type_id=rel_dict.get('inverse_rel_type_id'),
+                    )
                     if multi_value:
                         rel_objs[source_rel_objs_field].append(rel_obj)
                     else:

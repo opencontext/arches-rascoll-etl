@@ -1473,7 +1473,7 @@ RSCI_CURRENT_LOCATION_STATEMENT_TYPE_IDS = ['72202a9f-1551-4cbc-9c7a-73c02321f3e
 
 IMPORT_RAW_RSCI_CURRENT_LOCATION_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-current-location.csv')
 
-RSCI_STATEMENTS_CONFIGS = {
+RSCI_CURRENT_LOCATION_CONFIGS = {
     'model_id': RSCI_UUID,
     'staging_table': 'rsci_current_location',
     'model_staging_schema': RSCI_MODEL_NAME,
@@ -1494,11 +1494,20 @@ RSCI_STATEMENTS_CONFIGS = {
                 ('principaluser_id', Integer, 1,),
             ], 
         },
-        # NOTE: TODO
-        # Add a location reference to the Getty Center
-        # for the current location table. 
         {
-            'raw_col': 'Grid Location',
+            'raw_col': 'current_location_place_dict',
+            'targ_table': 'current_location',
+            'stage_field_prefix': 'cur_loc_',
+            'value_transform': copy_value,
+            'targ_field': 'current_location',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('nodegroupid', UUID, 'bda4a954-d376-11ef-a239-0275dc2ded29',),
+            ], 
+        },
+        {
+            'raw_col': 'current_location_statement',
             'targ_table': 'current_location_statement',
             'stage_field_prefix': 'cur_loc_statement_',
             'value_transform': make_lang_dict_value,
@@ -1508,10 +1517,10 @@ RSCI_STATEMENTS_CONFIGS = {
             'default_values': [
                 ('current_location_statement_type', ARRAY(UUID), RSCI_CURRENT_LOCATION_STATEMENT_TYPE_IDS,),
                 ('current_location_statement_language', ARRAY(UUID), [ENG_VALUE_UUID],),
-                ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
+                ('nodegroupid', UUID, 'c7ab9e8a-08e1-11f0-a3e8-0275dc2ded29',),
             ],
             'related_tileid': {
-                'source_tile_field': 'current_location_tileid',
+                'source_tile_field': 'cur_loc_tileid',
                 'targ_tile_field': 'current_location',
             },
         },
@@ -1541,6 +1550,9 @@ ALL_MAPPING_CONFIGS = [
 
     # Colors
     RSCI_COLORS_CONFIGS,
+
+    # Current location
+    RSCI_CURRENT_LOCATION_CONFIGS,
 ]
 
 

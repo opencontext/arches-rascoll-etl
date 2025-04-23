@@ -78,3 +78,19 @@ def lookup_data_type_sql_str(data_type):
         mapped_data_type = 'uuid[]'
     return mapped_data_type
 
+
+def make_related_object_dict_and_res_x_res_id(
+    resource_id,
+    rel_type_id,
+    inverse_rel_type_id,
+):
+    """Make a dictionary for the related object"""
+    res_x_res_id = str(GenUUID.uuid4())
+    rel_obj = {
+        # This is the resource instance id that we are linking TO (towards)
+        "resourceId": resource_id,
+        "ontologyProperty": rel_type_id,
+        "resourceXresourceId": res_x_res_id,
+        "inverseOntologyProperty": inverse_rel_type_id,
+    }
+    return rel_obj, res_x_res_id

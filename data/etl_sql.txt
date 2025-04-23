@@ -1656,4 +1656,74 @@ color_d_nodegroupid::uuid
                 
 
 
+                INSERT INTO reference_and_sample_collection_item.instances (
+                    resourceinstanceid, 
+resource_instance_lifecycle_state_id, 
+graphid, 
+graphpublicationid, 
+principaluser_id
+                ) SELECT
+                    resourceinstanceid::uuid, 
+'7e3cce56-fbfb-4a4b-8e83-59b9f9e7cb75'::uuid AS state_id, 
+graphid::uuid, 
+graphpublicationid::uuid, 
+principaluser_id::integer
+                
+                FROM staging.rsci_current_location
+                WHERE (staging.rsci_current_location.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.rsci_current_location.resourceinstanceid::uuid IS NOT NULL))
+                ORDER BY staging.rsci_current_location.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.current_location (
+                    resourceinstanceid, 
+tileid, 
+current_location, 
+nodegroupid
+                ) SELECT
+                    resourceinstanceid::uuid, 
+cur_loc_tileid::uuid, 
+cur_loc_current_location::jsonb, 
+cur_loc_nodegroupid::uuid
+                
+                FROM staging.rsci_current_location
+                WHERE (staging.rsci_current_location.cur_loc_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_current_location.cur_loc_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_current_location.cur_loc_current_location::jsonb IS NOT NULL))
+                ORDER BY staging.rsci_current_location.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.current_location_statement (
+                    resourceinstanceid, 
+tileid, 
+current_location_statement_content, 
+current_location_statement_type, 
+current_location_statement_language, 
+nodegroupid, 
+current_location
+                ) SELECT
+                    resourceinstanceid::uuid, 
+cur_loc_statement_tileid::uuid, 
+cur_loc_statement_current_location_statement_content::jsonb, 
+cur_loc_statement_current_location_statement_type::uuid[], 
+cur_loc_statement_current_location_statement_language::uuid[], 
+cur_loc_statement_nodegroupid::uuid, 
+cur_loc_tileid::uuid
+                
+                FROM staging.rsci_current_location
+                WHERE (staging.rsci_current_location.cur_loc_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_current_location.cur_loc_statement_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_current_location.cur_loc_statement_current_location_statement_content::jsonb IS NOT NULL))
+                ORDER BY staging.rsci_current_location.resourceinstanceid
+                
+                ;
+                
+
+
 select * from refresh_geojson_geometries();
