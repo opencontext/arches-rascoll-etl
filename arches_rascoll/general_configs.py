@@ -1463,6 +1463,63 @@ RSCI_COLORS_CONFIGS = {
 }
 
 
+#---------------------------------#
+#- RSCI CURRENT LOCATION CONFIGS -#
+#---------------------------------#
+
+# for 'brief text'
+RSCI_CURRENT_LOCATION_STATEMENT_TYPE_IDS = ['72202a9f-1551-4cbc-9c7a-73c02321f3ea',]
+
+IMPORT_RAW_RSCI_CURRENT_LOCATION_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-current-location.csv')
+
+RSCI_STATEMENTS_CONFIGS = {
+    'model_id': RSCI_UUID,
+    'staging_table': 'rsci_current_location',
+    'model_staging_schema': RSCI_MODEL_NAME,
+    'raw_pk_col': 'rsci_uuid',
+    'load_path': IMPORT_RAW_RSCI_CURRENT_LOCATION_CSV,
+    'mappings': [
+        {
+            'raw_col': 'rsci_uuid',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'default_values': [
+                ('graphid', UUID, RSCI_UUID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+            ], 
+        },
+        # NOTE: TODO
+        # Add a location reference to the Getty Center
+        # for the current location table. 
+        {
+            'raw_col': 'Grid Location',
+            'targ_table': 'current_location_statement',
+            'stage_field_prefix': 'cur_loc_statement_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'current_location_statement_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('current_location_statement_type', ARRAY(UUID), RSCI_CURRENT_LOCATION_STATEMENT_TYPE_IDS,),
+                ('current_location_statement_language', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'current_location_tileid',
+                'targ_tile_field': 'current_location',
+            },
+        },
+    ],
+}
+
+
+
+
 ALL_MAPPING_CONFIGS = [
     # Create resource instances for different models
     RSCI_MAPPING_CONFIGS,
