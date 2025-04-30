@@ -229,6 +229,7 @@ begin
 $$ language plpgsql;
 """
 
+# Has part, part type, (component) nodegroup cardinality fix
 UPDATE_NODE_GROUP_CARDINALITY = """
 UPDATE node_groups
 SET cardinality = 'n'

@@ -48,7 +48,7 @@ def prepare_rsci_color_data(
         ('color_a_type_uuid', 'color_use',),
         ('color_b_type_uuid', 'color_split 1',),
         ('color_c_type_uuid', 'color_split 2',),
-        ('color_d_type_uuid', 'color_split 2',),
+        ('color_d_type_uuid', 'color_split 3',),
     ]
     for col, not_null_col in color_type_cols:
         df_colors[col] = ''
