@@ -332,7 +332,7 @@ e5539ed2-2fc3-4ed4-b4d5-137cc4c5a285,Black,Black,,,,f6e81a55-08b1-4d8c-82b5-3a78
 ded3d374-00da-4fe3-bd96-bff1d9e32a43,Beige,Beige,,,,cb45df63-21d2-445f-b5a1-5f132221df3f,,,
 6cc55b5d-bec8-4a01-afda-2207daa3f417,Black,Black,,,,f6e81a55-08b1-4d8c-82b5-3a7847db01ec,,,
 cfd0d061-275c-444f-86d4-83b436072c7a,Tan,Tan,,,,bb3d1a69-3ffa-4a21-b94e-8fa994d87446,,,
-679fd461-09dd-475e-bbc7-31d5c902354f,White & Light Grey,,White,Light Grey,,,4d16adba-e698-463d-9d2c-efbb2b0897c5,444fe2e7-9ed7-4bef-bd57-947ffc1dd822,444fe2e7-9ed7-4bef-bd57-947ffc1dd822
+679fd461-09dd-475e-bbc7-31d5c902354f,White & Light Grey,,White,Light Grey,,,4d16adba-e698-463d-9d2c-efbb2b0897c5,444fe2e7-9ed7-4bef-bd57-947ffc1dd822,
 9975a351-dc85-4b27-9dd7-bf90a9bb0c88,Yellow,Yellow,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 6efb8122-1deb-4dc4-95eb-35aa6af3f0e3,Amber,Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 2d362f51-b200-47cc-973b-d3cfe69e9776,Amber,Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
@@ -359,7 +359,7 @@ fba8bb74-d4a6-451e-aa32-b58488a3f75b,Light Amber,Light Amber,,,,835f1ef7-57a4-4c
 bad63356-ec9d-4ce0-b81f-1e9fbd7ea066,Beige,Beige,,,,cb45df63-21d2-445f-b5a1-5f132221df3f,,,
 c532b547-2859-49df-a395-6ddee335128a,Light Amber,Light Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 ffe0925d-f1a1-4765-8c02-8c4026ad217c,Amber,Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
-826c765b-21c5-49e2-8754-9faddeb09e8c,Yellow & Black,,Yellow,Black,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,f6e81a55-08b1-4d8c-82b5-3a7847db01ec,f6e81a55-08b1-4d8c-82b5-3a7847db01ec
+826c765b-21c5-49e2-8754-9faddeb09e8c,Yellow & Black,,Yellow,Black,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,f6e81a55-08b1-4d8c-82b5-3a7847db01ec,
 9c3ecda5-b502-43f6-873e-e87ce4cd6910,Light Amber,Light Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 cc095530-7a93-4cf9-bb7c-2f14b0dcf929,Light Amber,Light Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 4795c3ce-41b2-4d4c-911b-05fa45ab4c13,Amber,Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
@@ -383,16 +383,16 @@ b0a09ffd-250d-40f1-a746-8691afc6f695,Light Orange,Light Orange,,,,b7a2bb22-6c1d-
 fc6345ba-aa90-433f-a6ef-24c26ee6a191,Light Amber,Light Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 87a11057-b7cd-4d2e-8ff4-52c3b3d110fa,Dark Amber,Dark Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 bf05e95d-6a15-4395-bcae-5c5d772c7cdc,Yellow,Yellow,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
-92b3c146-5820-4cd1-9a73-98d6bdbba7fb,Yellow & Black,,Yellow,Black,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,f6e81a55-08b1-4d8c-82b5-3a7847db01ec,f6e81a55-08b1-4d8c-82b5-3a7847db01ec
-8ee34eae-4068-480d-824e-ca1f59f8478e,Yellow & Black,,Yellow,Black,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,f6e81a55-08b1-4d8c-82b5-3a7847db01ec,f6e81a55-08b1-4d8c-82b5-3a7847db01ec
-ebb6a9b1-6a78-4245-adb3-303fe66fcbe3,Yellow & Black,,Yellow,Black,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,f6e81a55-08b1-4d8c-82b5-3a7847db01ec,f6e81a55-08b1-4d8c-82b5-3a7847db01ec
+92b3c146-5820-4cd1-9a73-98d6bdbba7fb,Yellow & Black,,Yellow,Black,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,f6e81a55-08b1-4d8c-82b5-3a7847db01ec,
+8ee34eae-4068-480d-824e-ca1f59f8478e,Yellow & Black,,Yellow,Black,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,f6e81a55-08b1-4d8c-82b5-3a7847db01ec,
+ebb6a9b1-6a78-4245-adb3-303fe66fcbe3,Yellow & Black,,Yellow,Black,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,f6e81a55-08b1-4d8c-82b5-3a7847db01ec,
 7edab1d8-de93-4bbc-bbee-9b06d626340f,Amber,Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
-7273c84e-ce5c-4abd-a3a9-efa4188ef910,Yellow & Black,,Yellow,Black,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,f6e81a55-08b1-4d8c-82b5-3a7847db01ec,f6e81a55-08b1-4d8c-82b5-3a7847db01ec
+7273c84e-ce5c-4abd-a3a9-efa4188ef910,Yellow & Black,,Yellow,Black,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,f6e81a55-08b1-4d8c-82b5-3a7847db01ec,
 6bbc4bbf-5610-4e43-abff-85f1dac14657,Yellow,Yellow,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 4b4c4cb8-9c52-4033-a979-6066845c8c85,Amber,Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 6a8e6228-be72-4daa-8197-aa8561e9b0e6,Amber,Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 3484b094-9cf1-4bf7-af6e-226ea051abc9,Yellow,Yellow,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
-5ce223ce-34ae-408e-b4ce-b1589f6d41ab,White & Yellow,,White,Yellow,,,4d16adba-e698-463d-9d2c-efbb2b0897c5,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,835f1ef7-57a4-4c51-96ad-8ec63489e5ff
+5ce223ce-34ae-408e-b4ce-b1589f6d41ab,White & Yellow,,White,Yellow,,,4d16adba-e698-463d-9d2c-efbb2b0897c5,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,
 9d05c3af-182d-43c1-9072-20261430a09c,Amber,Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 138d1600-96ab-4ba2-8998-81681ac905b8,Light Amber,Light Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 91f25189-9458-489f-a696-6a12dcab2e50,Light Amber,Light Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
@@ -501,7 +501,7 @@ eecd2adb-9bfd-4624-8459-61f617a697b5,White,White,,,,4d16adba-e698-463d-9d2c-efbb
 4aba741d-a3f9-45a3-ad19-9e75f020b334,White,White,,,,4d16adba-e698-463d-9d2c-efbb2b0897c5,,,
 0303bfc3-ab72-4408-94b2-56925a5c84f5,Yellow,Yellow,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 2edbb7da-dc14-4865-b1fa-8ef01a1e23e7,Brown,Brown,,,,bb3d1a69-3ffa-4a21-b94e-8fa994d87446,,,
-5a47273d-776b-4677-a57a-934fce2bfbad,White & Amber,,White,Amber,,,4d16adba-e698-463d-9d2c-efbb2b0897c5,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,835f1ef7-57a4-4c51-96ad-8ec63489e5ff
+5a47273d-776b-4677-a57a-934fce2bfbad,White & Amber,,White,Amber,,,4d16adba-e698-463d-9d2c-efbb2b0897c5,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,
 52ff92e0-68bb-49ee-8dfe-cf291c6b8b06,White,White,,,,4d16adba-e698-463d-9d2c-efbb2b0897c5,,,
 40b8c570-b93d-4dde-a001-6f4b1db455d3,Tan,Tan,,,,bb3d1a69-3ffa-4a21-b94e-8fa994d87446,,,
 dcc8bca5-41be-4a96-a979-55f9341aba39,Blue,Blue,,,,3cac3ac3-7c0e-48bd-9b91-cf463b7767e8,,,
@@ -2386,7 +2386,7 @@ eb7aaf62-3d37-4999-badc-294e4d4a578b,Red,Red,,,,998d35b2-cd0c-41a8-8296-5e229701
 9fe608be-70f7-41c5-a007-c1f6b5c19b90,Reddish-brown,Reddish-brown,,,,bb3d1a69-3ffa-4a21-b94e-8fa994d87446,,,
 cd7d9ae8-06ef-4d47-9023-fe0d43a9c2ec,Amber,Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 b8fceac6-6bc0-4742-a7d4-13d96a5a0e35,Yellow,Yellow,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
-b62efe2d-0c61-47ee-88cc-59f6b74b875e,Brown / White,,Brown,White,,,bb3d1a69-3ffa-4a21-b94e-8fa994d87446,4d16adba-e698-463d-9d2c-efbb2b0897c5,4d16adba-e698-463d-9d2c-efbb2b0897c5
+b62efe2d-0c61-47ee-88cc-59f6b74b875e,Brown / White,,Brown,White,,,bb3d1a69-3ffa-4a21-b94e-8fa994d87446,4d16adba-e698-463d-9d2c-efbb2b0897c5,
 ceb72d56-315a-422b-934c-0e2472f18dfe,Reddish-yellow,Reddish-yellow,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 81d729a4-bf8c-450a-aee6-652d9e2a391c,Yellow,Yellow,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 c2cedc72-35bd-495a-b2f1-54b2701e304f,Amber,Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
@@ -2651,7 +2651,7 @@ fad347e8-61b5-4501-9e4b-56d1031fb9d0,White,White,,,,4d16adba-e698-463d-9d2c-efbb
 9a4df3dc-c287-4f67-a0dc-dea27c651199,Yellow,Yellow,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 f9b3b8d7-5468-4353-b3ff-30cddfe00bf4,Dark Brown,Dark Brown,,,,bb3d1a69-3ffa-4a21-b94e-8fa994d87446,,,
 82c2a960-5d35-4247-86d0-e6a487882230,Brown,Brown,,,,bb3d1a69-3ffa-4a21-b94e-8fa994d87446,,,
-5003db6c-5cda-4940-92ec-5692dcd05e79,"Brown, Grey & Yellow",,Brown,Grey,Yellow,,bb3d1a69-3ffa-4a21-b94e-8fa994d87446,444fe2e7-9ed7-4bef-bd57-947ffc1dd822,444fe2e7-9ed7-4bef-bd57-947ffc1dd822
+5003db6c-5cda-4940-92ec-5692dcd05e79,"Brown, Grey & Yellow",,Brown,Grey,Yellow,,bb3d1a69-3ffa-4a21-b94e-8fa994d87446,444fe2e7-9ed7-4bef-bd57-947ffc1dd822,835f1ef7-57a4-4c51-96ad-8ec63489e5ff
 a411676d-6fa8-4779-b2c3-405f78f3ced4,Black,Black,,,,f6e81a55-08b1-4d8c-82b5-3a7847db01ec,,,
 fb91076e-7e6e-4c0b-9b85-3e076156e5a8,Light Amber,Light Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 7b8bffac-57a4-4c7f-b850-c923e94df427,Amber,Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
@@ -2679,7 +2679,7 @@ bb796a9c-b361-4e04-a5e5-aab530d87935,Light Amber,Light Amber,,,,835f1ef7-57a4-4c
 dcd4a0f3-ee61-4e1b-9285-20cd6ac7c99c,Light Amber,Light Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 a5c71f4c-a7c4-4a19-8ec0-159088f32269,Beige,Beige,,,,cb45df63-21d2-445f-b5a1-5f132221df3f,,,
 32eebb64-a102-4866-ab61-990cb6b1b379,Yellow,Yellow,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
-3c5ee6ee-5821-43ab-9e1f-b99014379ac1,Brown & Beige,,Brown,Beige,,,bb3d1a69-3ffa-4a21-b94e-8fa994d87446,cb45df63-21d2-445f-b5a1-5f132221df3f,cb45df63-21d2-445f-b5a1-5f132221df3f
+3c5ee6ee-5821-43ab-9e1f-b99014379ac1,Brown & Beige,,Brown,Beige,,,bb3d1a69-3ffa-4a21-b94e-8fa994d87446,cb45df63-21d2-445f-b5a1-5f132221df3f,
 71d4fff1-405e-4ad5-8c73-0ee34bfa2eb1,Green,Green,,,,d50967f8-b23c-4590-a5d0-866c2683cec2,,,
 99c74f8b-e9c5-4ec9-b55c-17ab779bd266,Light Yellow,Light Yellow,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 03916f17-f69a-422a-861a-de65202e477a,Black,Black,,,,f6e81a55-08b1-4d8c-82b5-3a7847db01ec,,,
@@ -4332,7 +4332,7 @@ c9769e5b-0e94-491c-b4b8-3171e1fe3c26,Brown,Brown,,,,bb3d1a69-3ffa-4a21-b94e-8fa9
 88c763e3-6534-4883-8354-0a45e4103ffc,Brown,Brown,,,,bb3d1a69-3ffa-4a21-b94e-8fa994d87446,,,
 fc48bb15-0dff-44e5-afce-da4a40837b7c,Brown,Brown,,,,bb3d1a69-3ffa-4a21-b94e-8fa994d87446,,,
 19c646b6-a048-4694-9ff1-f0448bc50f54,Brown,Brown,,,,bb3d1a69-3ffa-4a21-b94e-8fa994d87446,,,
-e492badf-9aed-430f-8de2-5157a3ac5a04,White (fiber) / Brown (seeds),,White,Brown,,,4d16adba-e698-463d-9d2c-efbb2b0897c5,bb3d1a69-3ffa-4a21-b94e-8fa994d87446,bb3d1a69-3ffa-4a21-b94e-8fa994d87446
+e492badf-9aed-430f-8de2-5157a3ac5a04,White (fiber) / Brown (seeds),,White,Brown,,,4d16adba-e698-463d-9d2c-efbb2b0897c5,bb3d1a69-3ffa-4a21-b94e-8fa994d87446,
 173e106a-0394-4e90-b598-cad9901529d2,Amber,Amber,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
 11d7bbdb-b8d8-4486-bb56-d7fd8a37236d,Gray,Gray,,,,444fe2e7-9ed7-4bef-bd57-947ffc1dd822,,,
 5cc0c228-74be-4c9a-9c5e-a4970d3bdc18,Yellow,Yellow,,,,835f1ef7-57a4-4c51-96ad-8ec63489e5ff,,,
