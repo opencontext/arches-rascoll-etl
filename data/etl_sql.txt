@@ -245,9 +245,10 @@ ALTER FUNCTION public.__arches_instance_view_update()
 
 
 
-
+/*
 ALTER TABLE TILES DISABLE TRIGGER __arches_check_excess_tiles_trigger;
 ALTER TABLE TILES DISABLE TRIGGER __arches_trg_update_spatial_attributes;
+*/
 
 
 
@@ -273,6 +274,9 @@ ALTER TABLE TILES DISABLE TRIGGER __arches_trg_update_spatial_attributes;
 
     SELECT __arches_create_resource_model_views('da0ed58e-d771-11ef-af99-0275dc2ded29');
     
+
+/* ---------------------------------------------------------------------------------- */ 
+
 
 
                 INSERT INTO reference_and_sample_collection_item.instances (
@@ -392,6 +396,9 @@ nodegroupid::uuid
                 ;
                 
 
+/* ---------------------------------------------------------------------------------- */ 
+
+
 
                 INSERT INTO place.instances (
                     resourceinstanceid, 
@@ -506,6 +513,9 @@ geo_point_nodegroupid::uuid
                 ;
                 
 
+/* ---------------------------------------------------------------------------------- */ 
+
+
 
                 INSERT INTO group_.instances (
                     resourceinstanceid, 
@@ -552,6 +562,9 @@ group_name_nodegroupid::uuid
                 
                 ;
                 
+
+/* ---------------------------------------------------------------------------------- */ 
+
 
 
                 INSERT INTO person.instances (
@@ -600,6 +613,9 @@ person_name_nodegroupid::uuid
                 ;
                 
 
+/* ---------------------------------------------------------------------------------- */ 
+
+
 
                 INSERT INTO collection_or_set.instances (
                     resourceinstanceid, 
@@ -646,6 +662,9 @@ nodegroupid::uuid
                 
                 ;
                 
+
+/* ---------------------------------------------------------------------------------- */ 
+
 
 
                 INSERT INTO reference_and_sample_collection_item.instances (
@@ -718,6 +737,9 @@ physical_form_nodegroupid::uuid
                 
                 ;
                 
+
+/* ---------------------------------------------------------------------------------- */ 
+
 
 
                 INSERT INTO reference_and_sample_collection_item.instances (
@@ -857,6 +879,9 @@ reactivity_safety_nodegroupid::uuid,
                 ;
                 
 
+/* ---------------------------------------------------------------------------------- */ 
+
+
 
                 INSERT INTO provenance_activity.instances (
                     resourceinstanceid, 
@@ -977,6 +1002,9 @@ acquisition_timespan_end_of_the_end::timestamp
                 
                 ;
                 
+
+/* ---------------------------------------------------------------------------------- */ 
+
 
 
                 INSERT INTO reference_and_sample_collection_item.instances (
@@ -1103,6 +1131,9 @@ prod_1_tileid::uuid
                 
                 ;
                 
+
+/* ---------------------------------------------------------------------------------- */ 
+
 
 
                 INSERT INTO reference_and_sample_collection_item.instances (
@@ -1265,6 +1296,9 @@ mat_nodegroupid::uuid
                 
                 ;
                 
+
+/* ---------------------------------------------------------------------------------- */ 
+
 
 
                 INSERT INTO reference_and_sample_collection_item.instances (
@@ -1498,6 +1532,9 @@ comp3_tileid::uuid
                 ;
                 
 
+/* ---------------------------------------------------------------------------------- */ 
+
+
 
                 INSERT INTO reference_and_sample_collection_item.instances (
                     resourceinstanceid, 
@@ -1628,6 +1665,9 @@ color_d_color_name_content::jsonb
                 ;
                 
 
+/* ---------------------------------------------------------------------------------- */ 
+
+
 
                 INSERT INTO reference_and_sample_collection_item.instances (
                     resourceinstanceid, 
@@ -1699,10 +1739,10 @@ cur_loc_tileid::uuid
                 
 
 
-
+/*
 ALTER TABLE TILES ENABLE TRIGGER __arches_check_excess_tiles_trigger;
 ALTER TABLE TILES ENABLE TRIGGER __arches_trg_update_spatial_attributes;
-
+*/
 
 
 

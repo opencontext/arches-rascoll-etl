@@ -293,6 +293,9 @@ def prepare_all_sql_inserts(
         # Add the SQL statements for the relational views.
         sqls += relational_views_sqls
     for configs in all_configs:
+        sqls.append(
+            "/* ---------------------------------------------------------------------------------- */ \n"
+        )
         staging_table = configs.get('staging_table')
         model_staging_schema = configs.get('model_staging_schema')
         start = 0
@@ -489,7 +492,7 @@ def prepare_all_sql_inserts(
                 """
                 sqls.append(tile_sql)
             start += increment
-            
+
     if general_configs.ARCHES_V8:
         sqls.append(
             sql_functions.REACTIVATE_TRIGGERS_AFTER_INSERTS
