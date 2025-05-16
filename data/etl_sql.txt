@@ -119,15 +119,25 @@ $$ language plpgsql;
 
 
 
+
 UPDATE node_groups
 SET cardinality = 'n'
 WHERE nodegroupid = '6ee83594-08e4-11f0-81c1-0275dc2ded29';
 
+UPDATE node_groups
+SET cardinality = 'n'
+WHERE nodegroupid = '6ee83f62-08e4-11f0-81c1-0275dc2ded29';
 
 
+
+
+/*
 UPDATE node_groups
 SET cardinality = 'n'
 WHERE nodegroupid = '3aff54bc-0f3b-11f0-aa84-02460e9d2217';
+*/
+
+
 
 
 
@@ -232,6 +242,12 @@ $BODY$;
 
 ALTER FUNCTION public.__arches_instance_view_update()
     OWNER TO postgres;
+
+
+
+
+ALTER TABLE TILES DISABLE TRIGGER __arches_check_excess_tiles_trigger;
+ALTER TABLE TILES DISABLE TRIGGER __arches_trg_update_spatial_attributes;
 
 
 
@@ -1276,18 +1292,24 @@ principaluser_id::integer
                 INSERT INTO reference_and_sample_collection_item.has_part (
                     resourceinstanceid, 
 tileid, 
-part_type, 
-nodegroupid
+part_name_content, 
+part_name_type, 
+part_name_language, 
+nodegroupid, 
+part_type
                 ) SELECT
                     resourceinstanceid::uuid, 
 comp1_tileid::uuid, 
-comp1_part_type::uuid, 
-comp1_nodegroupid::uuid
+comp1_part_name_content::jsonb, 
+comp1_part_name_type::uuid[], 
+comp1_part_name_language::uuid[], 
+comp1_nodegroupid::uuid, 
+comp1_part_type::uuid
                 
                 FROM staging.rsci_components
                 WHERE (staging.rsci_components.comp1_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.rsci_components.comp1_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_components.comp1_part_type::uuid IS NOT NULL))
+((staging.rsci_components.comp1_part_name_content::jsonb IS NOT NULL))
                 ORDER BY staging.rsci_components.resourceinstanceid
                 
                 ;
@@ -1348,48 +1370,27 @@ comp1_tileid::uuid
                 
 
 
-                INSERT INTO reference_and_sample_collection_item.part_dimension_name (
-                    resourceinstanceid, 
-tileid, 
-part_dimension_name_content_, 
-part_dimension_name_type_, 
-part_dimension_name_language_, 
-nodegroupid, 
-part_dimension
-                ) SELECT
-                    resourceinstanceid::uuid, 
-comp1_p_tileid::uuid, 
-comp1_p_part_dimension_name_content_::jsonb, 
-comp1_p_part_dimension_name_type_::uuid[], 
-comp1_p_part_dimension_name_language_::uuid[], 
-comp1_p_nodegroupid::uuid, 
-comp1_n_tileid::uuid
-                
-                FROM staging.rsci_components
-                WHERE (staging.rsci_components.comp1_p_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_components.comp1_p_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_components.comp1_p_part_dimension_name_content_::jsonb IS NOT NULL))
-                ORDER BY staging.rsci_components.resourceinstanceid
-                
-                ;
-                
-
-
                 INSERT INTO reference_and_sample_collection_item.has_part (
                     resourceinstanceid, 
 tileid, 
-part_type, 
-nodegroupid
+part_name_content, 
+part_name_type, 
+part_name_language, 
+nodegroupid, 
+part_type
                 ) SELECT
                     resourceinstanceid::uuid, 
 comp2_tileid::uuid, 
-comp2_part_type::uuid, 
-comp2_nodegroupid::uuid
+comp2_part_name_content::jsonb, 
+comp2_part_name_type::uuid[], 
+comp2_part_name_language::uuid[], 
+comp2_nodegroupid::uuid, 
+comp2_part_type::uuid
                 
                 FROM staging.rsci_components
                 WHERE (staging.rsci_components.comp2_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.rsci_components.comp2_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_components.comp2_part_type::uuid IS NOT NULL))
+((staging.rsci_components.comp2_part_name_content::jsonb IS NOT NULL))
                 ORDER BY staging.rsci_components.resourceinstanceid
                 
                 ;
@@ -1444,33 +1445,6 @@ comp2_tileid::uuid
                 WHERE (staging.rsci_components.comp2_n_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.rsci_components.comp2_n_tileid::uuid IS NOT NULL) AND 
 ((staging.rsci_components.comp2_n_part_dimension_value_::numeric IS NOT NULL))
-                ORDER BY staging.rsci_components.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.part_dimension_name (
-                    resourceinstanceid, 
-tileid, 
-part_dimension_name_content_, 
-part_dimension_name_type_, 
-part_dimension_name_language_, 
-nodegroupid, 
-part_dimension
-                ) SELECT
-                    resourceinstanceid::uuid, 
-comp2_p_tileid::uuid, 
-comp2_p_part_dimension_name_content_::jsonb, 
-comp2_p_part_dimension_name_type_::uuid[], 
-comp2_p_part_dimension_name_language_::uuid[], 
-comp2_p_nodegroupid::uuid, 
-comp2_n_tileid::uuid
-                
-                FROM staging.rsci_components
-                WHERE (staging.rsci_components.comp2_p_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_components.comp2_p_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_components.comp2_p_part_dimension_name_content_::jsonb IS NOT NULL))
                 ORDER BY staging.rsci_components.resourceinstanceid
                 
                 ;
@@ -1550,43 +1524,24 @@ principaluser_id::integer
                 INSERT INTO reference_and_sample_collection_item.has_color (
                     resourceinstanceid, 
 tileid, 
-color_name_content, 
+color_type, 
+nodegroupid, 
 color_name_type, 
 color_name_language, 
-nodegroupid
-                ) SELECT
-                    resourceinstanceid::uuid, 
-color_tileid::uuid, 
-color_color_name_content::jsonb, 
-color_color_name_type::uuid[], 
-color_color_name_language::uuid, 
-color_nodegroupid::uuid
-                
-                FROM staging.rsci_colors
-                WHERE (staging.rsci_colors.color_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_colors.color_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_colors.color_color_name_content::jsonb IS NOT NULL))
-                ORDER BY staging.rsci_colors.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.has_color (
-                    resourceinstanceid, 
-tileid, 
-color_type, 
-nodegroupid
+color_name_content
                 ) SELECT
                     resourceinstanceid::uuid, 
 color_a_tileid::uuid, 
 color_a_color_type::uuid, 
-color_a_nodegroupid::uuid
+color_a_nodegroupid::uuid, 
+color_a_color_name_type::uuid[], 
+color_a_color_name_language::uuid, 
+color_a_color_name_content::jsonb
                 
                 FROM staging.rsci_colors
                 WHERE (staging.rsci_colors.color_a_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.rsci_colors.color_a_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_colors.color_a_color_type::uuid IS NOT NULL))
+((staging.rsci_colors.color_a_color_type::uuid IS NOT NULL) OR (staging.rsci_colors.color_a_color_name_content::jsonb IS NOT NULL))
                 ORDER BY staging.rsci_colors.resourceinstanceid
                 
                 ;
@@ -1597,17 +1552,23 @@ color_a_nodegroupid::uuid
                     resourceinstanceid, 
 tileid, 
 color_type, 
-nodegroupid
+nodegroupid, 
+color_name_type, 
+color_name_language, 
+color_name_content
                 ) SELECT
                     resourceinstanceid::uuid, 
 color_b_tileid::uuid, 
 color_b_color_type::uuid, 
-color_b_nodegroupid::uuid
+color_b_nodegroupid::uuid, 
+color_b_color_name_type::uuid[], 
+color_b_color_name_language::uuid, 
+color_b_color_name_content::jsonb
                 
                 FROM staging.rsci_colors
                 WHERE (staging.rsci_colors.color_b_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.rsci_colors.color_b_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_colors.color_b_color_type::uuid IS NOT NULL))
+((staging.rsci_colors.color_b_color_type::uuid IS NOT NULL) OR (staging.rsci_colors.color_b_color_name_content::jsonb IS NOT NULL))
                 ORDER BY staging.rsci_colors.resourceinstanceid
                 
                 ;
@@ -1618,17 +1579,23 @@ color_b_nodegroupid::uuid
                     resourceinstanceid, 
 tileid, 
 color_type, 
-nodegroupid
+nodegroupid, 
+color_name_type, 
+color_name_language, 
+color_name_content
                 ) SELECT
                     resourceinstanceid::uuid, 
 color_c_tileid::uuid, 
 color_c_color_type::uuid, 
-color_c_nodegroupid::uuid
+color_c_nodegroupid::uuid, 
+color_c_color_name_type::uuid[], 
+color_c_color_name_language::uuid, 
+color_c_color_name_content::jsonb
                 
                 FROM staging.rsci_colors
                 WHERE (staging.rsci_colors.color_c_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.rsci_colors.color_c_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_colors.color_c_color_type::uuid IS NOT NULL))
+((staging.rsci_colors.color_c_color_type::uuid IS NOT NULL) OR (staging.rsci_colors.color_c_color_name_content::jsonb IS NOT NULL))
                 ORDER BY staging.rsci_colors.resourceinstanceid
                 
                 ;
@@ -1639,17 +1606,23 @@ color_c_nodegroupid::uuid
                     resourceinstanceid, 
 tileid, 
 color_type, 
-nodegroupid
+nodegroupid, 
+color_name_type, 
+color_name_language, 
+color_name_content
                 ) SELECT
                     resourceinstanceid::uuid, 
 color_d_tileid::uuid, 
 color_d_color_type::uuid, 
-color_d_nodegroupid::uuid
+color_d_nodegroupid::uuid, 
+color_d_color_name_type::uuid[], 
+color_d_color_name_language::uuid, 
+color_d_color_name_content::jsonb
                 
                 FROM staging.rsci_colors
                 WHERE (staging.rsci_colors.color_d_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.rsci_colors.color_d_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_colors.color_d_color_type::uuid IS NOT NULL))
+((staging.rsci_colors.color_d_color_type::uuid IS NOT NULL) OR (staging.rsci_colors.color_d_color_name_content::jsonb IS NOT NULL))
                 ORDER BY staging.rsci_colors.resourceinstanceid
                 
                 ;
@@ -1724,6 +1697,13 @@ cur_loc_tileid::uuid
                 
                 ;
                 
+
+
+
+ALTER TABLE TILES ENABLE TRIGGER __arches_check_excess_tiles_trigger;
+ALTER TABLE TILES ENABLE TRIGGER __arches_trg_update_spatial_attributes;
+
+
 
 
 select * from refresh_geojson_geometries();

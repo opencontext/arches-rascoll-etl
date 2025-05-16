@@ -82,5 +82,20 @@ def prepare_rsci_color_data(
         | (df_colors['color_d_type_uuid'].notnull() & (df_colors['color_d_type_uuid'] != ''))
     )
     df_colors = df_colors[good_index].copy()
+    df_colors['color_type_uuids'] = ''
+    single_val_to_list_cols = ['color_a_type_uuid', 'color_b_type_uuid', 'color_c_type_uuid', 'color_d_type_uuid']
+    for i, row in df_colors.iterrows():
+        color_type_uuids = []
+        for col in single_val_to_list_cols:
+            if row[col] != '' and row[col] is not None:
+                color_type_uuids.append(str(row[col]))
+        if len(color_type_uuids) == 0:
+            continue
+        df_colors.at[i, 'color_type_uuids'] = color_type_uuids
+    act_index = ~(df_colors['color_type_uuids'] == '')
+    df_colors.loc[act_index, 'color_type_uuids'] = df_colors[act_index].apply(
+        lambda row: json.dumps(row['color_type_uuids']), 
+        axis=1
+    )
     df_colors.to_csv(rsci_color_path, index=False)
     return df_colors

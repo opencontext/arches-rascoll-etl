@@ -285,6 +285,9 @@ def prepare_all_sql_inserts(
         sqls.append(
             sql_functions.ARCHES_V8_RESOURCE_INSTANCE_FUNCTION_FIX
         )
+        sqls.append(
+            sql_functions.DIASABLE_TRIGGERS_BEFORE_INSERTS
+        )
 
     if relational_views_sqls:
         # Add the SQL statements for the relational views.
@@ -486,7 +489,11 @@ def prepare_all_sql_inserts(
                 """
                 sqls.append(tile_sql)
             start += increment
-    
+            
+    if general_configs.ARCHES_V8:
+        sqls.append(
+            sql_functions.REACTIVATE_TRIGGERS_AFTER_INSERTS
+        )
     sqls.append(
         sql_functions.POSTGRESQL_AFTER_ETL_FUNCTION
     )

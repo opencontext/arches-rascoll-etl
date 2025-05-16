@@ -231,17 +231,41 @@ $$ language plpgsql;
 
 # Has part, part type, (component) nodegroup cardinality fix
 UPDATE_NODE_GROUP_CARDINALITY = """
+
 UPDATE node_groups
 SET cardinality = 'n'
 WHERE nodegroupid = '6ee83594-08e4-11f0-81c1-0275dc2ded29';
+
+UPDATE node_groups
+SET cardinality = 'n'
+WHERE nodegroupid = '6ee83f62-08e4-11f0-81c1-0275dc2ded29';
+
 """
 
-UPDATE_COLOR_NODE_GROUP_CARDINALITY ="""
+# Comment these out, so we don't change the cardinality of the node groups
+UPDATE_COLOR_NODE_GROUP_CARDINALITY = """
+/*
 UPDATE node_groups
 SET cardinality = 'n'
 WHERE nodegroupid = '3aff54bc-0f3b-11f0-aa84-02460e9d2217';
+*/
+
+
 """
 
+DIASABLE_TRIGGERS_BEFORE_INSERTS = """
+/*
+ALTER TABLE TILES DISABLE TRIGGER __arches_check_excess_tiles_trigger;
+ALTER TABLE TILES DISABLE TRIGGER __arches_trg_update_spatial_attributes;
+*/
+"""
+
+REACTIVATE_TRIGGERS_AFTER_INSERTS = """
+/*
+ALTER TABLE TILES ENABLE TRIGGER __arches_check_excess_tiles_trigger;
+ALTER TABLE TILES ENABLE TRIGGER __arches_trg_update_spatial_attributes;
+*/
+"""
 
 POSTGRESQL_AFTER_ETL_FUNCTION = """
 select * from refresh_geojson_geometries();
