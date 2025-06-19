@@ -1,0 +1,59 @@
+Source Column,Card Name,Resource Model,Target Table,Target Field,Model Staging Schema,Data Type,Description,Additional Notes
+rsci_uuid,,,instances,resourceinstanceid,reference_and_sample_collection_item,UUID,Primary key for RSCI records,Used as the main identifier for all RSCI records
+Common Name,Name of Object,Reference and Sample Collection Item,name,name_content,reference_and_sample_collection_item,JSONB,Primary name of the RSCI record,Stored as JSON with language information
+Additional Names,Name of Object,Reference and Sample Collection Item,name,name_content,reference_and_sample_collection_item,JSONB,Alternative names for the RSCI record,Stored as JSON with language information
+Barcode No.,Identifier of Object,Reference and Sample Collection Item,identifier,identifier_content,reference_and_sample_collection_item,JSONB,Unique identifier for the RSCI record,Stored as JSON with language information
+facet_type_value_uuid,Search Facet,Reference and Sample Collection Item,facet_type,facet_type,reference_and_sample_collection_item,UUID,Type classification of the RSCI record,References a concept value
+Physical Form,Statement or Interpretation about Object,Reference and Sample Collection Item,statement,statement_content,reference_and_sample_collection_item,JSONB,Physical description of the RSCI record,Stored as JSON with language information
+Chemical Name,Material Data Assignment Name,Reference and Sample Collection Item,material_data_assignment_name,material_data_assignment_name_content,reference_and_sample_collection_item,JSONB,Chemical name of the material,Stored as JSON with language information
+gbif_canonical_name,Name of Object,Reference and Sample Collection Item,name,name_content,reference_and_sample_collection_item,JSONB,GBIF taxonomic name,Stored as JSON with language information
+gbif_uri,Statement or Interpretation about Object,Reference and Sample Collection Item,statement,statement_content,reference_and_sample_collection_item,JSONB,GBIF URI reference,Combined with gbif_canonical_name to create statement
+Mixture Type,Type of Mixture,Reference and Sample Collection Item,mixture_type,mixture_type,reference_and_sample_collection_item,ARRAY(UUID),Type of mixture,Stored as array of concept value UUIDs
+Natural/Synthetic,Attribute Type,Reference and Sample Collection Item,attribute_type,attribute_type,reference_and_sample_collection_item,ARRAY(UUID),Natural or synthetic classification,Stored as array of concept value UUIDs
+Sample Type,Material(s) of Object,Reference and Sample Collection Item,material,material,reference_and_sample_collection_item,ARRAY(UUID),Type of sample,Stored as array of concept value UUIDs
+Typical Use,Material(s) of Object,Reference and Sample Collection Item,material,material,reference_and_sample_collection_item,ARRAY(UUID),Typical use of the material,Stored as array of concept value UUIDs
+Component1,Component,Reference and Sample Collection Item,has_part,part_name_content,reference_and_sample_collection_item,JSONB,First component name,Part of component 1 data
+comp1_n,Component Dimension,Reference and Sample Collection Item,part_dimension,part_dimension_value_,reference_and_sample_collection_item,Numeric,First component numeric value,Part of component 1 data
+comp1_g,Component Dimension,Reference and Sample Collection Item,part_dimension,part_dimension_unit,reference_and_sample_collection_item,UUID,First component unit,Part of component 1 data
+comp1_p,Component,Reference and Sample Collection Item,has_part,part_name_content,reference_and_sample_collection_item,JSONB,First component description,Part of component 1 data
+Component2,Component,Reference and Sample Collection Item,has_part,part_name_content,reference_and_sample_collection_item,JSONB,Second component name,Part of component 2 data
+comp2_n,Component Dimension,Reference and Sample Collection Item,part_dimension,part_dimension_value_,reference_and_sample_collection_item,Numeric,Second component numeric value,Part of component 2 data
+comp2_g,Component Dimension,Reference and Sample Collection Item,part_dimension,part_dimension_unit,reference_and_sample_collection_item,UUID,Second component unit,Part of component 2 data
+comp2_p,Component,Reference and Sample Collection Item,has_part,part_name_content,reference_and_sample_collection_item,JSONB,Second component description,Part of component 2 data
+Component3,Component Statement,Reference and Sample Collection Item,part_statement,part_statement_content,reference_and_sample_collection_item,JSONB,Third component description,Part of component 3 data
+specific_place_uri,External URI for Place,Place,external_uri,external_uri,place,JSONB,Primary place URI,Used for place relationships
+specific_place_uri_2,External URI for Place,Place,external_uri,external_uri,place,JSONB,Secondary place URI,Used for place relationships
+specific_place,Name of Place,Place,statement,content,place,JSONB,Primary place name,Used in place statements
+specific_place_2,Name of Place,Place,statement,content,place,JSONB,Secondary place name,Used in place statements
+specific_geojson,Geospatial Definition of Place,Place,defined_by,defined_by,place,JSONB,Primary geospatial data,Used for geospatial points
+specific_geojson_2,Geospatial Definition of Place,Place,defined_by,defined_by,place,JSONB,Secondary geospatial data,Used for geospatial points
+latitude,Geospatial Definition of Place,Place,defined_by,defined_by,place,JSONB,Primary latitude,Used to create geospatial points
+longitude,Geospatial Definition of Place,Place,defined_by,defined_by,place,JSONB,Primary longitude,Used to create geospatial points
+latitude_2,Geospatial Definition of Place,Place,defined_by,defined_by,place,JSONB,Secondary latitude,Used to create geospatial points
+longitude_2,Geospatial Definition of Place,Place,defined_by,defined_by,place,JSONB,Secondary longitude,Used to create geospatial points
+Acquired By (CLEAN_1),,,instances,resourceinstanceid,provenance_activity,UUID,Primary acquirer person,Links to person record
+Acquired By (CLEAN_2),,,instances,resourceinstanceid,provenance_activity,UUID,Secondary acquirer person,Links to person record
+Acquired By (Institution_1),,,instances,resourceinstanceid,provenance_activity,UUID,Primary acquiring institution,Links to group record
+Acquired By (Institution_2),,,instances,resourceinstanceid,provenance_activity,UUID,Secondary acquiring institution,Links to group record
+Acquired From (CLEAN_1),,,instances,resourceinstanceid,provenance_activity,UUID,Primary source institution,Links to group record
+Acquired From (CLEAN_2),,,instances,resourceinstanceid,provenance_activity,UUID,Secondary source institution,Links to group record
+Acquisition Date__begin_of_the_begin,TimeSpan of Transfer of Ownership,Provenance Activity,acquisition_timespan,begin_of_the_begin,provenance_activity,DateTime,Start of acquisition period,Part of acquisition date range
+Acquisition Date__end_of_the_begin,Payment TimeSpan,Provenance Activity,acquisition_timespan,end_of_the_begin,provenance_activity,DateTime,End of acquisition period start,Part of acquisition date range
+Acquisition Date__begin_of_the_end,Payment TimeSpan,Provenance Activity,acquisition_timespan,begin_of_the_end,provenance_activity,DateTime,Start of acquisition period end,Part of acquisition date range
+Acquisition Date__end_of_the_end,Move TimeSpan,Provenance Activity,acquisition_timespan,end_of_the_end,provenance_activity,DateTime,End of acquisition period,Part of acquisition date range
+Manufacturer (CLEAN),,,instances,resourceinstanceid,reference_and_sample_collection_item,UUID,Manufacturer information,Links to group record
+origination_date_statement,Statement about Production Event,Reference and Sample Collection Item,production_statement,production_statement_content,reference_and_sample_collection_item,JSONB,Production date statement,Stored as JSON with language information
+origin_date_begin_of_begin,,,production_timespan,begin_of_the_begin,reference_and_sample_collection_item,DateTime,Start of production period,Part of production date range
+origin_date_end_of_begin,,,production_timespan,end_of_the_begin,reference_and_sample_collection_item,DateTime,End of production period start,Part of production date range
+origin_date_begin_of_end,,,production_timespan,begin_of_the_end,reference_and_sample_collection_item,DateTime,Start of production period end,Part of production date range
+origin_date_end_of_end,,,production_timespan,end_of_the_end,reference_and_sample_collection_item,DateTime,End of production period,Part of production date range
+Color,Color,Reference and Sample Collection Item,has_color,color_name_content,reference_and_sample_collection_item,JSONB,Color description,Stored as JSON with language information
+color_a_type_uuid,Color,Reference and Sample Collection Item,has_color,color_type,reference_and_sample_collection_item,UUID,Primary color type,References a concept value
+color_b_type_uuid,Color,Reference and Sample Collection Item,has_color,color_type,reference_and_sample_collection_item,UUID,Secondary color type,References a concept value
+color_c_type_uuid,Color,Reference and Sample Collection Item,has_color,color_type,reference_and_sample_collection_item,UUID,Tertiary color type,References a concept value
+color_d_type_uuid,Color,Reference and Sample Collection Item,has_color,color_type,reference_and_sample_collection_item,UUID,Quaternary color type,References a concept value
+current_location_place_dict,Current Location of Object,Reference and Sample Collection Item,current_location,current_location,reference_and_sample_collection_item,JSONB,Current location information,Stored as JSON with place details 
+Fire Safety,Fire Safety Classification,Reference and Sample Collection Item,fire_safety_classification,fire_safety_classification_type,reference_and_sample_collection_item,,,
+Health Safety,Health Safety Classification,Reference and Sample Collection Item,health_safety_classification,health_safety_classification_type,reference_and_sample_collection_item,,,
+Other Safety,General Safety Classification,Reference and Sample Collection Item,general_safety_classification,general_safety_classification_type,reference_and_sample_collection_item,,,
+Reactivity Safety,Reactivity Safety Classification,Reference and Sample Collection Item,reactivity_safety_classification,reactivity_safety_classification_type,reference_and_sample_collection_item,,,

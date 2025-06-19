@@ -94,3 +94,33 @@ def make_related_object_dict_and_res_x_res_id(
         "inverseOntologyProperty": inverse_rel_type_id,
     }
     return rel_obj, res_x_res_id
+
+
+def get_card_data_for_node_in_graph(node_alias, graph_name):
+    """Get the card data for a node in a graph"""
+    sql = f"""
+    SELECT 
+        c.cardid, 
+        c.name->>'en' AS card_name, 
+        c.nodegroupid, 
+        n.name AS node_name,
+        n.alias, 
+        n.graphid, 
+        ng.parentnodegroupid, 
+        pc.name->>'en' AS par_card_name, 
+        g.name->>'en' AS graph_name, 
+        g.slug
+    FROM cards AS c
+    JOIN nodes AS N ON c.nodegroupid = n.nodegroupid
+    JOIN node_groups AS ng ON n.nodegroupid = ng.nodegroupid
+    LEFT JOIN cards AS pc ON ng.parentnodegroupid = pc.nodegroupid
+    JOIN graphs AS g ON n.graphid = g.graphid 
+    WHERE n.alias = '{node_alias}'
+    AND g.name->>'en' = '{graph_name}'
+    """
+    engine = create_engine(general_configs.ARCHES_DB_URL)
+    df = pd.read_sql(sql, engine)
+    d_list = df.to_dict(orient='records')
+    if len(d_list) == 0:
+        return None
+    return d_list[0]
