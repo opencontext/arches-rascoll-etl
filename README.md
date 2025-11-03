@@ -26,6 +26,21 @@ CREATE SCHEMA IF NOT EXISTS staging;
 
 ```python
 
+from arches_rascoll import etl
+# Prepare the staging tables, load them into the staging table, save them
+# do the data directory.
+# etl.load_staging_site_site_element_ids()
+dfs = etl.prepare_all_transformed_data()
+# Prepare the SQL statements and save them as a file in the data directory.
+sqls = etl.prepare_all_sql_inserts()
+
+```
+
+
+### DEPRECATED: In a Python shell, populate the staging schema with data ready loading into Arches
+
+```python
+
 from arches_rascoll import ref_collection
 # Prepare the staging tables, load them into the staging table, save them
 # do the data directory.

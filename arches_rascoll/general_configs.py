@@ -14,7 +14,7 @@ from sqlalchemy.dialects.postgresql import UUID, ARRAY, JSONB
 
 # Note, the database credentials in the DB URL are set to the default values for a local Arches install, 
 # these should be changed to match your own database and set with the ARCHES_DB_URL environment variable.
-ARCHES_DB_URL = os.getenv('ARCHES_DB_URL', 'postgresql://postgres:postgis@127.0.0.1:5434/rascoll')
+ARCHES_DB_URL = os.getenv('ARCHES_DB_URL', 'postgresql://postgres:postgis@127.0.0.1:5434/rascolls')
 
 ARCHES_V8 = True
 # UUID of the resource_instance_lifecycle_state_id for the Arches 8.0.0 release
