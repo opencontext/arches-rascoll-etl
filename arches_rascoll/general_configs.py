@@ -18,7 +18,7 @@ ARCHES_DB_URL = os.getenv('ARCHES_DB_URL', 'postgresql://postgres:postgis@127.0.
 
 ARCHES_V8 = True
 # UUID of the resource_instance_lifecycle_state_id for the Arches 8.0.0 release
-ARCHES_V8_RESOURCE_INSTANCE_LIFECYCLE_STATE_ID = '7e3cce56-fbfb-4a4b-8e83-59b9f9e7cb75'
+ARCHES_V8_RESOURCE_INSTANCE_LIFECYCLE_STATE_ID = 'f75bb034-36e3-4ab4-8167-f520cf0b4c58'
 # ARCHES_V8_RESOURCE_INSTANCE_LIFECYCLE_STATE_ID =  '9375c9a7-dad2-4f14-a5c1-d7e329fdde4f'
 
 current_directory = os.getcwd()
@@ -42,6 +42,23 @@ RSCI_MODEL_NAME = 'reference_and_sample_collection_item'
 # The UUID for the English language value. This is the prefLabel relates to the
 # English concept (id: '38729dbe-6d1c-48ce-bf47-e2a18945600e')
 ENG_VALUE_UUID = 'bc35776b-996f-4fc1-bd25-9f6432c1f349'
+
+
+# Language objects list_id='f7fc4f6d-fd46-4881-846f-4a08bc1a3fef'
+# pref_labels=['English (language)',]
+LANGUAGES_ENGLISH_LIST_ITEMS = [{'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/38729dbe-6d1c-48ce-bf47-e2a18945600e', 'labels': [{'id': '813fab8a-1c58-4e24-8b02-fd3928ecf9a1', 'value': 'English (language)', 'language_id': 'en', 'list_item_id': '38729dbe-6d1c-48ce-bf47-e2a18945600e', 'valuetype_id': 'prefLabel'}], 'list_id': 'f7fc4f6d-fd46-4881-846f-4a08bc1a3fef'}]
+
+
+# Metatype list_id='c82d6f85-ae67-4c28-b07a-c114f6d6ba50'
+# pref_labels=['brief text',]
+# METATYPE_BRIEF_TEXT_LIST_IDS = 'afd2413e-1bbd-42c2-b261-5943ac931f46'
+METATYPE_BRIEF_TEXT_LIST_ITEMS = [{'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/b2f45594-6c10-49d7-a4b7-24e5ca839838', 'labels': [{'id': '3956dc7c-083f-471e-acdc-162455e6ebf0', 'value': 'brief text', 'language_id': 'en', 'list_item_id': 'afd2413e-1bbd-42c2-b261-5943ac931f46', 'valuetype_id': 'prefLabel'}], 'list_id': 'c82d6f85-ae67-4c28-b07a-c114f6d6ba50'}]
+
+# Language objects list_id='80028d07-9c98-48cf-84db-f77bc01c8bbc'
+# pref_labels=['preferred terms',]
+GENERIC_NAME_TYPE_PREFERRED_LIST_ITEMS = [{'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/5f400d39-3b6b-4b8a-939b-4e49787c7444', 'labels': [{'id': '65385d63-59b6-47d0-8c6c-af0ac2b68f48', 'value': 'preferred terms', 'language_id': 'en', 'list_item_id': '5f400d39-3b6b-4b8a-939b-4e49787c7444', 'valuetype_id': 'prefLabel'}], 'list_id': '80028d07-9c98-48cf-84db-f77bc01c8bbc'}]
+
+
 
 # These UUIDs are actually for the prefLabel value that is related to the concepts
 # for these types... Again, a reminder about this likely point of confusion.
@@ -85,29 +102,6 @@ def make_lang_dict_value(value, lang='en'):
 
 RSCI_BARCODE_TYPE_UUIDS = ['ae7f2811-3fee-4624-bc74-9451bd05be2d']
 
-RSCI_NAME_TILE_DATA = {
-    "bda5ce4c-d376-11ef-a239-0275dc2ded29": [PREFERRED_TERM_TYPE_UUID,], # type
-    "bda511e6-d376-11ef-a239-0275dc2ded29": None, # source
-    "bda5852c-d376-11ef-a239-0275dc2ded29": None, # _label
-    "bda5e77e-d376-11ef-a239-0275dc2ded29": [ENG_VALUE_UUID,], # language
-    "bda5cf14-d376-11ef-a239-0275dc2ded29": TILE_DATA_COPY_FLAG,
-}
-
-RSCI_ALT_NAME_TILE_DATA = {
-    "bda5ce4c-d376-11ef-a239-0275dc2ded29": [ALT_NAME_TYPE_UUID,], # type
-    "bda511e6-d376-11ef-a239-0275dc2ded29": None, # source
-    "bda5852c-d376-11ef-a239-0275dc2ded29": None, # _label
-    "bda5e77e-d376-11ef-a239-0275dc2ded29": [ENG_VALUE_UUID,], # language
-    "bda5cf14-d376-11ef-a239-0275dc2ded29": TILE_DATA_COPY_FLAG,
-}
-
-RSCI_STATEMENT_TILE_DATA = {
-    "bda54b02-d376-11ef-a239-0275dc2ded29": RSCI_BARCODE_TYPE_UUIDS, # type
-    "bda559a8-d376-11ef-a239-0275dc2ded29": None, # _label
-    "bda57dc0-d376-11ef-a239-0275dc2ded29": None, # source
-    "9e729fcc-d714-11ef-8c40-0275dc2ded29": None, # data assignment
-    "bda5c60e-d376-11ef-a239-0275dc2ded29": TILE_DATA_COPY_FLAG,
-}
 
 # the value ID for the metatype concept "Facet Type"
 RSCI_FACET_METATYPE_UUID = 'b8a24689-9ee3-4639-bc5b-a0e70e31f71f'
@@ -148,7 +142,6 @@ RSCI_MAPPING_CONFIGS = {
                 ('name_language_', ARRAY(UUID), [ENG_VALUE_UUID],),
                 ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
             ], 
-            'tile_data': RSCI_NAME_TILE_DATA,
         },
         {
             'raw_col': 'Additional Names',
@@ -176,7 +169,6 @@ RSCI_MAPPING_CONFIGS = {
                 ('identifier_type', ARRAY(UUID), RSCI_BARCODE_TYPE_UUIDS,),
                 ('nodegroupid', UUID, 'bda3962c-d376-11ef-a239-0275dc2ded29',),
             ],
-            'tile_data': RSCI_STATEMENT_TILE_DATA,
         },
         {
             'raw_col': 'facet_type_value_uuid',
@@ -207,24 +199,15 @@ IMPORT_PLACES_CSV = os.path.join(DATA_DIR, 'gci-all-places.csv')
 PLACE_MODEL_UUID = '3dda9f54-d771-11ef-825b-0275dc2ded29'
 PLACE_MODEL_NAME = 'place'
 
-PLACE_STATEMENT_TYPE_UUIDS = ['72202a9f-1551-4cbc-9c7a-73c02321f3ea','df8e4cf6-9b0b-472f-8986-83d5b2ca28a0',]
-
-PLACE_NAME_TILE_DATA = {
-    "3ddadbfe-d771-11ef-825b-0275dc2ded29": [PREFERRED_TERM_TYPE_UUID,], # type
-    "3ddaccea-d771-11ef-825b-0275dc2ded29": None, # source
-    "3ddadafa-d771-11ef-825b-0275dc2ded29": None, # _label
-    "3ddadcee-d771-11ef-825b-0275dc2ded29": [ENG_VALUE_UUID,], # language
-    "3ddacdf8-d771-11ef-825b-0275dc2ded29": TILE_DATA_COPY_FLAG,
-}
-
-PLACE_STATEMENT_TILE_DATA = {
-    "3ddae356-d771-11ef-825b-0275dc2ded29": PLACE_STATEMENT_TYPE_UUIDS, # type
-    "3ddada14-d771-11ef-825b-0275dc2ded29": None, # _label
-    "3ddaa0f8-d771-11ef-825b-0275dc2ded29": None, # statement creation
-    "3ddad744-d771-11ef-825b-0275dc2ded29": [ENG_VALUE_UUID,], # language
-    "3ddacee8-d771-11ef-825b-0275dc2ded29": TILE_DATA_COPY_FLAG,
-}
-
+# List: Statement Types - Generic (f44f7240-35c5-49e8-a0e3-2ffe308f0862)
+# preflabels: brief text, sources (general concept)
+# The following are the value IDs for the preflabels 'brief text' and 'sources (general concept)'
+# PLACE_STATEMENT_TYPE_UUIDS = ['b2725f26-717e-48aa-8d66-3c382ea6ee8e', 'f8a874f2-afba-4b7c-a555-6bfaea5bfee1',]
+# PLACE_STATEMENT_TYPE_UUIDS = ['86c90464-5ad0-490a-b281-24df80e671ac', '8abfbb19-3845-4510-8af5-60d82f4f9beb',]
+PLACE_STATEMENT_TYPE_LIST_ITEMS = [
+    {'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/b2f45594-6c10-49d7-a4b7-24e5ca839838', 'labels': [{'id': 'b2725f26-717e-48aa-8d66-3c382ea6ee8e', 'value': 'brief text', 'language_id': 'en', 'list_item_id': '86c90464-5ad0-490a-b281-24df80e671ac', 'valuetype_id': 'prefLabel'}], 'list_id': 'f44f7240-35c5-49e8-a0e3-2ffe308f0862'}, 
+    {'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/fbb90342-3b1d-4fc9-835b-85f0c0c29268', 'labels': [{'id': 'f8a874f2-afba-4b7c-a555-6bfaea5bfee1', 'value': 'sources (general concept)', 'language_id': 'en', 'list_item_id': '8abfbb19-3845-4510-8af5-60d82f4f9beb', 'valuetype_id': 'prefLabel'}], 'list_id': 'f44f7240-35c5-49e8-a0e3-2ffe308f0862'}
+]
 
 PLACE_MAPPING_CONFIGS = {
     'model_id': PLACE_MODEL_UUID,
@@ -241,9 +224,10 @@ PLACE_MAPPING_CONFIGS = {
             'targ_field': 'resourceinstanceid',
             'data_type': UUID,
             'make_tileid': False,
+            'do_distinct': True,
             'default_values': [
                 ('graphid', UUID, PLACE_MODEL_UUID,),
-                ('graphpublicationid', UUID, 'e2b081a8-d7f6-11ef-8ff3-0275dc2ded29',),
+                ('graphpublicationid', UUID, 'a3e9145b-ba55-4793-a0fa-189e0f404ca7',),
                 ('principaluser_id', Integer, 1,),
             ], 
         },
@@ -256,11 +240,10 @@ PLACE_MAPPING_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('type', ARRAY(UUID), [PREFERRED_TERM_TYPE_UUID],),
-                ('language', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('type', JSONB, GENERIC_NAME_TYPE_PREFERRED_LIST_ITEMS,),
+                ('language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('nodegroupid', UUID, '3ddab19c-d771-11ef-825b-0275dc2ded29',),
             ],
-            'tile_data': PLACE_NAME_TILE_DATA, 
         },
         {
             'raw_col': 'statement',
@@ -271,11 +254,11 @@ PLACE_MAPPING_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('type', ARRAY(UUID),  PLACE_STATEMENT_TYPE_UUIDS,),
-                ('language', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('type_metatype', JSONB, METATYPE_BRIEF_TEXT_LIST_ITEMS),
+                ('type', JSONB,  PLACE_STATEMENT_TYPE_LIST_ITEMS,),
+                ('language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('nodegroupid', UUID, '3ddac588-d771-11ef-825b-0275dc2ded29',),
             ],
-            'tile_data': PLACE_STATEMENT_TILE_DATA,
         },
         {
             'raw_col': 'specific_place_uri',

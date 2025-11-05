@@ -1,3 +1,4 @@
+import json
 import os
 import pandas as pd
 import uuid as GenUUID
@@ -23,6 +24,10 @@ controlled_lists.get_controlled_list_item_by_preflabel(
 )
 uri = 'http://localhost:8000/plugins/controlled-list-manager/item/55801709-9719-473f-9608-949f08b32eb7'
 controlled_lists.get_controlled_list_item_by_uri(uri)
+controlled_lists.make_json_for_controlled_list_items(
+    pref_labels=['brief text', 'sources (general concept)',],
+    list_id='f44f7240-35c5-49e8-a0e3-2ffe308f0862',
+)
 """
 
 def get_controlled_list_item_by_uri(
@@ -40,7 +45,9 @@ def get_controlled_list_item_by_uri(
         li.id,
         li.uri AS uri, 
         liv.id AS preflabel_valueid,
-        liv.value AS preflabel
+        liv.value AS preflabel,
+        liv.languageid AS language_id,
+        liv.valuetype_id AS valuetype_id
     FROM public.arches_controlled_lists_listitem AS li    
     LEFT JOIN public.arches_controlled_lists_listitemvalue AS liv ON (
         liv.list_item_id = li.id
@@ -78,7 +85,9 @@ def get_controlled_list_item_by_preflabel(
             li.id,
             li.uri AS uri, 
             liv.id AS preflabel_valueid,
-            liv.value AS preflabel
+            liv.value AS preflabel,
+            liv.languageid AS language_id,
+            liv.valuetype_id AS valuetype_id
         FROM public.arches_controlled_lists_listitemvalue AS liv
         LEFT JOIN public.arches_controlled_lists_listitem AS li ON (
             liv.list_item_id = li.id
@@ -98,7 +107,9 @@ def get_controlled_list_item_by_preflabel(
             li.id,
             li.uri AS uri, 
             liv.id AS preflabel_valueid,
-            liv.value AS preflabel
+            liv.value AS preflabel,
+            liv.languageid AS language_id,
+            liv.valuetype_id AS valuetype_id
         FROM public.arches_controlled_lists_listitemvalue AS liv
         LEFT JOIN public.arches_controlled_lists_listitem AS li ON (
             liv.list_item_id = li.id
@@ -118,3 +129,35 @@ def get_controlled_list_item_by_preflabel(
     return d_list[0]
 
 
+def make_json_for_controlled_list_items(
+    pref_labels,
+    list_id=None,
+    as_string=True,
+    db_url=general_configs.ARCHES_DB_URL,
+):
+    if not isinstance(pref_labels, list):
+        pref_labels = [pref_labels]
+    output = []
+    for pref_label in pref_labels:
+        r = get_controlled_list_item_by_preflabel(
+            pref_label=pref_label,
+            list_id=list_id,
+            db_url=db_url,
+        )
+        item = {
+            'uri': r.get('uri'),
+            'labels': [
+                {
+                    'id': str(r.get('preflabel_valueid')),
+                    'value': str(r.get('preflabel')),
+                    'language_id': str(r.get('language_id')),
+                    'list_item_id': str(r.get('id')),
+                    'valuetype_id': str(r.get('valuetype_id')),
+                },
+            ],
+            'list_id': str(r.get('list_id')),
+        }
+        output.append(item)
+    if as_string:
+        return json.dumps(output, indent=4)
+    return output
