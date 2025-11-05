@@ -132,7 +132,7 @@ def get_controlled_list_item_by_preflabel(
 def make_json_for_controlled_list_items(
     pref_labels,
     list_id=None,
-    as_string=True,
+    as_string=False,
     db_url=general_configs.ARCHES_DB_URL,
 ):
     if not isinstance(pref_labels, list):
