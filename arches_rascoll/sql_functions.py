@@ -347,3 +347,12 @@ begin
 end
 $$ language plpgsql volatile;
 """
+
+
+ADD_GRAPH_PUBLICATION_ID = """
+UPDATE resource_instances
+SET graphpublicationid = graphs.publicationid
+FROM graphs
+WHERE graphs.graphid = resource_instances.graphid
+AND resource_instances.graphpublicationid is null;
+"""

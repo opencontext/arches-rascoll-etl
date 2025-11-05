@@ -556,8 +556,8 @@ nodegroupid
                     resourceinstanceid::uuid, 
 group_name_tileid::uuid, 
 group_name_name_content::jsonb, 
-group_name_name_type::uuid[], 
-group_name_name_language::uuid[], 
+group_name_name_type::jsonb, 
+group_name_name_language::jsonb, 
 group_name_nodegroupid::uuid
                 
                 FROM staging.group_
@@ -611,8 +611,8 @@ nodegroupid
                     resourceinstanceid::uuid, 
 person_name_tileid::uuid, 
 person_name_name_content::jsonb, 
-person_name_name_type::uuid[], 
-person_name_name_language::uuid[], 
+person_name_name_type::jsonb, 
+person_name_name_language::jsonb, 
 person_name_nodegroupid::uuid
                 
                 FROM staging.person
@@ -666,8 +666,8 @@ nodegroupid
                     resourceinstanceid::uuid, 
 tileid::uuid, 
 name_content::jsonb, 
-name_type::uuid[], 
-name_language::uuid[], 
+name_type::jsonb, 
+name_language::jsonb, 
 nodegroupid::uuid
                 
                 FROM staging.collection_or_set
