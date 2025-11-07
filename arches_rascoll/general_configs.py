@@ -38,32 +38,43 @@ RSCI_MODEL_NAME = 'reference_and_sample_collection_item'
 # NOTE: Lots of the UUIDs to concept items are actually the UUIDs for
 # preLabel "values" (in the Arches "values" table) that are related to the concept.
 # At first this is super confusing. 
+def get_controlled_list_objs_by_pref_labels(pref_labels, list_id=None):
+    from arches_rascoll import controlled_lists
+    return controlled_lists.make_json_for_controlled_list_items(
+        pref_labels=pref_labels,
+        list_id=list_id,
+    )
 
-# The UUID for the English language value. This is the prefLabel relates to the
-# English concept (id: '38729dbe-6d1c-48ce-bf47-e2a18945600e')
-ENG_VALUE_UUID = 'bc35776b-996f-4fc1-bd25-9f6432c1f349'
+
+# TODO: Remove these legacy IDs
+ENG_VALUE_UUID = None
+PREFERRED_TERM_TYPE_UUID = None
+
 
 
 # Language objects list_id='f7fc4f6d-fd46-4881-846f-4a08bc1a3fef'
 # pref_labels=['English (language)',]
-LANGUAGES_ENGLISH_LIST_ITEMS = [{'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/38729dbe-6d1c-48ce-bf47-e2a18945600e', 'labels': [{'id': '813fab8a-1c58-4e24-8b02-fd3928ecf9a1', 'value': 'English (language)', 'language_id': 'en', 'list_item_id': '38729dbe-6d1c-48ce-bf47-e2a18945600e', 'valuetype_id': 'prefLabel'}], 'list_id': 'f7fc4f6d-fd46-4881-846f-4a08bc1a3fef'}]
+LANGUAGES_ENGLISH_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['English (language)',],
+    list_id='f7fc4f6d-fd46-4881-846f-4a08bc1a3fef',
+)
 
 
 # Metatype list_id='c82d6f85-ae67-4c28-b07a-c114f6d6ba50'
 # pref_labels=['brief text',]
-# METATYPE_BRIEF_TEXT_LIST_IDS = 'afd2413e-1bbd-42c2-b261-5943ac931f46'
-METATYPE_BRIEF_TEXT_LIST_ITEMS = [{'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/b2f45594-6c10-49d7-a4b7-24e5ca839838', 'labels': [{'id': '3956dc7c-083f-471e-acdc-162455e6ebf0', 'value': 'brief text', 'language_id': 'en', 'list_item_id': 'afd2413e-1bbd-42c2-b261-5943ac931f46', 'valuetype_id': 'prefLabel'}], 'list_id': 'c82d6f85-ae67-4c28-b07a-c114f6d6ba50'}]
+METATYPE_BRIEF_TEXT_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['brief text',],
+    list_id='c82d6f85-ae67-4c28-b07a-c114f6d6ba50',
+)
 
-# Language objects list_id='80028d07-9c98-48cf-84db-f77bc01c8bbc'
+
+# Name Types - Generic list_id='80028d07-9c98-48cf-84db-f77bc01c8bbc'
 # pref_labels=['preferred terms',]
-GENERIC_NAME_TYPE_PREFERRED_LIST_ITEMS = [{'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/5f400d39-3b6b-4b8a-939b-4e49787c7444', 'labels': [{'id': '65385d63-59b6-47d0-8c6c-af0ac2b68f48', 'value': 'preferred terms', 'language_id': 'en', 'list_item_id': '5f400d39-3b6b-4b8a-939b-4e49787c7444', 'valuetype_id': 'prefLabel'}], 'list_id': '80028d07-9c98-48cf-84db-f77bc01c8bbc'}]
+NAME_TYPES_GENERIC_PREFERRED_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['preferred terms',],
+    list_id='80028d07-9c98-48cf-84db-f77bc01c8bbc',
+)
 
-
-
-# These UUIDs are actually for the prefLabel value that is related to the concepts
-# for these types... Again, a reminder about this likely point of confusion.
-PREFERRED_TERM_TYPE_UUID = '8f40c740-3c02-4839-b1a4-f1460823a9fe'
-ALT_NAME_TYPE_UUID = '0798bf2c-ab07-43d7-81f4-f1e2d20251a1'
 
 TILE_DATA_COPY_FLAG = '----COPY:stage_targ_field----'
 
@@ -100,13 +111,51 @@ def make_lang_dict_value(value, lang='en'):
     }
 
 
-RSCI_BARCODE_TYPE_UUIDS = ['ae7f2811-3fee-4624-bc74-9451bd05be2d']
 
 
-# the value ID for the metatype concept "Facet Type"
-RSCI_FACET_METATYPE_UUID = 'b8a24689-9ee3-4639-bc5b-a0e70e31f71f'
-# the value ID for the facet type 'reference collection items'
-RSCI_FACET_TYPE_UUID = 'f697d7f2-4956-4b14-8910-c7ca673e74ca'
+
+# Name Types - Physical Thing list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce'
+# pref_labels=['primary name',]
+NAME_TYPES_PHYSICAL_THING_PRIMARY_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['primary name',],
+    list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce',
+)
+
+# Name Types - Physical Thing list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce'
+# pref_labels=['alternate titles',]
+NAME_TYPES_PHYSICAL_THING_ALTERNATE_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['alternate titles',],
+    list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce',
+)
+
+# Identifier Types - Physical Thing list_id='f4a87a34-8288-4cec-8e20-b28bd567ce0a'
+# pref_labels=['Barcode',]
+ID_TYPE_PHYSICAL_THING_BARCODE_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['Barcode',],
+    list_id='f4a87a34-8288-4cec-8e20-b28bd567ce0a',
+)
+
+# Metatype list_id='c82d6f85-ae67-4c28-b07a-c114f6d6ba50'
+# pref_labels=['facet type',]
+METATYPE_FACET_TYPE_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['facet type',],
+    list_id='c82d6f85-ae67-4c28-b07a-c114f6d6ba50',
+)
+
+# Facet_type list_id='44984237-b8fc-49c1-a94d-06fc8e38c48e'
+# pref_labels=['reference collection items',]
+FACET_TYPE_RSCI_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['reference collection items',],
+    list_id='44984237-b8fc-49c1-a94d-06fc8e38c48e',
+)
+
+
+def value_transform_facet_type_list_items_obj(value, default_value=FACET_TYPE_RSCI_LIST_ITEMS):
+    """A value transform specifically to make facet type list objects for RSCI items"""
+    if not value:
+        return None
+    return default_value
+
 
 
 RSCI_MAPPING_CONFIGS = {
@@ -138,8 +187,8 @@ RSCI_MAPPING_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('name_type_', ARRAY(UUID), [PREFERRED_TERM_TYPE_UUID],),
-                ('name_language_', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('name_type_', JSONB, NAME_TYPES_PHYSICAL_THING_PRIMARY_LIST_ITEMS,),
+                ('name_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
             ], 
         },
@@ -152,8 +201,8 @@ RSCI_MAPPING_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('name_type_', ARRAY(UUID), [ALT_NAME_TYPE_UUID],),
-                ('name_language_', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('name_type_', JSONB, NAME_TYPES_PHYSICAL_THING_ALTERNATE_LIST_ITEMS,),
+                ('name_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
             ],
         },
@@ -166,7 +215,7 @@ RSCI_MAPPING_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('identifier_type', ARRAY(UUID), RSCI_BARCODE_TYPE_UUIDS,),
+                ('identifier_type', JSONB, ID_TYPE_PHYSICAL_THING_BARCODE_LIST_ITEMS,),
                 ('nodegroupid', UUID, 'bda3962c-d376-11ef-a239-0275dc2ded29',),
             ],
         },
@@ -174,12 +223,12 @@ RSCI_MAPPING_CONFIGS = {
             'raw_col': 'facet_type_value_uuid',
             'targ_table': 'facet_type',
             'stage_field_prefix': '',
-            'value_transform': copy_value,
+            'value_transform': value_transform_facet_type_list_items_obj,
             'targ_field': 'facet_type',
-            'data_type': UUID,
+            'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('facet_type_metatype', UUID, RSCI_FACET_METATYPE_UUID,),
+                ('facet_type_metatype', JSONB, METATYPE_FACET_TYPE_LIST_ITEMS,),
                 ('nodegroupid', UUID, 'e9b8d73c-09b7-11f0-b84f-0275dc2ded29',),
             ],
         }
@@ -200,11 +249,11 @@ PLACE_MODEL_UUID = '3dda9f54-d771-11ef-825b-0275dc2ded29'
 PLACE_MODEL_NAME = 'place'
 
 # List: Statement Types - Generic list_id='f44f7240-35c5-49e8-a0e3-2ffe308f0862'
-# pref_labels = ['brief text', 'sources (general concept)', ]
-PLACE_STATEMENT_TYPE_LIST_ITEMS = [
-    {'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/b2f45594-6c10-49d7-a4b7-24e5ca839838', 'labels': [{'id': 'b2725f26-717e-48aa-8d66-3c382ea6ee8e', 'value': 'brief text', 'language_id': 'en', 'list_item_id': '86c90464-5ad0-490a-b281-24df80e671ac', 'valuetype_id': 'prefLabel'}], 'list_id': 'f44f7240-35c5-49e8-a0e3-2ffe308f0862'}, 
-    {'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/fbb90342-3b1d-4fc9-835b-85f0c0c29268', 'labels': [{'id': 'f8a874f2-afba-4b7c-a555-6bfaea5bfee1', 'value': 'sources (general concept)', 'language_id': 'en', 'list_item_id': '8abfbb19-3845-4510-8af5-60d82f4f9beb', 'valuetype_id': 'prefLabel'}], 'list_id': 'f44f7240-35c5-49e8-a0e3-2ffe308f0862'}
-]
+# pref_labels=['brief text', 'sources (general concept)', ]
+PLACE_STATEMENT_TYPE_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['brief text', 'sources (general concept)', ],
+    list_id='f44f7240-35c5-49e8-a0e3-2ffe308f0862',
+)
 
 PLACE_MAPPING_CONFIGS = {
     'model_id': PLACE_MODEL_UUID,
@@ -237,7 +286,7 @@ PLACE_MAPPING_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('type', JSONB, GENERIC_NAME_TYPE_PREFERRED_LIST_ITEMS,),
+                ('type', JSONB, NAME_TYPES_GENERIC_PREFERRED_LIST_ITEMS,),
                 ('language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('nodegroupid', UUID, '3ddab19c-d771-11ef-825b-0275dc2ded29',),
             ],
@@ -336,7 +385,7 @@ GROUP_MAPPING_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('name_type', JSONB, GENERIC_NAME_TYPE_PREFERRED_LIST_ITEMS,),
+                ('name_type', JSONB, NAME_TYPES_GENERIC_PREFERRED_LIST_ITEMS,),
                 ('name_language',  JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('nodegroupid', UUID, '3695cff8-d770-11ef-8f5d-0275dc2ded29',),
             ],
@@ -356,9 +405,10 @@ IMPORT_RAW_PERSON_CSV = os.path.join(DATA_DIR, 'gci-all-persons.csv')
 
 # Name Types - Personal list_id='36169008-3624-4589-98f8-47653f6db663'
 # pref_labels=['full names (personal names)',]
-PERSON_FULL_NAME_LIST_ITEMS = [
-    {'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/c54f3642-9f8d-475d-8c6d-b82fc4b5b853', 'labels': [{'id': '0ca06e22-0589-4af6-8804-e86dd8ff1b6a', 'value': 'full names (personal names)', 'language_id': 'en', 'list_item_id': 'c54f3642-9f8d-475d-8c6d-b82fc4b5b853', 'valuetype_id': 'prefLabel'}], 'list_id': '36169008-3624-4589-98f8-47653f6db663'},
-]
+PERSON_FULL_NAME_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['full names (personal names)',],
+    list_id='36169008-3624-4589-98f8-47653f6db663',
+)
 
 
 PERSON_MAPPING_CONFIGS = {
@@ -447,7 +497,7 @@ SET_MAPPING_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('name_type', JSONB, GENERIC_NAME_TYPE_PREFERRED_LIST_ITEMS,),
+                ('name_type', JSONB, NAME_TYPES_GENERIC_PREFERRED_LIST_ITEMS,),
                 ('name_language',  JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('nodegroupid', UUID, 'da0ef9d8-d771-11ef-af99-0275dc2ded29',),
             ],
@@ -468,11 +518,19 @@ RSCI_PHYS_FORM_STATEMENT_TYPE_IDS = ['72c01bf3-60a3-4a09-bc33-ddbd508c145f',] # 
 
 # Statement Types - Physical Thing list_id='a16a4edc-c916-4293-af98-44d76ce6cba7'
 # pref_labels=['note',]
-STATEMENT_PHYS_THING_NOTE_LIST_ITEMS = [{'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/20d28e7a-0d4f-4055-b1cd-cf6f264e8432', 'labels': [{'id': 'd920b10b-6283-4fcd-91d0-9f2c5a1d96e9', 'value': 'note', 'language_id': 'en', 'list_item_id': 'ed1a239d-cdf7-4860-90e4-53723b668bf3', 'valuetype_id': 'prefLabel'}], 'list_id': 'a16a4edc-c916-4293-af98-44d76ce6cba7'}]
+STATEMENT_PHYS_THING_NOTE_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['note',],
+    list_id='a16a4edc-c916-4293-af98-44d76ce6cba7',
+)
+
+
 
 # Statement Types - Physical Thing list_id='a16a4edc-c916-4293-af98-44d76ce6cba7'
 # pref_labels=['sample description',]
-STATEMENT_PHYS_THING_SAMPLE_DESCRIPTION_LIST_ITEMS = [{'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/f147d843-7622-4109-bd73-c7fb05f1adea', 'labels': [{'id': 'fc1022ac-8f3f-4b76-94d9-11d9b394e731', 'value': 'sample description', 'language_id': 'en', 'list_item_id': 'f147d843-7622-4109-bd73-c7fb05f1adea', 'valuetype_id': 'prefLabel'}], 'list_id': 'a16a4edc-c916-4293-af98-44d76ce6cba7'}]
+STATEMENT_PHYS_THING_SAMPLE_DESCRIPTION_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['sample description',],
+    list_id='a16a4edc-c916-4293-af98-44d76ce6cba7',
+)
 
 
 RSCI_STATEMENTS_CONFIGS = {
@@ -1002,10 +1060,6 @@ RSCI_PRODUCTION_CONFIGS = {
 #- RSCI MATERIAL CONFIGS --------#
 #---------------------------------#
 
-# The name type for "chemical name"
-RSCI_MATERIAL_CHEM_NAME_TYPES = ['91b68412-5cef-47b1-bb9d-bb204a2defad',]
-RSCI_GBIF_NAME_TYPES = ['983b7351-17ec-47d7-a42a-c6444dc91df4',]
-
 # Name Types - Physical Thing list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce'
 # pref_labels=['chemical name',]
 NAME_PHYSICAL_THINGS_CHEMICAL_NAMES_LIST_ITEMS = [
@@ -1018,6 +1072,17 @@ NAME_PHYSICAL_THINGS_GBIF_LIST_ITEMS = [
     {'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/c95630b4-8936-4923-bc65-05693aad165d', 'labels': [{'id': '10a27024-94d6-44a5-b13d-54a224cd228f', 'value': 'GBIF name', 'language_id': 'en', 'list_item_id': 'c95630b4-8936-4923-bc65-05693aad165d', 'valuetype_id': 'prefLabel'}], 'list_id': '9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce'},
 ]
 
+# Statement Types - Physical Thing list_id='a16a4edc-c916-4293-af98-44d76ce6cba7'
+# pref_labels=['biological taxonomy statement',]
+STATEMENT_PHYS_THING_BIO_TAXON_LIST_ITEMS = [
+    {'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/c85b0692-ac90-48a8-a86e-f1de08df7f0c', 'labels': [{'id': '7e35ca13-8d7f-4b38-ae0e-2e0843215e59', 'value': 'biological taxonomy statement', 'language_id': 'en', 'list_item_id': 'c85b0692-ac90-48a8-a86e-f1de08df7f0c', 'valuetype_id': 'prefLabel'}], 'list_id': 'a16a4edc-c916-4293-af98-44d76ce6cba7'},
+]
+
+# Metatype list_id='c82d6f85-ae67-4c28-b07a-c114f6d6ba50'
+# pref_labels=['material components',]
+METATYPE_MATERIAL_COMPONENTS_LIST_ITEMS = [
+    {'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/501d7f8e-550c-44cb-a077-1c56cea92e9c', 'labels': [{'id': 'd96fdc10-ba92-4b2f-8c38-ee64787e7233', 'value': 'material components', 'language_id': 'en', 'list_item_id': '501d7f8e-550c-44cb-a077-1c56cea92e9c', 'valuetype_id': 'prefLabel'}], 'list_id': 'c82d6f85-ae67-4c28-b07a-c114f6d6ba50'},
+]
 
 CONCEPTS_MATERIALS_CSV = os.path.join(DATA_DIR, 'concepts_materials.csv')
 CONCEPTS_MATERIALS_RDF = os.path.join(DATA_DIR, 'concepts_materials.rdf')
@@ -1087,8 +1152,8 @@ RSCI_MATERIALS_OBJECT_TYPE_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('statement_type', ARRAY(UUID), ['0fccc7ca-50fd-4b67-abcd-aff15396cbfa'],),
-                ('statement_language_', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('statement_type', JSONB, STATEMENT_PHYS_THING_BIO_TAXON_LIST_ITEMS,),
+                ('statement_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
             ], 
         },
@@ -1101,7 +1166,7 @@ RSCI_MATERIALS_OBJECT_TYPE_CONFIGS = {
             'data_type': ARRAY(UUID),
             'make_tileid': True,
             'default_values': [
-                ('mixture_type_metatype', UUID, 'b9ec8ea4-c678-40e8-8668-bf71828fd6a6',),
+                ('mixture_type_metatype', JSONB, METATYPE_MATERIAL_COMPONENTS_LIST_ITEMS,),
                 ('nodegroupid', UUID, '53f96a86-0908-11f0-9f70-0275dc2ded29',),
             ], 
         },
@@ -1156,6 +1221,34 @@ RSCI_PART_TYPE_VALUE_UUID = '52a5d486-7cb2-4369-b0b1-2fec4f5ffdbf'
 
 IMPORT_RAW_RSCI_COMPONENTS_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-components.csv')
 
+
+# Name Types - Physical Thing list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce'
+# pref_labels=['component name',]
+NAME_PHYSICAL_THINGS_COMPONENT_NAME_LIST_ITEMS = [
+    {'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/df2d67d8-b7cb-487d-b4c0-f04bd526e7be', 'labels': [{'id': '0e8f36c4-159f-4aed-b41e-70e072af41b4', 'value': 'component name', 'language_id': 'en', 'list_item_id': 'df2d67d8-b7cb-487d-b4c0-f04bd526e7be', 'valuetype_id': 'prefLabel'}], 'list_id': '9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce'},
+]
+
+# Statement Types - Physical Thing list_id='a16a4edc-c916-4293-af98-44d76ce6cba7'
+# pref_labels=['materials/technique description',]
+STATEMENT_PHYS_THING_MATERIALS_DESCRIPTION_LIST_ITEMS = [
+    {'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/7be0d823-b871-4006-9eed-e0351c604f05', 'labels': [{'id': '12910a3b-7257-4499-bada-29e1fd585123', 'value': 'materials/technique description', 'language_id': 'en', 'list_item_id': '7be0d823-b871-4006-9eed-e0351c604f05', 'valuetype_id': 'prefLabel'}], 'list_id': 'a16a4edc-c916-4293-af98-44d76ce6cba7'},
+]
+
+# Dimension Types - Physical Thing list_id='c9e838f8-7660-4701-821c-721dac98a10b'
+# pref_labels=['weight (heaviness attribute)',]
+# NOTE TODO: this should be mass
+DIMENSION_TYPES_PHYSICAL_THING_MASS_LIST_ITEMS = [
+    {'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/b391c967-2a6b-4972-9289-17130cf96557', 'labels': [{'id': 'eafc834b-9d38-4eb1-8a4f-544ba770f7f2', 'value': 'weight (heaviness attribute)', 'language_id': 'en', 'list_item_id': 'b391c967-2a6b-4972-9289-17130cf96557', 'valuetype_id': 'prefLabel'}], 'list_id': 'c9e838f8-7660-4701-821c-721dac98a10b'},
+]
+
+# Dimension Types - Physical Units list_id='44295221-1215-4359-a079-234b317f65b7'
+# pref_labels=['grams (measurements)',]
+DIMENSION_TYPES_PHYSICAL_UNITS_GRAMS_LIST_ITEMS = [
+    {'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/48e06dbc-c0ea-4cc7-9588-f1ac2b53b46e', 'labels': [{'id': 'cd45b516-f3b1-4c25-868c-9019881acca5', 'value': 'grams (measurements)', 'language_id': 'en', 'list_item_id': '48e06dbc-c0ea-4cc7-9588-f1ac2b53b46e', 'valuetype_id': 'prefLabel'}], 'list_id': '44295221-1215-4359-a079-234b317f65b7'},
+]
+
+
+
 RSCI_COMPONENT_CONFIGS = {
     'model_id': RSCI_UUID,
     'staging_table': 'rsci_components',
@@ -1186,8 +1279,8 @@ RSCI_COMPONENT_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('part_name_type', ARRAY(UUID), RSCI_PART_NAME_TYPES,),
-                ('part_name_language', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('part_name_type', JSONB, NAME_PHYSICAL_THINGS_COMPONENT_NAME_LIST_ITEMS,),
+                ('part_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('nodegroupid', UUID, '6ee83c9c-08e4-11f0-81c1-0275dc2ded29',),
                 ('part_type', UUID, RSCI_PART_TYPE_VALUE_UUID,),
             ],
@@ -1201,8 +1294,8 @@ RSCI_COMPONENT_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('part_statement_type', ARRAY(UUID), RSCI_PART_STATEMENT_TYPES ,),
-                ('part_statement_language', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('part_statement_type', JSONB, STATEMENT_PHYS_THING_MATERIALS_DESCRIPTION_LIST_ITEMS,),
+                ('part_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
             ],
             'related_tileid': {
@@ -1219,8 +1312,8 @@ RSCI_COMPONENT_CONFIGS = {
             'data_type': Numeric,
             'make_tileid': True,
             'default_values': [
-                ('part_dimension_type_', UUID, RSCI_PART_DIMENSION_TYPE,),
-                ('part_dimension_unit', UUID, RSCI_PART_GRAMS_VALUE_UUID,),
+                ('part_dimension_type_', JSONB, DIMENSION_TYPES_PHYSICAL_THING_MASS_LIST_ITEMS,),
+                ('part_dimension_unit', JSONB, DIMENSION_TYPES_PHYSICAL_UNITS_GRAMS_LIST_ITEMS,),
                 ('nodegroupid', UUID, '6ee8420a-08e4-11f0-81c1-0275dc2ded29',),
             ],
             'related_tileid': {
@@ -1238,8 +1331,8 @@ RSCI_COMPONENT_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('part_name_type', ARRAY(UUID), RSCI_PART_NAME_TYPES,),
-                ('part_name_language', ARRAY(UUID), [ENG_VALUE_UUID],),
+                ('part_name_type', JSONB, NAME_PHYSICAL_THINGS_COMPONENT_NAME_LIST_ITEMS,),
+                ('part_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('nodegroupid', UUID, '6ee83c9c-08e4-11f0-81c1-0275dc2ded29',),
                 ('part_type', UUID, RSCI_PART_TYPE_VALUE_UUID,),
             ],
@@ -1513,8 +1606,11 @@ ALL_MAPPING_CONFIGS = [
     PERSON_MAPPING_CONFIGS,
     SET_MAPPING_CONFIGS,
 
-    # These have dependencies across eachother.
     RSCI_STATEMENTS_CONFIGS,
+]
+
+OTHER_CONFIGS = [
+    # These have dependencies across eachother.
     RSCI_SAFETY_GROUP_MAPPINGS,
     PROV_ACT_MAPPING_CONFIGS,
     RSCI_PRODUCTION_CONFIGS,
