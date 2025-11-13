@@ -356,3 +356,13 @@ FROM graphs
 WHERE graphs.graphid = resource_instances.graphid
 AND resource_instances.graphpublicationid is null;
 """
+
+
+FIX_KO_REPORT_BUG = """
+update cards_x_nodes_x_widgets set config = jsonb_set(
+    config,
+	'{defaultValue}',
+	(config -> 'defaultValue')::jsonb - '__ko_mapping__',
+	true
+) where config -> 'defaultValue' ->> '__ko_mapping__' is not null;
+"""

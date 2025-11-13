@@ -35,21 +35,26 @@ RSCI_UUID = 'bda239c6-d376-11ef-a239-0275dc2ded29'
 RSCI_MODEL_NAME = 'reference_and_sample_collection_item'
 
 
+CONTROLLED_LIST_CACHE_DICT = {}
 # NOTE: Lots of the UUIDs to concept items are actually the UUIDs for
 # preLabel "values" (in the Arches "values" table) that are related to the concept.
 # At first this is super confusing. 
-def get_controlled_list_objs_by_pref_labels(pref_labels, list_id=None):
+def get_controlled_list_objs_by_pref_labels(pref_labels, list_id=None,):
     from arches_rascoll import controlled_lists
-    return controlled_lists.make_json_for_controlled_list_items(
+    key = (str(pref_labels), str(list_id),)
+    if key in CONTROLLED_LIST_CACHE_DICT:
+        return CONTROLLED_LIST_CACHE_DICT.get(key)
+    result = controlled_lists.make_json_for_controlled_list_items(
         pref_labels=pref_labels,
         list_id=list_id,
     )
+    CONTROLLED_LIST_CACHE_DICT[key] = result
+    return result
 
 
 # TODO: Remove these legacy IDs
 ENG_VALUE_UUID = None
 PREFERRED_TERM_TYPE_UUID = None
-
 
 
 # Language objects list_id='f7fc4f6d-fd46-4881-846f-4a08bc1a3fef'
@@ -564,7 +569,7 @@ RSCI_STATEMENTS_CONFIGS = {
             'default_values': [
                 ('statement_type', JSONB, STATEMENT_PHYS_THING_NOTE_LIST_ITEMS,),
                 ('statement_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
+                # ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
             ],
         },
         {
@@ -578,7 +583,7 @@ RSCI_STATEMENTS_CONFIGS = {
             'default_values': [
                 ('statement_type', JSONB, STATEMENT_PHYS_THING_SAMPLE_DESCRIPTION_LIST_ITEMS,),
                 ('statement_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
+                # ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
             ],
         }
     ],
@@ -594,6 +599,14 @@ IMPORT_RSCI_GROUPS_SAFTEY_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-groups-safe
 # These are the same "is related to" values as used to relate RSCI to the place model
 REL_RSCI_GROUP_REL_SAFETY_TYPE_ID = REL_LINK_REL_TYPE_ID
 REL_RSCI_GROUP_REL_INVERSE_SAFETY_TYPE_ID = REL_LINK_INVERSE_REL_TYPE_ID
+
+
+# Safety Classification Classification list_id='de36422b-71cb-49dd-9dd6-4366753497bc'
+# pref_labels=['sample description',]
+SAFETY_CLASSIFICATION_NFPA_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['NFPA 704 Hazard Identification System',],
+    list_id='de36422b-71cb-49dd-9dd6-4366753497bc',
+)
 
 
 RSCI_SAFETY_GROUP_MAPPINGS = {
@@ -618,94 +631,26 @@ RSCI_SAFETY_GROUP_MAPPINGS = {
             ], 
         },
         {
-            'raw_col': 'fire_safety_value_uuid',
-            'targ_table': 'fire_safety_classification',
+            'raw_col': 'all_safety',
+            'targ_table': 'safety_classification',
             'stage_field_prefix': '',
             'value_transform': copy_value,
-            'targ_field': 'fire_safety_classification_type',
-            'data_type': UUID,
+            'targ_field': 'nfpa_safety_classifcation_type',
+            'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('nodegroupid', UUID, 'bda455bc-d376-11ef-a239-0275dc2ded29',),
+                ('nfpa_safety_classification_classification', JSONB, SAFETY_CLASSIFICATION_NFPA_LIST_ITEMS,),
+                # ('nodegroupid', UUID, 'bda455bc-d376-11ef-a239-0275dc2ded29',),
             ],
             'related_resources': [
                 {
-                    'targ_field': 'fire_safety_classification_hold_for',
+                    'targ_field': 'nfpa_safety_classification_hold_for',
                     'multi_value': True,
                     'source_field_from_uuid': 'resourceinstanceid',
                     'source_field_to_uuid': 'group_uuid',
                     'rel_type_id': REL_RSCI_GROUP_REL_SAFETY_TYPE_ID,
                     'inverse_rel_type_id': REL_RSCI_GROUP_REL_INVERSE_SAFETY_TYPE_ID,
-                    'rel_nodeid': 'bda5f8e0-d376-11ef-a239-0275dc2ded29', # fire saftey hold for nodeid
-                },
-            ]
-        },
-        {
-            'raw_col': 'health_safety_value_uuid',
-            'targ_table': 'health_safety_classification',
-            'stage_field_prefix': '',
-            'value_transform': copy_value,
-            'targ_field': 'health_safety_classification_type',
-            'data_type': UUID,
-            'make_tileid': True,
-            'default_values': [
-                ('nodegroupid', UUID, 'bda25802-d376-11ef-a239-0275dc2ded29',),
-            ],
-            'related_resources': [
-                {
-                    'targ_field': 'health_safety_classification_hold_for',
-                    'multi_value': True,
-                    'source_field_from_uuid': 'resourceinstanceid',
-                    'source_field_to_uuid': 'group_uuid',
-                    'rel_type_id': REL_RSCI_GROUP_REL_SAFETY_TYPE_ID,
-                    'inverse_rel_type_id': REL_RSCI_GROUP_REL_INVERSE_SAFETY_TYPE_ID,
-                    'rel_nodeid': 'bda4e2d4-d376-11ef-a239-0275dc2ded29', # health saftey hold for nodeid
-                },
-            ]
-        },
-        {
-            'raw_col': 'other_safety_value_uuid',
-            'targ_table': 'general_safety_classification',
-            'stage_field_prefix': '',
-            'value_transform': copy_value,
-            'targ_field': 'general_safety_classification_type',
-            'data_type': UUID,
-            'make_tileid': True,
-            'default_values': [
-                ('nodegroupid', UUID, 'bda4e2d4-d376-11ef-a239-0275dc2ded29',),
-            ],
-            'related_resources': [
-                {
-                    'targ_field': 'general_safety_classification_hold_for',
-                    'multi_value': True,
-                    'source_field_from_uuid': 'resourceinstanceid',
-                    'source_field_to_uuid': 'group_uuid',
-                    'rel_type_id': REL_RSCI_GROUP_REL_SAFETY_TYPE_ID,
-                    'inverse_rel_type_id': REL_RSCI_GROUP_REL_INVERSE_SAFETY_TYPE_ID,
-                    'rel_nodeid': 'bda5348c-d376-11ef-a239-0275dc2ded29', # general saftey hold for nodeid
-                },
-            ]
-        },
-        {
-            'raw_col': 'reactivity_safety_value_uuid',
-            'targ_table': 'reactivity_safety_classification',
-            'stage_field_prefix': 'reactivity_safety_',
-            'value_transform': copy_value,
-            'targ_field': 'reactivity_safety_classification_type',
-            'data_type': UUID,
-            'make_tileid': True,
-            'default_values': [
-                ('nodegroupid', UUID, '459b071e-fdf6-11ef-966f-0275dc2ded29',),
-            ],
-            'related_resources': [
-                {
-                    'targ_field': 'reactivity_safety_classification_hold_for',
-                    'multi_value': True,
-                    'source_field_from_uuid': 'resourceinstanceid',
-                    'source_field_to_uuid': 'group_uuid',
-                    'rel_type_id': REL_RSCI_GROUP_REL_SAFETY_TYPE_ID,
-                    'inverse_rel_type_id': REL_RSCI_GROUP_REL_INVERSE_SAFETY_TYPE_ID,
-                    'rel_nodeid': '459b071e-fdf6-11ef-966f-0275dc2ded29', # reactivity saftey hold for nodeid
+                    # 'rel_nodeid': 'bda5f8e0-d376-11ef-a239-0275dc2ded29', # hold for nodeid
                 },
             ]
         },
@@ -714,19 +659,10 @@ RSCI_SAFETY_GROUP_MAPPINGS = {
 
 
 
-
 #---------------------------------#
-#- PROVENANCE ACTIVITY CONFIGS ---#
+#- RSCI ACQUISITION CONFIGS    ---#
 #---------------------------------#
-PROV_ACT_MODEL_UUID = '26a55ac6-d772-11ef-825b-0275dc2ded29'
-PROV_ACT_MODEL_NAME = 'provenance_activity'
-
-IMPORT_RAW_PROV_ACT_CSV = os.path.join(DATA_DIR, 'gci-all-provenance-activity.csv')
-
-PROV_ACT_EVENT_TYPE_TRANSFERED_VALUE_UUID = '9435c2af-2773-49d0-b85e-abb3539723da'
-PROV_ACT_ACQUIRE_CARRIED_OUT_BY_NODE_ID = '26a62ed8-d772-11ef-825b-0275dc2ded29'
-PROV_ACT_ACQUIRE_FROM_NODE_ID = '26a60520-d772-11ef-825b-0275dc2ded29'
-PROV_ACT_ACQUIRE_TITLE_OF_NODE_ID = '26a65a98-d772-11ef-825b-0275dc2ded29'
+IMPORT_RSCI_ACQUISITION_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-acquistition.csv')
 
 # These are the same "is related to" values as used to relate RSCI to the place model
 REL_PROV_ACT_CARRIED_OUT_BY_REL_TYPE_ID = REL_LINK_REL_TYPE_ID
@@ -734,19 +670,33 @@ REL_PROV_ACT_CARRIED_OUT_BY_REL_INVERSE_TYPE_ID = REL_LINK_INVERSE_REL_TYPE_ID
 REL_PROV_ACT_TRANS_TITLE_FROM_REL_TYPE_ID = REL_LINK_REL_TYPE_ID
 REL_PROV_ACT_TRANS_TITLE_FROM_REL_INVERSE_TYPE_ID = REL_LINK_INVERSE_REL_TYPE_ID
 
-# The transfered title of relationship type is blank
-REL_PROV_ACT_TRANS_TITLE_OF_REL_TYPE_ID = ''
-REL_PROV_ACT_TRANS_TITLE_OF_REL_INVERSE_TYPE_ID = ''
+# Event Types - Acquisition Event list_id='f3eca78c-7547-4ca5-a7eb-b130391b40ed'
+# pref_labels=['transfer (method of acquisition)',]
+EVENT_TPYPE_ACQUISITION_TRANSFER_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['transfer (method of acquisition)',],
+    list_id='f3eca78c-7547-4ca5-a7eb-b130391b40ed',
+)
 
-PROV_ACT_MAPPING_CONFIGS = {
-    'model_id': PROV_ACT_MODEL_UUID,
-    'staging_table': PROV_ACT_MODEL_NAME,
-    'model_staging_schema': PROV_ACT_MODEL_NAME,
-    'raw_pk_col': 'prov_act_uuid',
-    'load_path': IMPORT_RAW_PROV_ACT_CSV,
+# Statement Types list_id='1adae7ea-4884-432f-af44-c9aea3a48a3d'
+# pref_labels=['brief text',]
+STATEMENT_TYPE_BRIEF_TEXT_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['brief text',],
+    list_id='1adae7ea-4884-432f-af44-c9aea3a48a3d',
+)
+
+# TimeSpan types list_id='c53d3557-e033-4aa1-b020-0dc2b690025f'
+# pref_lavels=[,]
+TIMESPAN_TYPES_APPROXIMATE_LIST_ITEMS = None
+
+RSCI_ACQUISITION_MAPPINGS = {
+    'model_id': RSCI_UUID,
+    'staging_table': 'rsci_acquistition',
+    'model_staging_schema': RSCI_MODEL_NAME,
+    'raw_pk_col': 'rsci_uuid',
+    'load_path': IMPORT_RSCI_ACQUISITION_CSV,
     'mappings': [
         {
-            'raw_col': 'prov_act_uuid',
+            'raw_col': 'rsci_uuid',
             'targ_table': 'instances',
             'stage_field_prefix': '',
             'value_transform': copy_value,
@@ -754,141 +704,134 @@ PROV_ACT_MAPPING_CONFIGS = {
             'data_type': UUID,
             'make_tileid': False,
             'default_values': [
-                ('graphid', UUID, PROV_ACT_MODEL_UUID,),
-                ('graphpublicationid', UUID, '3fd6e10e-d8c6-11ef-9ef7-0275dc2ded29',),
+                ('graphid', UUID, RSCI_UUID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
                 ('principaluser_id', Integer, 1,),
             ], 
         },
         {
-            'raw_col': 'prov_act_name',
-            'targ_table': 'provenance_activity_name',
-            'stage_field_prefix': 'prov_act_name_',
-            'value_transform': make_lang_dict_value,
-            'targ_field': 'content',
-            'data_type': JSONB,
-            'make_tileid': True,
-            'default_values': [
-                ('type', ARRAY(UUID), [PREFERRED_TERM_TYPE_UUID],),
-                ('language', ARRAY(UUID), [ENG_VALUE_UUID],),
-                ('nodegroupid', UUID, '26a5c4f2-d772-11ef-825b-0275dc2ded29',),
-            ],
-        },
-        {
-            'raw_col': 'prov_act_name',
+            'raw_col': 'acquisition_type',
             'targ_table': 'acquisition',
-            'stage_field_prefix': 'acquisition_',
-            'value_transform': make_lang_dict_value,
-            'targ_field': '_label',
+            'stage_field_prefix': 'acq_',
+            'value_transform': copy_value,
+            'targ_field': 'acquisition_type',
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('nodegroupid', UUID, '26a58b04-d772-11ef-825b-0275dc2ded29',),
+
             ],
             'related_resources': [
                 {
                     'group_source_field': 'carried_out_by_',
                     'multi_value': True,
-                    'targ_field': 'carried_out_by',
+                    'targ_field': 'acquisition_carried_out_by',
                     'source_field_from_uuid': 'resourceinstanceid',
                     'source_field_to_uuid': 'acq_by_person_1_uuid',
                     'rel_type_id': REL_PROV_ACT_CARRIED_OUT_BY_REL_TYPE_ID,
                     'inverse_rel_type_id': REL_PROV_ACT_CARRIED_OUT_BY_REL_INVERSE_TYPE_ID,
-                    'rel_nodeid': PROV_ACT_ACQUIRE_CARRIED_OUT_BY_NODE_ID,
+                    # 'rel_nodeid': PROV_ACT_ACQUIRE_CARRIED_OUT_BY_NODE_ID,
                 },
                 {
                     'group_source_field': 'carried_out_by_',
                     'multi_value': True,
-                    'targ_field': 'carried_out_by',
+                    'targ_field': 'acquisition_carried_out_by',
                     'source_field_from_uuid': 'resourceinstanceid',
                     'source_field_to_uuid': 'acq_by_person_2_uuid',
                     'rel_type_id': REL_PROV_ACT_CARRIED_OUT_BY_REL_TYPE_ID,
                     'inverse_rel_type_id': REL_PROV_ACT_CARRIED_OUT_BY_REL_INVERSE_TYPE_ID,
-                    'rel_nodeid': PROV_ACT_ACQUIRE_CARRIED_OUT_BY_NODE_ID,
+                    # 'rel_nodeid': PROV_ACT_ACQUIRE_CARRIED_OUT_BY_NODE_ID,
                 },
                 {
                     'group_source_field': 'carried_out_by_',
                     'multi_value': True,
-                    'targ_field': 'carried_out_by',
+                    'targ_field': 'acquisition_carried_out_by',
                     'source_field_from_uuid': 'resourceinstanceid',
                     'source_field_to_uuid': 'acq_by_group_1_uuid',
                     'rel_type_id': REL_PROV_ACT_CARRIED_OUT_BY_REL_TYPE_ID,
                     'inverse_rel_type_id': REL_PROV_ACT_CARRIED_OUT_BY_REL_INVERSE_TYPE_ID,
-                    'rel_nodeid': PROV_ACT_ACQUIRE_CARRIED_OUT_BY_NODE_ID,
+                    # 'rel_nodeid': PROV_ACT_ACQUIRE_CARRIED_OUT_BY_NODE_ID,
                 },
                 {
                     'group_source_field': 'carried_out_by_',
                     'multi_value': True,
-                    'targ_field': 'carried_out_by',
+                    'targ_field': 'acquisition_carried_out_by',
                     'source_field_from_uuid': 'resourceinstanceid',
                     'source_field_to_uuid': 'acq_by_group_2_uuid',
                     'rel_type_id': REL_PROV_ACT_CARRIED_OUT_BY_REL_TYPE_ID,
                     'inverse_rel_type_id': REL_PROV_ACT_CARRIED_OUT_BY_REL_INVERSE_TYPE_ID,
-                    'rel_nodeid': PROV_ACT_ACQUIRE_CARRIED_OUT_BY_NODE_ID,
+                    # 'rel_nodeid': PROV_ACT_ACQUIRE_CARRIED_OUT_BY_NODE_ID,
                 },
                 {
                     'group_source_field': 'transferred_title_from_',
                     'multi_value': True,
-                    'targ_field': 'transferred_title_from',
+                    'targ_field': 'acquisition_transferred_title_from',
                     'source_field_from_uuid': 'resourceinstanceid',
                     'source_field_to_uuid': 'acq_from_group_1_uuid',
                     'rel_type_id': REL_PROV_ACT_TRANS_TITLE_FROM_REL_TYPE_ID,
                     'inverse_rel_type_id': REL_PROV_ACT_TRANS_TITLE_FROM_REL_INVERSE_TYPE_ID,
-                    'rel_nodeid': PROV_ACT_ACQUIRE_FROM_NODE_ID,
+                    # 'rel_nodeid': PROV_ACT_ACQUIRE_FROM_NODE_ID,
                 },
                 {
                     'group_source_field': 'transferred_title_from_',
                     'multi_value': True,
-                    'targ_field': 'transferred_title_from',
+                    'targ_field': 'acquisition_transferred_title_from',
                     'source_field_from_uuid': 'resourceinstanceid',
                     'source_field_to_uuid': 'acq_from_group_2_uuid',
                     'rel_type_id': REL_PROV_ACT_TRANS_TITLE_FROM_REL_TYPE_ID,
                     'inverse_rel_type_id': REL_PROV_ACT_TRANS_TITLE_FROM_REL_INVERSE_TYPE_ID,
-                    'rel_nodeid': PROV_ACT_ACQUIRE_FROM_NODE_ID,
-                },
-                {
-                    'group_source_field': 'transferred_title_of_',
-                    'multi_value': True,
-                    'targ_field': 'transferred_title_of',
-                    'source_field_from_uuid': 'resourceinstanceid',
-                    'source_field_to_uuid': 'rsci_uuid',
-                    'rel_type_id': REL_PROV_ACT_TRANS_TITLE_OF_REL_TYPE_ID,
-                    'inverse_rel_type_id': REL_PROV_ACT_TRANS_TITLE_OF_REL_INVERSE_TYPE_ID,
-                    'rel_nodeid': PROV_ACT_ACQUIRE_FROM_NODE_ID,
+                    # 'rel_nodeid': PROV_ACT_ACQUIRE_FROM_NODE_ID,
                 },
             ],
         },
         {
+            'raw_col': 'acquisition_note',
+            'targ_table': 'acquisition_statement',
+            'stage_field_prefix': 'acq_state_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'acquisition_statement_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('acquisition_statement_type', JSONB, STATEMENT_TYPE_BRIEF_TEXT_LIST_ITEMS,),
+                ('acquisition_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'acq_tileid',
+                'targ_tile_field': 'acquisition',
+            },
+        },
+        {
             'raw_col': 'Acquisition Date__begin_of_the_begin',
             'targ_table': 'acquisition_timespan',
-            'stage_field_prefix': 'acquisition_timespan_',
+            'stage_field_prefix': 'acq_time_',
             'value_transform': copy_value,
-            'targ_field': 'begin_of_the_begin',
+            'targ_field': 'acquisition_timespan_begin_of_the_begin',
             'data_type': DateTime,
             'make_tileid': True,
             'default_values': [
-                ('nodegroupid', UUID, '26a57510-d772-11ef-825b-0275dc2ded29',),
+                ('acquisition_timespan_type', JSONB, TIMESPAN_TYPES_APPROXIMATE_LIST_ITEMS,),
             ],
             'related_tileid': {
-                'source_tile_field': 'acquisition_tileid',
+                'source_tile_field': 'acq_tileid',
                 'targ_tile_field': 'acquisition',
             },
             'tile_other_fields': [
                 # Mappings for other fields to include in the same tile
                 {
                     'raw_col': 'Acquisition Date__end_of_the_begin',
-                    'targ_field': 'end_of_the_begin',
+                    'targ_field': 'acquisition_timespan_end_of_the_begin',
                     'data_type': DateTime,
                     'value_transform': copy_value,
                 },
                 {
                     'raw_col': 'Acquisition Date__begin_of_the_end',
-                    'targ_field': 'begin_of_the_end',
+                    'targ_field': 'acquisition_timespan_begin_of_the_end',
                     'data_type': DateTime,
                     'value_transform': copy_value,
                 },
                 {
                     'raw_col': 'Acquisition Date__end_of_the_end',
-                    'targ_field': 'end_of_the_end',
+                    'targ_field': 'acquisition_timespan_end_of_the_end',
                     'data_type': DateTime,
                     'value_transform': copy_value,
                 }
@@ -898,14 +841,12 @@ PROV_ACT_MAPPING_CONFIGS = {
 }
 
 
-
-
 #---------------------------------#
 #- RSCI PRODUCTION CONFIGS -----#
 #---------------------------------#
 
 IMPORT_RAW_PROD_CSV = os.path.join(DATA_DIR, 'gci-all-production.csv')
-PRODUCTION_NODE_ID = 'bda43726-d376-11ef-a239-0275dc2ded29'
+# PRODUCTION_NODE_ID = 'bda43726-d376-11ef-a239-0275dc2ded29'
 
 # Event Types - Production list_id='f0b85b97-f3ae-41dd-ac4e-6f1e249a9dbb'
 # pref_labels=['note',]
@@ -914,12 +855,15 @@ EVENT_TYPE_PRODUCTION_LIST_ITEMS = None
 
 # Statement Types list_id='1adae7ea-4884-432f-af44-c9aea3a48a3d'
 # pref_labels = ['producer description', ]
-STATEMENT_PRODUCER_DESC_LIST_ITEMS = [{'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/8a8ee459-ed32-4bd5-9235-518529188060', 'labels': [{'id': 'ef313d0a-93d9-4e1f-acc2-0c99218e7535', 'value': 'producer description', 'language_id': 'en', 'list_item_id': '6d8445c5-45ad-4a3b-855d-2613bb5d8351', 'valuetype_id': 'prefLabel'}], 'list_id': '1adae7ea-4884-432f-af44-c9aea3a48a3d'}]
-
+STATEMENT_PRODUCER_DESC_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels = ['producer description', ],
+    list_id='1adae7ea-4884-432f-af44-c9aea3a48a3d',
+)
 
 REL_RSCI_PLACE_REL_TYPE_ID = REL_LINK_REL_TYPE_ID
 REL_RSCI_PLACE_INVERSE_REL_TYPE_ID = REL_LINK_INVERSE_REL_TYPE_ID
-REL_RSCI_PLACE_NODEID = 'bda5889c-d376-11ef-a239-0275dc2ded29'
+# REL_RSCI_PLACE_NODEID = 'bda5889c-d376-11ef-a239-0275dc2ded29'
+REL_RSCI_PLACE_NODEID = None
 
 
 RSCI_PRODUCTION_CONFIGS = {
@@ -952,8 +896,8 @@ RSCI_PRODUCTION_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('nodegroupid', UUID, PRODUCTION_NODE_ID,),
                 ('production_type', JSONB, EVENT_TYPE_PRODUCTION_LIST_ITEMS,),
+                # ('nodegroupid', UUID, PRODUCTION_NODE_ID,),
             ],
             'related_resources': [
                 {
@@ -964,7 +908,7 @@ RSCI_PRODUCTION_CONFIGS = {
                     'source_field_to_uuid': 'manu_group_uuid',
                     'rel_type_id': REL_LINK_REL_TYPE_ID,
                     'inverse_rel_type_id': REL_LINK_INVERSE_REL_TYPE_ID,
-                    'rel_nodeid': PRODUCTION_NODE_ID,
+                    # 'rel_nodeid': PRODUCTION_NODE_ID,
                 },
                 {
                     'group_source_field': 'production_location_',
@@ -974,7 +918,7 @@ RSCI_PRODUCTION_CONFIGS = {
                     'source_field_to_uuid': 'place_uuid_1',
                     'rel_type_id': REL_RSCI_PLACE_REL_TYPE_ID,
                     'inverse_rel_type_id': REL_RSCI_PLACE_INVERSE_REL_TYPE_ID,
-                    'rel_nodeid': REL_RSCI_PLACE_NODEID,
+                    # 'rel_nodeid': REL_RSCI_PLACE_NODEID,
                 },
                 {
                     'group_source_field': 'production_location_',
@@ -984,7 +928,7 @@ RSCI_PRODUCTION_CONFIGS = {
                     'source_field_to_uuid': 'place_uuid_2',
                     'rel_type_id': REL_RSCI_PLACE_REL_TYPE_ID,
                     'inverse_rel_type_id': REL_RSCI_PLACE_INVERSE_REL_TYPE_ID,
-                    'rel_nodeid': REL_RSCI_PLACE_NODEID,
+                    # 'rel_nodeid': REL_RSCI_PLACE_NODEID,
                 },
             ],
             'tile_other_fields': [
@@ -1007,7 +951,7 @@ RSCI_PRODUCTION_CONFIGS = {
             'data_type': DateTime,
             'make_tileid': True,
             'default_values': [
-                ('nodegroupid', UUID, 'bda37764-d376-11ef-a239-0275dc2ded29',),
+                # ('nodegroupid', UUID, 'bda37764-d376-11ef-a239-0275dc2ded29',),
             ],
             'related_tileid': {
                 'source_tile_field': 'prod_1_tileid',
@@ -1050,7 +994,7 @@ RSCI_PRODUCTION_CONFIGS = {
             'default_values': [
                 ('production_statement_type', JSONB, STATEMENT_PRODUCER_DESC_LIST_ITEMS,),
                 ('production_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                ('nodegroupid', UUID, 'bda36f9e-d376-11ef-a239-0275dc2ded29',),
+                # ('nodegroupid', UUID, 'bda36f9e-d376-11ef-a239-0275dc2ded29',),
             ],
         },
     ],
@@ -1062,41 +1006,91 @@ RSCI_PRODUCTION_CONFIGS = {
 
 # Name Types - Physical Thing list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce'
 # pref_labels=['chemical name',]
-NAME_PHYSICAL_THINGS_CHEMICAL_NAMES_LIST_ITEMS = [
-    {'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/0e9afc78-d23c-4799-86aa-68870cc38866', 'labels': [{'id': '737abd56-ce14-498f-9a4a-d63bc7441aef', 'value': 'chemical name', 'language_id': 'en', 'list_item_id': '0e9afc78-d23c-4799-86aa-68870cc38866', 'valuetype_id': 'prefLabel'}], 'list_id': '9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce'},
-]
+NAME_PHYSICAL_THINGS_CHEMICAL_NAMES_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['chemical name',],
+    list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce',
+)
 
 # Name Types - Physical Thing list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce'
 # pref_labels=['GBIF name',]
-NAME_PHYSICAL_THINGS_GBIF_LIST_ITEMS = [
-    {'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/c95630b4-8936-4923-bc65-05693aad165d', 'labels': [{'id': '10a27024-94d6-44a5-b13d-54a224cd228f', 'value': 'GBIF name', 'language_id': 'en', 'list_item_id': 'c95630b4-8936-4923-bc65-05693aad165d', 'valuetype_id': 'prefLabel'}], 'list_id': '9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce'},
-]
+NAME_PHYSICAL_THINGS_GBIF_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['GBIF name',],
+    list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce',
+)
 
 # Statement Types - Physical Thing list_id='a16a4edc-c916-4293-af98-44d76ce6cba7'
 # pref_labels=['biological taxonomy statement',]
-STATEMENT_PHYS_THING_BIO_TAXON_LIST_ITEMS = [
-    {'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/c85b0692-ac90-48a8-a86e-f1de08df7f0c', 'labels': [{'id': '7e35ca13-8d7f-4b38-ae0e-2e0843215e59', 'value': 'biological taxonomy statement', 'language_id': 'en', 'list_item_id': 'c85b0692-ac90-48a8-a86e-f1de08df7f0c', 'valuetype_id': 'prefLabel'}], 'list_id': 'a16a4edc-c916-4293-af98-44d76ce6cba7'},
-]
+STATEMENT_PHYS_THING_BIO_TAXON_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['biological taxonomy statement',],
+    list_id='a16a4edc-c916-4293-af98-44d76ce6cba7',
+)
 
 # Metatype list_id='c82d6f85-ae67-4c28-b07a-c114f6d6ba50'
 # pref_labels=['material components',]
-METATYPE_MATERIAL_COMPONENTS_LIST_ITEMS = [
-    {'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/501d7f8e-550c-44cb-a077-1c56cea92e9c', 'labels': [{'id': 'd96fdc10-ba92-4b2f-8c38-ee64787e7233', 'value': 'material components', 'language_id': 'en', 'list_item_id': '501d7f8e-550c-44cb-a077-1c56cea92e9c', 'valuetype_id': 'prefLabel'}], 'list_id': 'c82d6f85-ae67-4c28-b07a-c114f6d6ba50'},
-]
+METATYPE_MATERIAL_COMPONENTS_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['material components',],
+    list_id='c82d6f85-ae67-4c28-b07a-c114f6d6ba50',
+)
 
+# NOTE: These are deprecated.
 CONCEPTS_MATERIALS_CSV = os.path.join(DATA_DIR, 'concepts_materials.csv')
 CONCEPTS_MATERIALS_RDF = os.path.join(DATA_DIR, 'concepts_materials.rdf')
-
-# The concepts for "object type"
 CONCEPTS_OBJECT_TYPE_CSV = os.path.join(DATA_DIR, 'concepts_object_type.csv')
 CONCEPTS_OBJECT_TYPE_RDF = os.path.join(DATA_DIR, 'concepts_object_type.rdf')
 NEW_CONCEPTS_OBJECT_TYPE_RDF = os.path.join(DATA_DIR, 'new_concepts_object_type.rdf')
 
 IMPORT_RAW_RSCI_MATERIALS_OBJ_TYPE_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-matterials-object-types.csv')
 
-RSCI_MATERIALS_OBJECT_TYPE_CONFIGS = {
+
+def make_mixture_type_list_items(value):
+    """Make list items list objects from mixture type values"""
+    if not value:
+        return None
+    # Mixture Type list_id='ce9c94e3-bb70-4e87-9fef-eb0c8a6ac1ac'
+    return get_controlled_list_objs_by_pref_labels(
+        pref_labels=[value,],
+        list_id='ce9c94e3-bb70-4e87-9fef-eb0c8a6ac1ac',
+    )
+
+def make_attribute_type_list_items(value):
+    """Make list items list objects from attribute_type values"""
+    if not value:
+        return None
+    # attributes (characteristics) list_id='9a61af90-9fd1-48fd-b5e1-e45bb8a6db5b'
+    return get_controlled_list_objs_by_pref_labels(
+        pref_labels=[value,],
+        list_id='9a61af90-9fd1-48fd-b5e1-e45bb8a6db5b',
+    )
+
+def make_sample_object_type_list_items(value):
+    if not value:
+        return None
+    # Object Types - Physical Thing list_id='56991802-f539-4b22-b5a9-b1945fceb52b'
+    return get_controlled_list_objs_by_pref_labels(
+        pref_labels=['samples',],
+        list_id='56991802-f539-4b22-b5a9-b1945fceb52b',
+    )
+
+def make_material_list_items(value):
+    """Make list items list objects from material values"""
+    if not value:
+        return None
+    # Materials list_id='9a2ee63b-d696-4686-979b-994597790289'
+    if not isinstance(value, list):
+        pref_labels = json.loads(value)
+    else:
+        pref_labels = value
+    pref_labels = list(set(pref_labels))
+    return get_controlled_list_objs_by_pref_labels(
+        pref_labels=pref_labels,
+        list_id='9a2ee63b-d696-4686-979b-994597790289',
+    )
+
+
+
+RSCI_MATERIALS_TYPE_CONFIGS = {
     'model_id': RSCI_UUID,
-    'staging_table': 'rsci_materials_object_types',
+    'staging_table': 'rsci_materials_types',
     'model_staging_schema': RSCI_MODEL_NAME,
     'raw_pk_col': 'rsci_uuid',
     'load_path': IMPORT_RAW_RSCI_MATERIALS_OBJ_TYPE_CSV,
@@ -1154,44 +1148,56 @@ RSCI_MATERIALS_OBJECT_TYPE_CONFIGS = {
             'default_values': [
                 ('statement_type', JSONB, STATEMENT_PHYS_THING_BIO_TAXON_LIST_ITEMS,),
                 ('statement_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
+                # ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
             ], 
         },
         {
-            'raw_col': 'mixture_type_value_uuids',
+            'raw_col': 'mixture_type_pref_label',
             'targ_table': 'mixture_type',
             'stage_field_prefix': '',
-            'value_transform': copy_value,
+            'value_transform': make_mixture_type_list_items, # Note a specific function for this.
             'targ_field': 'mixture_type',
-            'data_type': ARRAY(UUID),
+            'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
                 ('mixture_type_metatype', JSONB, METATYPE_MATERIAL_COMPONENTS_LIST_ITEMS,),
-                ('nodegroupid', UUID, '53f96a86-0908-11f0-9f70-0275dc2ded29',),
+                # ('nodegroupid', UUID, '53f96a86-0908-11f0-9f70-0275dc2ded29',),
             ], 
         },
         {
-            'raw_col': 'attributes_value_uuids',
+            'raw_col': 'attributes_pref_label',
             'targ_table': 'attribute_type',
             'stage_field_prefix': 'atribs_',
-            'value_transform': copy_value,
+            'value_transform': make_attribute_type_list_items,  # Note a specific function for this.
             'targ_field': 'attribute_type',
-            'data_type': ARRAY(UUID),
+            'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('nodegroupid', UUID, '398111dc-0907-11f0-9e45-0275dc2ded29',),
+                # ('nodegroupid', UUID, '398111dc-0907-11f0-9e45-0275dc2ded29',),
             ], 
         },
         {
-            'raw_col': 'object_type_value_uuids',
-            'targ_table': 'material',
-            'stage_field_prefix': 'mat_',
-            'value_transform': copy_value,
-            'targ_field': 'material',
-            'data_type': ARRAY(UUID),
+            'raw_col': 'rsci_uuid',
+            'targ_table': 'object_type',
+            'stage_field_prefix': 'object_type_',
+            'value_transform': make_sample_object_type_list_items,  # Note a specific function for this.
+            'targ_field': 'object_type',
+            'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('nodegroupid', UUID, 'bda47b64-d376-11ef-a239-0275dc2ded29',),
+                # ('nodegroupid', UUID, '398111dc-0907-11f0-9e45-0275dc2ded29',),
+            ], 
+        },
+        {
+            'raw_col': 'materials_pref_labels',
+            'targ_table': 'material',
+            'stage_field_prefix': 'mat_',
+            'value_transform': make_material_list_items,
+            'targ_field': 'material',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                # ('nodegroupid', UUID, 'bda47b64-d376-11ef-a239-0275dc2ded29',),
             ], 
         },
     ],
@@ -1221,32 +1227,47 @@ RSCI_PART_TYPE_VALUE_UUID = '52a5d486-7cb2-4369-b0b1-2fec4f5ffdbf'
 
 IMPORT_RAW_RSCI_COMPONENTS_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-components.csv')
 
-
 # Name Types - Physical Thing list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce'
 # pref_labels=['component name',]
-NAME_PHYSICAL_THINGS_COMPONENT_NAME_LIST_ITEMS = [
-    {'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/df2d67d8-b7cb-487d-b4c0-f04bd526e7be', 'labels': [{'id': '0e8f36c4-159f-4aed-b41e-70e072af41b4', 'value': 'component name', 'language_id': 'en', 'list_item_id': 'df2d67d8-b7cb-487d-b4c0-f04bd526e7be', 'valuetype_id': 'prefLabel'}], 'list_id': '9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce'},
-]
+NAME_PHYSICAL_THINGS_COMPONENT_NAME_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['component name',],
+    list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce',
+)
+
+# Object Part Types list_id='73a6d800-669d-48b7-a1fb-2ecdaa0a4827'
+# pref_labels=['component name',]
+OBJECT_PART_TYPES_COMPONENTS_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['components (objects parts)',],
+    list_id='73a6d800-669d-48b7-a1fb-2ecdaa0a4827',
+)
+
+def make_object_part_components_list_items(value):
+    if not value:
+        return None
+    # Object Types - Physical Thing list_id='56991802-f539-4b22-b5a9-b1945fceb52b'
+    return OBJECT_PART_TYPES_COMPONENTS_LIST_ITEMS
 
 # Statement Types - Physical Thing list_id='a16a4edc-c916-4293-af98-44d76ce6cba7'
 # pref_labels=['materials/technique description',]
-STATEMENT_PHYS_THING_MATERIALS_DESCRIPTION_LIST_ITEMS = [
-    {'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/7be0d823-b871-4006-9eed-e0351c604f05', 'labels': [{'id': '12910a3b-7257-4499-bada-29e1fd585123', 'value': 'materials/technique description', 'language_id': 'en', 'list_item_id': '7be0d823-b871-4006-9eed-e0351c604f05', 'valuetype_id': 'prefLabel'}], 'list_id': 'a16a4edc-c916-4293-af98-44d76ce6cba7'},
-]
+STATEMENT_PHYS_THING_MATERIALS_DESCRIPTION_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['materials/technique description',],
+    list_id='a16a4edc-c916-4293-af98-44d76ce6cba7',
+)
 
 # Dimension Types - Physical Thing list_id='c9e838f8-7660-4701-821c-721dac98a10b'
 # pref_labels=['weight (heaviness attribute)',]
 # NOTE TODO: this should be mass
-DIMENSION_TYPES_PHYSICAL_THING_MASS_LIST_ITEMS = [
-    {'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/b391c967-2a6b-4972-9289-17130cf96557', 'labels': [{'id': 'eafc834b-9d38-4eb1-8a4f-544ba770f7f2', 'value': 'weight (heaviness attribute)', 'language_id': 'en', 'list_item_id': 'b391c967-2a6b-4972-9289-17130cf96557', 'valuetype_id': 'prefLabel'}], 'list_id': 'c9e838f8-7660-4701-821c-721dac98a10b'},
-]
+DIMENSION_TYPES_PHYSICAL_THING_MASS_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['weight (heaviness attribute)',],
+    list_id='c9e838f8-7660-4701-821c-721dac98a10b',
+)
 
 # Dimension Types - Physical Units list_id='44295221-1215-4359-a079-234b317f65b7'
 # pref_labels=['grams (measurements)',]
-DIMENSION_TYPES_PHYSICAL_UNITS_GRAMS_LIST_ITEMS = [
-    {'uri': 'http://localhost:8000/plugins/controlled-list-manager/item/48e06dbc-c0ea-4cc7-9588-f1ac2b53b46e', 'labels': [{'id': 'cd45b516-f3b1-4c25-868c-9019881acca5', 'value': 'grams (measurements)', 'language_id': 'en', 'list_item_id': '48e06dbc-c0ea-4cc7-9588-f1ac2b53b46e', 'valuetype_id': 'prefLabel'}], 'list_id': '44295221-1215-4359-a079-234b317f65b7'},
-]
-
+DIMENSION_TYPES_PHYSICAL_UNITS_GRAMS_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['grams (measurements)',],
+    list_id='44295221-1215-4359-a079-234b317f65b7',
+)
 
 
 RSCI_COMPONENT_CONFIGS = {
@@ -1281,8 +1302,8 @@ RSCI_COMPONENT_CONFIGS = {
             'default_values': [
                 ('part_name_type', JSONB, NAME_PHYSICAL_THINGS_COMPONENT_NAME_LIST_ITEMS,),
                 ('part_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                ('nodegroupid', UUID, '6ee83c9c-08e4-11f0-81c1-0275dc2ded29',),
-                ('part_type', UUID, RSCI_PART_TYPE_VALUE_UUID,),
+                ('part_type', JSONB, OBJECT_PART_TYPES_COMPONENTS_LIST_ITEMS,),
+                # ('nodegroupid', UUID, '6ee83c9c-08e4-11f0-81c1-0275dc2ded29',),
             ],
         },
         {
@@ -1296,7 +1317,7 @@ RSCI_COMPONENT_CONFIGS = {
             'default_values': [
                 ('part_statement_type', JSONB, STATEMENT_PHYS_THING_MATERIALS_DESCRIPTION_LIST_ITEMS,),
                 ('part_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+                # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
             ],
             'related_tileid': {
                 'source_tile_field': 'comp1_tileid',
@@ -1314,7 +1335,7 @@ RSCI_COMPONENT_CONFIGS = {
             'default_values': [
                 ('part_dimension_type_', JSONB, DIMENSION_TYPES_PHYSICAL_THING_MASS_LIST_ITEMS,),
                 ('part_dimension_unit', JSONB, DIMENSION_TYPES_PHYSICAL_UNITS_GRAMS_LIST_ITEMS,),
-                ('nodegroupid', UUID, '6ee8420a-08e4-11f0-81c1-0275dc2ded29',),
+                # ('nodegroupid', UUID, '6ee8420a-08e4-11f0-81c1-0275dc2ded29',),
             ],
             'related_tileid': {
                 'source_tile_field': 'comp1_tileid',
@@ -1333,8 +1354,8 @@ RSCI_COMPONENT_CONFIGS = {
             'default_values': [
                 ('part_name_type', JSONB, NAME_PHYSICAL_THINGS_COMPONENT_NAME_LIST_ITEMS,),
                 ('part_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                ('nodegroupid', UUID, '6ee83c9c-08e4-11f0-81c1-0275dc2ded29',),
-                ('part_type', UUID, RSCI_PART_TYPE_VALUE_UUID,),
+                ('part_type', JSONB, OBJECT_PART_TYPES_COMPONENTS_LIST_ITEMS,),
+                # ('nodegroupid', UUID, '6ee83c9c-08e4-11f0-81c1-0275dc2ded29',),
             ],
         },
         {
@@ -1346,9 +1367,9 @@ RSCI_COMPONENT_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('part_statement_type', ARRAY(UUID), RSCI_PART_STATEMENT_TYPES ,),
-                ('part_statement_language', ARRAY(UUID), [ENG_VALUE_UUID],),
-                ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+                ('part_statement_type', JSONB, STATEMENT_PHYS_THING_MATERIALS_DESCRIPTION_LIST_ITEMS,),
+                ('part_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
             ],
             'related_tileid': {
                 'source_tile_field': 'comp2_tileid',
@@ -1364,9 +1385,9 @@ RSCI_COMPONENT_CONFIGS = {
             'data_type': Numeric,
             'make_tileid': True,
             'default_values': [
-                ('part_dimension_type_', UUID, RSCI_PART_DIMENSION_TYPE,),
-                ('part_dimension_unit', UUID, RSCI_PART_GRAMS_VALUE_UUID,),
-                ('nodegroupid', UUID, '6ee8420a-08e4-11f0-81c1-0275dc2ded29',),
+                ('part_dimension_type_', JSONB, DIMENSION_TYPES_PHYSICAL_THING_MASS_LIST_ITEMS,),
+                ('part_dimension_unit', JSONB, DIMENSION_TYPES_PHYSICAL_UNITS_GRAMS_LIST_ITEMS,),
+                # ('nodegroupid', UUID, '6ee8420a-08e4-11f0-81c1-0275dc2ded29',),
             ],
             'related_tileid': {
                 'source_tile_field': 'comp2_tileid',
@@ -1378,12 +1399,12 @@ RSCI_COMPONENT_CONFIGS = {
             'raw_col': 'comp3_part_type_uuid',
             'targ_table': 'has_part',
             'stage_field_prefix': 'comp3_',
-            'value_transform': copy_value,
+            'value_transform': make_object_part_components_list_items,
             'targ_field': 'part_type',
-            'data_type': UUID,
+            'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('nodegroupid', UUID, '6ee83594-08e4-11f0-81c1-0275dc2ded29',),
+                # ('nodegroupid', UUID, '6ee83594-08e4-11f0-81c1-0275dc2ded29',),
             ], 
         },
         {
@@ -1395,9 +1416,9 @@ RSCI_COMPONENT_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('part_statement_type', ARRAY(UUID), RSCI_PART_STATEMENT_TYPES ,),
-                ('part_statement_language', ARRAY(UUID), [ENG_VALUE_UUID],),
-                ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+                ('part_statement_type', JSONB, STATEMENT_PHYS_THING_MATERIALS_DESCRIPTION_LIST_ITEMS,),
+                ('part_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
             ],
             'related_tileid': {
                 'source_tile_field': 'comp3_tileid',
@@ -1607,16 +1628,21 @@ ALL_MAPPING_CONFIGS = [
     SET_MAPPING_CONFIGS,
 
     RSCI_STATEMENTS_CONFIGS,
+    RSCI_SAFETY_GROUP_MAPPINGS,
+
+    RSCI_ACQUISITION_MAPPINGS,
+    RSCI_PRODUCTION_CONFIGS,
+
+    # Materials
+    RSCI_MATERIALS_TYPE_CONFIGS,
+    RSCI_COMPONENT_CONFIGS,
 ]
 
 OTHER_CONFIGS = [
     # These have dependencies across eachother.
-    RSCI_SAFETY_GROUP_MAPPINGS,
-    PROV_ACT_MAPPING_CONFIGS,
-    RSCI_PRODUCTION_CONFIGS,
+    # RSCI_PRODUCTION_CONFIGS,
 
     # Materials and object type.
-    RSCI_MATERIALS_OBJECT_TYPE_CONFIGS, 
     RSCI_COMPONENT_CONFIGS,
 
     # Colors
@@ -1643,9 +1669,6 @@ ARCHES_REL_VIEW_PREP_SQLS = [
     """,
     f"""
     SELECT __arches_create_resource_model_views('{PERSON_MODEL_UUID}');
-    """,
-    f"""
-    SELECT __arches_create_resource_model_views('{PROV_ACT_MODEL_UUID}');
     """,
     f"""
     SELECT __arches_create_resource_model_views('{SET_MODEL_UUID}');

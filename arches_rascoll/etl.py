@@ -386,8 +386,10 @@ def prepare_all_transformed_data(
             df_stage, col_data_types = prep_transformed_data(df, configs)
         else:
             # Use a separate data frame for the data prior to transformation.
+            print(f"Loading data file to transform from: {configs.get('load_path')}")
             df_load = pd.read_csv(configs.get('load_path'))
             df_stage, col_data_types = prep_transformed_data(df_load, configs)
+            # print(f"df_stage has: {df_stage.columns.tolist()}")
         if not regenerate and os.path.exists(trans_path):
             # Yes this is inefficient. We're always regenerating a df_stage even if we
             # don't want to regenerate and will be throwing away the newly created df_stage

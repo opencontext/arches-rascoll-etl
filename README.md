@@ -37,18 +37,6 @@ sqls = etl.prepare_all_sql_inserts()
 ```
 
 
-### DEPRECATED: In a Python shell, populate the staging schema with data ready loading into Arches
-
-```python
-
-from arches_rascoll import ref_collection
-# Prepare the staging tables, load them into the staging table, save them
-# do the data directory.
-dfs = ref_collection.prepare_all_transformed_data()
-# Prepare the SQL statements and save them as a file in the data directory.
-sqls = ref_collection.prepare_all_sql_inserts()
-
-```
 
 
 ### Execute the SQL statements to load into Arches
