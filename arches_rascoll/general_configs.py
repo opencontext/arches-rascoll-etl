@@ -1434,10 +1434,39 @@ RSCI_COMPONENT_CONFIGS = {
 #- RSCI COLORS CONFIGS -----------#
 #---------------------------------#
 
+# NOTE: These are deprecated
 COLOR_CONCEPT_MAPPINGS_CSV = os.path.join(DATA_DIR, 'color_concept_mappings.csv')
 IMPORT_RAW_RSCI_COLORS_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-colors.csv')
 
-ALTERNATE_TITLES_VALUE_ID = '1a0dbab5-aab1-4d4e-a4f5-9267ab382fa2'
+
+def make_color_type_list_items(value):
+    """Make list items list objects from color type pref_label values"""
+    if not value:
+        return None
+    if not isinstance(value, list):
+        raw_pref_labels = json.loads(value)
+    else:
+        raw_pref_labels = value
+    raw_pref_labels = list(set(raw_pref_labels))
+    pref_labels = []
+    no_suffix_pref_labels = ['colorless', 'multicolored',]
+    for label in raw_pref_labels:
+        if not label in no_suffix_pref_labels:
+            # add a suffix to the label
+            label += ' (color)'
+        pref_labels.append(label)
+    # Color list_id='1008354b-3ac2-4a8c-88b8-6aad2302a916'
+    return get_controlled_list_objs_by_pref_labels(
+        pref_labels=pref_labels,
+        list_id='1008354b-3ac2-4a8c-88b8-6aad2302a916',
+    )
+
+# Color Names list_id='080ddad2-56e9-4492-b59d-50a10ecdf26c'
+COLOR_NAMES_LEGACY_COLOR_NAMES_TYPE_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['Legacy Color Name',],
+    list_id='080ddad2-56e9-4492-b59d-50a10ecdf26c',
+)
+
 
 RSCI_COLORS_CONFIGS = {
     'model_id': RSCI_UUID,
@@ -1461,92 +1490,34 @@ RSCI_COLORS_CONFIGS = {
             ], 
         },
         {
-            'raw_col': 'color_a_type_uuid',
+            'raw_col': 'color_pref_labels',
             'targ_table': 'has_color',
-            'stage_field_prefix': 'color_a_',
-            'value_transform': copy_value,
+            'stage_field_prefix': 'has_color_',
+            'value_transform': make_color_type_list_items,
             'targ_field': 'color_type',
-            'data_type': UUID,
+            'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('nodegroupid', UUID, '3aff54bc-0f3b-11f0-aa84-02460e9d2217',),
-                ('color_name_type', ARRAY(UUID), [ALTERNATE_TITLES_VALUE_ID,],),
-                ('color_name_language', UUID, ENG_VALUE_UUID,),
-            ],
-            'tile_other_fields': [
-                {
-                    'raw_col': 'Color',
-                    'targ_field': 'color_name_content',
-                    'data_type': JSONB,
-                    'value_transform': make_lang_dict_value,
-                },
-            ],
+                # ('nodegroupid', UUID, '6ee83594-08e4-11f0-81c1-0275dc2ded29',),
+            ], 
         },
         {
-            'raw_col': 'color_b_type_uuid',
-            'targ_table': 'has_color',
-            'stage_field_prefix': 'color_b_',
-            'value_transform': copy_value,
-            'targ_field': 'color_type',
-            'data_type': UUID,
+            'raw_col': 'Color',
+            'targ_table': 'color_name',
+            'stage_field_prefix': 'color_name_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'color_name_content',
+            'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('nodegroupid', UUID, '3aff54bc-0f3b-11f0-aa84-02460e9d2217',),
-                ('color_name_type', ARRAY(UUID), [ALTERNATE_TITLES_VALUE_ID,],),
-                ('color_name_language', UUID, ENG_VALUE_UUID,),
+                ('color_name_type', JSONB, COLOR_NAMES_LEGACY_COLOR_NAMES_TYPE_LIST_ITEMS,),
+                ('color_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
             ],
-            'tile_other_fields': [
-                {
-                    'raw_col': 'Color',
-                    'targ_field': 'color_name_content',
-                    'data_type': JSONB,
-                    'value_transform': make_lang_dict_value,
-                },
-            ],
-        },
-         {
-            'raw_col': 'color_c_type_uuid',
-            'targ_table': 'has_color',
-            'stage_field_prefix': 'color_c_',
-            'value_transform': copy_value,
-            'targ_field': 'color_type',
-            'data_type': UUID,
-            'make_tileid': True,
-            'default_values': [
-                ('nodegroupid', UUID, '3aff54bc-0f3b-11f0-aa84-02460e9d2217',),
-                ('color_name_type', ARRAY(UUID), [ALTERNATE_TITLES_VALUE_ID,],),
-                ('color_name_language', UUID, ENG_VALUE_UUID,),
-            ],
-            'tile_other_fields': [
-                {
-                    'raw_col': 'Color',
-                    'targ_field': 'color_name_content',
-                    'data_type': JSONB,
-                    'value_transform': make_lang_dict_value,
-                },
-            ],
-        },
-         {
-            'raw_col': 'color_d_type_uuid',
-            'targ_table': 'has_color',
-            'stage_field_prefix': 'color_d_',
-            'value_transform': copy_value,
-            'targ_field': 'color_type',
-            'data_type': UUID,
-            'make_tileid': True,
-            'default_values': [
-                ('nodegroupid', UUID, '3aff54bc-0f3b-11f0-aa84-02460e9d2217',),
-                ('color_name_type', ARRAY(UUID), [ALTERNATE_TITLES_VALUE_ID,],),
-                ('color_name_language', UUID, ENG_VALUE_UUID,),
-            ],
-            'tile_other_fields': [
-                {
-                    'raw_col': 'Color',
-                    'targ_field': 'color_name_content',
-                    'data_type': JSONB,
-                    'value_transform': make_lang_dict_value,
-                },
-            ],
+            'related_tileid': {
+                'source_tile_field': 'has_color_tileid',
+                'targ_tile_field': 'has_color',
+            },
         },
     ],
 }
@@ -1636,6 +1607,9 @@ ALL_MAPPING_CONFIGS = [
     # Materials
     RSCI_MATERIALS_TYPE_CONFIGS,
     RSCI_COMPONENT_CONFIGS,
+
+    # Colors
+    RSCI_COLORS_CONFIGS,
 ]
 
 OTHER_CONFIGS = [

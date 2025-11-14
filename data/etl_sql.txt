@@ -1499,6 +1499,82 @@ comp3_tileid::uuid
                 ;
                 
 
+/* ---------------------------------------------------------------------------------- */ 
+
+
+
+                INSERT INTO reference_and_sample_collection_item.instances (
+                    resourceinstanceid, 
+resource_instance_lifecycle_state_id, 
+graphid, 
+graphpublicationid, 
+principaluser_id
+                ) SELECT
+                    
+ DISTINCT
+                    resourceinstanceid::uuid, 
+'f75bb034-36e3-4ab4-8167-f520cf0b4c58'::uuid AS state_id, 
+graphid::uuid, 
+graphpublicationid::uuid, 
+principaluser_id::integer
+                
+                FROM staging.rsci_colors
+                WHERE (staging.rsci_colors.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.rsci_colors.resourceinstanceid::uuid IS NOT NULL))
+                
+                ORDER BY staging.rsci_colors.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.has_color (
+                    resourceinstanceid, 
+tileid, 
+color_type
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+has_color_tileid::uuid, 
+has_color_color_type::jsonb
+                
+                FROM staging.rsci_colors
+                WHERE (staging.rsci_colors.has_color_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_colors.has_color_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_colors.has_color_color_type::jsonb IS NOT NULL))
+                
+                ORDER BY staging.rsci_colors.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.color_name (
+                    resourceinstanceid, 
+tileid, 
+color_name_content, 
+color_name_type, 
+color_name_language, 
+has_color
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+color_name_tileid::uuid, 
+color_name_color_name_content::jsonb, 
+color_name_color_name_type::jsonb, 
+color_name_color_name_language::jsonb, 
+has_color_tileid::uuid
+                
+                FROM staging.rsci_colors
+                WHERE (staging.rsci_colors.color_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_colors.color_name_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_colors.color_name_color_name_content::jsonb IS NOT NULL))
+                
+                ORDER BY staging.rsci_colors.resourceinstanceid
+                
+                ;
+                
+
 
 /*
 ALTER TABLE TILES ENABLE TRIGGER __arches_check_excess_tiles_trigger;
