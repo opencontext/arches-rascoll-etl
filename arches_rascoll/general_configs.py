@@ -537,6 +537,13 @@ STATEMENT_PHYS_THING_SAMPLE_DESCRIPTION_LIST_ITEMS = get_controlled_list_objs_by
     list_id='a16a4edc-c916-4293-af98-44d76ce6cba7',
 )
 
+# Statement Types - Physical Thing list_id='a16a4edc-c916-4293-af98-44d76ce6cba7'
+# pref_labels=['experiment description',]
+STATEMENT_PHYS_THING_EXPERIMENT_DESCRIPTION_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['experiment description',],
+    list_id='a16a4edc-c916-4293-af98-44d76ce6cba7',
+)
+
 
 RSCI_STATEMENTS_CONFIGS = {
     'model_id': RSCI_UUID,
@@ -582,6 +589,20 @@ RSCI_STATEMENTS_CONFIGS = {
             'make_tileid': True,
             'default_values': [
                 ('statement_type', JSONB, STATEMENT_PHYS_THING_SAMPLE_DESCRIPTION_LIST_ITEMS,),
+                ('statement_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
+            ],
+        },
+        {
+            'raw_col': 'Experiments',
+            'targ_table': 'statement',
+            'stage_field_prefix': 'exp_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'statement_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('statement_type', JSONB, STATEMENT_PHYS_THING_EXPERIMENT_DESCRIPTION_LIST_ITEMS,),
                 ('statement_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 # ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
             ],
@@ -1208,23 +1229,6 @@ RSCI_MATERIALS_TYPE_CONFIGS = {
 #- RSCI COMPONENT CONFIGS --------#
 #---------------------------------#
 
-# The statement type preflabel valueid for 'brief text' and 'materials/technique description'
-
-# Component name value_id for the preflabel "component name"
-RSCI_PART_NAME_TYPES = ['45f1707d-574e-4fd7-b78a-062472dbe718',]
-
-# RSCI_PART_STATEMENT_TYPES = ['72202a9f-1551-4cbc-9c7a-73c02321f3ea', '7100d304-bc56-4e4c-bc3a-fa3ec539d979',]
-RSCI_PART_STATEMENT_TYPES = ['72202a9f-1551-4cbc-9c7a-73c02321f3ea',]
-
-# The preflabel valueid for the concept "weight (heaviness attribute)"
-RSCI_PART_DIMENSION_TYPE = 'f729dd3e-c92c-4ebc-95d1-7e765c5606eb'
-
-# The preflabel valueid for the concept "grams (measurements)"
-RSCI_PART_GRAMS_VALUE_UUID = '01bba78f-94ab-4d6f-9a53-e76575b85531'
-
-# The preflabel valueid for the concept "components (objects parts)" 
-RSCI_PART_TYPE_VALUE_UUID = '52a5d486-7cb2-4369-b0b1-2fec4f5ffdbf'
-
 IMPORT_RAW_RSCI_COMPONENTS_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-components.csv')
 
 # Name Types - Physical Thing list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce'
@@ -1467,6 +1471,12 @@ COLOR_NAMES_LEGACY_COLOR_NAMES_TYPE_LIST_ITEMS = get_controlled_list_objs_by_pre
     list_id='080ddad2-56e9-4492-b59d-50a10ecdf26c',
 )
 
+# Color Names list_id='080ddad2-56e9-4492-b59d-50a10ecdf26c'
+COLOR_NAMES_COLOUR_INDEX_TYPE_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['Colour Index™ Generic Name',],
+    list_id='080ddad2-56e9-4492-b59d-50a10ecdf26c',
+)
+
 
 RSCI_COLORS_CONFIGS = {
     'model_id': RSCI_UUID,
@@ -1519,6 +1529,78 @@ RSCI_COLORS_CONFIGS = {
                 'targ_tile_field': 'has_color',
             },
         },
+        {
+            'raw_col': 'Color Index (CI) No. 1',
+            'targ_table': 'color_name',
+            'stage_field_prefix': 'color_name_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'color_name_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('color_name_type', JSONB, COLOR_NAMES_COLOUR_INDEX_TYPE_LIST_ITEMS,),
+                ('color_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'has_color_tileid',
+                'targ_tile_field': 'has_color',
+            },
+        },
+        {
+            'raw_col': 'Color Index (CI) No. 2',
+            'targ_table': 'color_name',
+            'stage_field_prefix': 'color_name_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'color_name_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('color_name_type', JSONB, COLOR_NAMES_COLOUR_INDEX_TYPE_LIST_ITEMS,),
+                ('color_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'has_color_tileid',
+                'targ_tile_field': 'has_color',
+            },
+        },
+        {
+            'raw_col': 'Color Index (CI) No. 3',
+            'targ_table': 'color_name',
+            'stage_field_prefix': 'color_name_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'color_name_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('color_name_type', JSONB, COLOR_NAMES_COLOUR_INDEX_TYPE_LIST_ITEMS,),
+                ('color_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'has_color_tileid',
+                'targ_tile_field': 'has_color',
+            },
+        },
+        {
+            'raw_col': 'Color Index (CI) No. 4',
+            'targ_table': 'color_name',
+            'stage_field_prefix': 'color_name_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'color_name_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('color_name_type', JSONB, COLOR_NAMES_COLOUR_INDEX_TYPE_LIST_ITEMS,),
+                ('color_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'has_color_tileid',
+                'targ_tile_field': 'has_color',
+            },
+        },
     ],
 }
 
@@ -1528,8 +1610,6 @@ RSCI_COLORS_CONFIGS = {
 #---------------------------------#
 
 GETTY_CENTER_PLACE_UUID = '52c75bc1-7797-4ef8-b829-7ce771e4968a'
-# for 'brief text'
-RSCI_CURRENT_LOCATION_STATEMENT_TYPE_IDS = ['72202a9f-1551-4cbc-9c7a-73c02321f3ea',]
 
 IMPORT_RAW_RSCI_CURRENT_LOCATION_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-current-location.csv')
 
@@ -1563,7 +1643,7 @@ RSCI_CURRENT_LOCATION_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('nodegroupid', UUID, 'bda4a954-d376-11ef-a239-0275dc2ded29',),
+                # ('nodegroupid', UUID, 'bda4a954-d376-11ef-a239-0275dc2ded29',),
             ], 
         },
         {
@@ -1575,9 +1655,9 @@ RSCI_CURRENT_LOCATION_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('current_location_statement_type', ARRAY(UUID), RSCI_CURRENT_LOCATION_STATEMENT_TYPE_IDS,),
-                ('current_location_statement_language', ARRAY(UUID), [ENG_VALUE_UUID],),
-                ('nodegroupid', UUID, 'c7ab9e8a-08e1-11f0-a3e8-0275dc2ded29',),
+                ('current_location_statement_type', JSONB, PLACE_STATEMENT_TYPE_LIST_ITEMS,),
+                ('current_location_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # ('nodegroupid', UUID, 'c7ab9e8a-08e1-11f0-a3e8-0275dc2ded29',),
             ],
             'related_tileid': {
                 'source_tile_field': 'cur_loc_tileid',
@@ -1587,6 +1667,153 @@ RSCI_CURRENT_LOCATION_CONFIGS = {
     ],
 }
 
+
+# Name Types - Physical Thing list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce'
+# pref_labels=['chemical name',]
+NAME_TYPES_PHYSICAL_THING_CHEMICAL_NAME_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['chemical name',],
+    list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce',
+)
+
+# Identifier Types - Physical Thing list_id='f4a87a34-8288-4cec-8e20-b28bd567ce0a'
+# pref_labels=['Old Barcode',]
+ID_TYPE_PHYSICAL_THING_OLD_BARCODE_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['Old Barcode',],
+    list_id='f4a87a34-8288-4cec-8e20-b28bd567ce0a',
+)
+
+# Identifier Types - Physical Thing list_id='f4a87a34-8288-4cec-8e20-b28bd567ce0a'
+# pref_labels=['Manufacturer Catalog Identifier (ID)',]
+ID_TYPE_PHYSICAL_THING_MANUFACTURER_CATALOG_ID_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['Manufacturer Catalog Identifier (ID)',],
+    list_id='f4a87a34-8288-4cec-8e20-b28bd567ce0a',
+)
+
+# Chemical Material Identifiers list_id='70b5d993-8545-4a07-a105-4bbeb40f362a'
+# pref_labels=['CAS Registry Number (CAS RN®)',]
+CHEMICAL_MATERIAL_IDS_CAS_REGISTRY_NUMBER_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['CAS Registry Number (CAS RN®)',],
+    list_id='70b5d993-8545-4a07-a105-4bbeb40f362a',
+)
+
+
+# Identifier Types - Physical Thing list_id='993b2172-c101-46a8-9a56-7d2632ee5f89'
+# pref_labels=['Certified Standard',]
+STANDARD_TYPE_CERTIFIED_STANDARD_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['Certified Standard',],
+    list_id='993b2172-c101-46a8-9a56-7d2632ee5f89',
+)
+
+# Identifier Types - Physical Thing list_id='993b2172-c101-46a8-9a56-7d2632ee5f89'
+# pref_labels=['Not Standard',]
+STANDARD_TYPE_CERTIFIED_NOT_STANDARD_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['Not Standard',],
+    list_id='993b2172-c101-46a8-9a56-7d2632ee5f89',
+)
+
+def make_standard_type_list_items(value):
+    """Make standard type list items for the 'Certified Standard' column. """
+    if value and str(value) != 'nan':
+        # Not empty, so it's a certified standard
+        return STANDARD_TYPE_CERTIFIED_STANDARD_LIST_ITEMS
+    return STANDARD_TYPE_CERTIFIED_NOT_STANDARD_LIST_ITEMS
+
+
+RSCI_CHEMICALS_CONFIGS = {
+    'model_id': RSCI_UUID,
+    'staging_table': 'rsci_chemical_attributes',
+    'model_staging_schema': RSCI_MODEL_NAME,
+    'raw_pk_col': 'rsci_uuid',
+    'mappings': [
+        {
+            'raw_col': 'rsci_uuid',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'default_values': [
+                ('graphid', UUID, RSCI_UUID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+            ], 
+        },
+        {
+            'raw_col': 'Old Barcode',
+            'targ_table': 'identifier',
+            'stage_field_prefix': 'old_barcode_no_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'identifier_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('identifier_type', JSONB, ID_TYPE_PHYSICAL_THING_OLD_BARCODE_LIST_ITEMS,),
+                # ('nodegroupid', UUID, 'bda3962c-d376-11ef-a239-0275dc2ded29',),
+            ],
+        },
+        {
+            'raw_col': 'Catalog No.',
+            'targ_table': 'identifier',
+            'stage_field_prefix': 'cat_id_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'identifier_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('identifier_type', JSONB, ID_TYPE_PHYSICAL_THING_MANUFACTURER_CATALOG_ID_LIST_ITEMS,),
+                # ('nodegroupid', UUID, 'bda3962c-d376-11ef-a239-0275dc2ded29',),
+            ],
+        },
+        {
+            'raw_col': 'Certified Standard?',
+            'targ_table': 'standard_type',
+            'stage_field_prefix': 'standard_type_',
+            'value_transform': make_standard_type_list_items,
+            'targ_field': 'standard_type',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                
+            ],
+        },
+        {
+            'raw_col': 'Chemical Name',
+            'targ_table': 'name',
+            'stage_field_prefix': 'chem_name_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'name_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('name_type_', JSONB, NAME_TYPES_PHYSICAL_THING_CHEMICAL_NAME_LIST_ITEMS,),
+                ('name_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # ('nodegroupid', UUID, '6ee83c9c-08e4-11f0-81c1-0275dc2ded29',),
+            ],
+        },
+        {
+            'raw_col': 'Chemical (CAS) No.',
+            'targ_table': 'chemical_material',
+            'stage_field_prefix': 'chem_no_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'chemical_material_identifier_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('chemical_material_identifier_type', JSONB, CHEMICAL_MATERIAL_IDS_CAS_REGISTRY_NUMBER_LIST_ITEMS,),
+            ],
+            'tile_other_fields': [
+                # Mappings for other fields to include in the same tile
+                {
+                    'raw_col': 'Chemical Formula',
+                    'targ_field': 'chemical_material_name_content',
+                    'data_type': Text,
+                    'value_transform': copy_value,
+                },
+            ],
+        },
+    ],
+}
 
 
 
@@ -1610,22 +1837,12 @@ ALL_MAPPING_CONFIGS = [
 
     # Colors
     RSCI_COLORS_CONFIGS,
-]
-
-OTHER_CONFIGS = [
-    # These have dependencies across eachother.
-    # RSCI_PRODUCTION_CONFIGS,
-
-    # Materials and object type.
-    RSCI_COMPONENT_CONFIGS,
-
-    # Colors
-    RSCI_COLORS_CONFIGS,
 
     # Current location
     RSCI_CURRENT_LOCATION_CONFIGS,
-]
 
+    RSCI_CHEMICALS_CONFIGS,
+]
 
 
 

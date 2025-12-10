@@ -754,6 +754,31 @@ physical_form_statement_language_::jsonb
                 ;
                 
 
+
+                INSERT INTO reference_and_sample_collection_item.statement (
+                    resourceinstanceid, 
+tileid, 
+statement_content, 
+statement_type, 
+statement_language_
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+exp_tileid::uuid, 
+exp_statement_content::jsonb, 
+exp_statement_type::jsonb, 
+exp_statement_language_::jsonb
+                
+                FROM staging.rsci_statements
+                WHERE (staging.rsci_statements.exp_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_statements.exp_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_statements.exp_statement_content::jsonb IS NOT NULL))
+                
+                ORDER BY staging.rsci_statements.resourceinstanceid
+                
+                ;
+                
+
 /* ---------------------------------------------------------------------------------- */ 
 
 
@@ -1571,6 +1596,335 @@ has_color_tileid::uuid
 ((staging.rsci_colors.color_name_color_name_content::jsonb IS NOT NULL))
                 
                 ORDER BY staging.rsci_colors.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.color_name (
+                    resourceinstanceid, 
+tileid, 
+color_name_content, 
+color_name_type, 
+color_name_language, 
+has_color
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+color_name_tileid::uuid, 
+color_name_color_name_content::jsonb, 
+color_name_color_name_type::jsonb, 
+color_name_color_name_language::jsonb, 
+has_color_tileid::uuid
+                
+                FROM staging.rsci_colors
+                WHERE (staging.rsci_colors.color_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_colors.color_name_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_colors.color_name_color_name_content::jsonb IS NOT NULL))
+                
+                ORDER BY staging.rsci_colors.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.color_name (
+                    resourceinstanceid, 
+tileid, 
+color_name_content, 
+color_name_type, 
+color_name_language, 
+has_color
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+color_name_tileid::uuid, 
+color_name_color_name_content::jsonb, 
+color_name_color_name_type::jsonb, 
+color_name_color_name_language::jsonb, 
+has_color_tileid::uuid
+                
+                FROM staging.rsci_colors
+                WHERE (staging.rsci_colors.color_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_colors.color_name_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_colors.color_name_color_name_content::jsonb IS NOT NULL))
+                
+                ORDER BY staging.rsci_colors.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.color_name (
+                    resourceinstanceid, 
+tileid, 
+color_name_content, 
+color_name_type, 
+color_name_language, 
+has_color
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+color_name_tileid::uuid, 
+color_name_color_name_content::jsonb, 
+color_name_color_name_type::jsonb, 
+color_name_color_name_language::jsonb, 
+has_color_tileid::uuid
+                
+                FROM staging.rsci_colors
+                WHERE (staging.rsci_colors.color_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_colors.color_name_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_colors.color_name_color_name_content::jsonb IS NOT NULL))
+                
+                ORDER BY staging.rsci_colors.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.color_name (
+                    resourceinstanceid, 
+tileid, 
+color_name_content, 
+color_name_type, 
+color_name_language, 
+has_color
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+color_name_tileid::uuid, 
+color_name_color_name_content::jsonb, 
+color_name_color_name_type::jsonb, 
+color_name_color_name_language::jsonb, 
+has_color_tileid::uuid
+                
+                FROM staging.rsci_colors
+                WHERE (staging.rsci_colors.color_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_colors.color_name_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_colors.color_name_color_name_content::jsonb IS NOT NULL))
+                
+                ORDER BY staging.rsci_colors.resourceinstanceid
+                
+                ;
+                
+
+/* ---------------------------------------------------------------------------------- */ 
+
+
+
+                INSERT INTO reference_and_sample_collection_item.instances (
+                    resourceinstanceid, 
+resource_instance_lifecycle_state_id, 
+graphid, 
+graphpublicationid, 
+principaluser_id
+                ) SELECT
+                    
+ DISTINCT
+                    resourceinstanceid::uuid, 
+'f75bb034-36e3-4ab4-8167-f520cf0b4c58'::uuid AS state_id, 
+graphid::uuid, 
+graphpublicationid::uuid, 
+principaluser_id::integer
+                
+                FROM staging.rsci_current_location
+                WHERE (staging.rsci_current_location.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.rsci_current_location.resourceinstanceid::uuid IS NOT NULL))
+                
+                ORDER BY staging.rsci_current_location.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.current_location (
+                    resourceinstanceid, 
+tileid, 
+current_location
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+cur_loc_tileid::uuid, 
+cur_loc_current_location::jsonb
+                
+                FROM staging.rsci_current_location
+                WHERE (staging.rsci_current_location.cur_loc_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_current_location.cur_loc_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_current_location.cur_loc_current_location::jsonb IS NOT NULL))
+                
+                ORDER BY staging.rsci_current_location.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.current_location_statement (
+                    resourceinstanceid, 
+tileid, 
+current_location_statement_content, 
+current_location_statement_type, 
+current_location_statement_language, 
+current_location
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+cur_loc_statement_tileid::uuid, 
+cur_loc_statement_current_location_statement_content::jsonb, 
+cur_loc_statement_current_location_statement_type::jsonb, 
+cur_loc_statement_current_location_statement_language::jsonb, 
+cur_loc_tileid::uuid
+                
+                FROM staging.rsci_current_location
+                WHERE (staging.rsci_current_location.cur_loc_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_current_location.cur_loc_statement_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_current_location.cur_loc_statement_current_location_statement_content::jsonb IS NOT NULL))
+                
+                ORDER BY staging.rsci_current_location.resourceinstanceid
+                
+                ;
+                
+
+/* ---------------------------------------------------------------------------------- */ 
+
+
+
+                INSERT INTO reference_and_sample_collection_item.instances (
+                    resourceinstanceid, 
+resource_instance_lifecycle_state_id, 
+graphid, 
+graphpublicationid, 
+principaluser_id
+                ) SELECT
+                    
+ DISTINCT
+                    resourceinstanceid::uuid, 
+'f75bb034-36e3-4ab4-8167-f520cf0b4c58'::uuid AS state_id, 
+graphid::uuid, 
+graphpublicationid::uuid, 
+principaluser_id::integer
+                
+                FROM staging.rsci_chemical_attributes
+                WHERE (staging.rsci_chemical_attributes.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.rsci_chemical_attributes.resourceinstanceid::uuid IS NOT NULL))
+                
+                ORDER BY staging.rsci_chemical_attributes.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.identifier (
+                    resourceinstanceid, 
+tileid, 
+identifier_content, 
+identifier_type
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+old_barcode_no_tileid::uuid, 
+old_barcode_no_identifier_content::jsonb, 
+old_barcode_no_identifier_type::jsonb
+                
+                FROM staging.rsci_chemical_attributes
+                WHERE (staging.rsci_chemical_attributes.old_barcode_no_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_chemical_attributes.old_barcode_no_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_chemical_attributes.old_barcode_no_identifier_content::jsonb IS NOT NULL))
+                
+                ORDER BY staging.rsci_chemical_attributes.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.identifier (
+                    resourceinstanceid, 
+tileid, 
+identifier_content, 
+identifier_type
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+cat_id_tileid::uuid, 
+cat_id_identifier_content::jsonb, 
+cat_id_identifier_type::jsonb
+                
+                FROM staging.rsci_chemical_attributes
+                WHERE (staging.rsci_chemical_attributes.cat_id_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_chemical_attributes.cat_id_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_chemical_attributes.cat_id_identifier_content::jsonb IS NOT NULL))
+                
+                ORDER BY staging.rsci_chemical_attributes.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.standard_type (
+                    resourceinstanceid, 
+tileid, 
+standard_type
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+standard_type_tileid::uuid, 
+standard_type_standard_type::jsonb
+                
+                FROM staging.rsci_chemical_attributes
+                WHERE (staging.rsci_chemical_attributes.standard_type_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_chemical_attributes.standard_type_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_chemical_attributes.standard_type_standard_type::jsonb IS NOT NULL))
+                
+                ORDER BY staging.rsci_chemical_attributes.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.name (
+                    resourceinstanceid, 
+tileid, 
+name_content, 
+name_type_, 
+name_language_
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+chem_name_tileid::uuid, 
+chem_name_name_content::jsonb, 
+chem_name_name_type_::jsonb, 
+chem_name_name_language_::jsonb
+                
+                FROM staging.rsci_chemical_attributes
+                WHERE (staging.rsci_chemical_attributes.chem_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_chemical_attributes.chem_name_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_chemical_attributes.chem_name_name_content::jsonb IS NOT NULL))
+                
+                ORDER BY staging.rsci_chemical_attributes.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.chemical_material (
+                    resourceinstanceid, 
+tileid, 
+chemical_material_identifier_content, 
+chemical_material_identifier_type, 
+chemical_material_name_content
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+chem_no_tileid::uuid, 
+chem_no_chemical_material_identifier_content::jsonb, 
+chem_no_chemical_material_identifier_type::jsonb, 
+chem_no_chemical_material_name_content::text
+                
+                FROM staging.rsci_chemical_attributes
+                WHERE (staging.rsci_chemical_attributes.chem_no_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.rsci_chemical_attributes.chem_no_tileid::uuid IS NOT NULL) AND 
+((staging.rsci_chemical_attributes.chem_no_chemical_material_identifier_content::jsonb IS NOT NULL) OR (staging.rsci_chemical_attributes.chem_no_chemical_material_name_content::text IS NOT NULL))
+                
+                ORDER BY staging.rsci_chemical_attributes.resourceinstanceid
                 
                 ;
                 
