@@ -230,7 +230,7 @@ ALTER TABLE TILES DISABLE TRIGGER __arches_trg_update_spatial_attributes;
 
 
 
-    SELECT __arches_create_resource_model_views('bda239c6-d376-11ef-a239-0275dc2ded29');
+    SELECT __arches_create_resource_model_views('d4e956f7-9fad-4fd2-94e3-563a3b2c3585');
     
 
 
@@ -268,11 +268,11 @@ graphid::uuid,
 graphpublicationid::uuid, 
 principaluser_id::integer
                 
-                FROM staging.rsci
-                WHERE (staging.rsci.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
-((staging.rsci.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_rsci
+                WHERE (staging.etl_rsci.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.etl_rsci.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.rsci.resourceinstanceid
+                ORDER BY staging.etl_rsci.resourceinstanceid
                 
                 ;
                 
@@ -283,23 +283,21 @@ principaluser_id::integer
 tileid, 
 name_content, 
 name_type_, 
-name_language_, 
-nodegroupid
+name_language_
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 common_name_tileid::uuid, 
 common_name_name_content::jsonb, 
 common_name_name_type_::jsonb, 
-common_name_name_language_::jsonb, 
-common_name_nodegroupid::uuid
+common_name_name_language_::jsonb
                 
-                FROM staging.rsci
-                WHERE (staging.rsci.common_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci.common_name_tileid::uuid IS NOT NULL) AND 
-((staging.rsci.common_name_name_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci
+                WHERE (staging.etl_rsci.common_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci.common_name_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci.common_name_name_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci.resourceinstanceid
+                ORDER BY staging.etl_rsci.resourceinstanceid
                 
                 ;
                 
@@ -310,23 +308,21 @@ common_name_nodegroupid::uuid
 tileid, 
 name_content, 
 name_type_, 
-name_language_, 
-nodegroupid
+name_language_
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 additional_names_tileid::uuid, 
 additional_names_name_content::jsonb, 
 additional_names_name_type_::jsonb, 
-additional_names_name_language_::jsonb, 
-additional_names_nodegroupid::uuid
+additional_names_name_language_::jsonb
                 
-                FROM staging.rsci
-                WHERE (staging.rsci.additional_names_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci.additional_names_tileid::uuid IS NOT NULL) AND 
-((staging.rsci.additional_names_name_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci
+                WHERE (staging.etl_rsci.additional_names_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci.additional_names_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci.additional_names_name_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci.resourceinstanceid
+                ORDER BY staging.etl_rsci.resourceinstanceid
                 
                 ;
                 
@@ -336,22 +332,20 @@ additional_names_nodegroupid::uuid
                     resourceinstanceid, 
 tileid, 
 identifier_content, 
-identifier_type, 
-nodegroupid
+identifier_type
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 barcode_no_tileid::uuid, 
 barcode_no_identifier_content::jsonb, 
-barcode_no_identifier_type::jsonb, 
-barcode_no_nodegroupid::uuid
+barcode_no_identifier_type::jsonb
                 
-                FROM staging.rsci
-                WHERE (staging.rsci.barcode_no_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci.barcode_no_tileid::uuid IS NOT NULL) AND 
-((staging.rsci.barcode_no_identifier_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci
+                WHERE (staging.etl_rsci.barcode_no_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci.barcode_no_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci.barcode_no_identifier_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci.resourceinstanceid
+                ORDER BY staging.etl_rsci.resourceinstanceid
                 
                 ;
                 
@@ -361,22 +355,20 @@ barcode_no_nodegroupid::uuid
                     resourceinstanceid, 
 tileid, 
 facet_type, 
-facet_type_metatype, 
-nodegroupid
+facet_type_metatype
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 tileid::uuid, 
 facet_type::jsonb, 
-facet_type_metatype::jsonb, 
-nodegroupid::uuid
+facet_type_metatype::jsonb
                 
-                FROM staging.rsci
-                WHERE (staging.rsci.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci.tileid::uuid IS NOT NULL) AND 
-((staging.rsci.facet_type::jsonb IS NOT NULL))
+                FROM staging.etl_rsci
+                WHERE (staging.etl_rsci.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci.tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci.facet_type::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci.resourceinstanceid
+                ORDER BY staging.etl_rsci.resourceinstanceid
                 
                 ;
                 
@@ -400,11 +392,11 @@ graphid::uuid,
 graphpublicationid::uuid, 
 principaluser_id::integer
                 
-                FROM staging.place
-                WHERE (staging.place.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM place.instances)) AND 
-((staging.place.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_place
+                WHERE (staging.etl_place.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM place.instances)) AND 
+((staging.etl_place.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.place.resourceinstanceid
+                ORDER BY staging.etl_place.resourceinstanceid
                 
                 ;
                 
@@ -413,25 +405,23 @@ principaluser_id::integer
                 INSERT INTO place.name (
                     resourceinstanceid, 
 tileid, 
-content, 
-type, 
-language, 
-nodegroupid
+name_content, 
+name_type, 
+name_language
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 specific_place_tileid::uuid, 
-specific_place_content::jsonb, 
-specific_place_type::jsonb, 
-specific_place_language::jsonb, 
-specific_place_nodegroupid::uuid
+specific_place_name_content::jsonb, 
+specific_place_name_type::jsonb, 
+specific_place_name_language::jsonb
                 
-                FROM staging.place
-                WHERE (staging.place.specific_place_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.place.specific_place_tileid::uuid IS NOT NULL) AND 
-((staging.place.specific_place_content::jsonb IS NOT NULL))
+                FROM staging.etl_place
+                WHERE (staging.etl_place.specific_place_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_place.specific_place_tileid::uuid IS NOT NULL) AND 
+((staging.etl_place.specific_place_name_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.place.resourceinstanceid
+                ORDER BY staging.etl_place.resourceinstanceid
                 
                 ;
                 
@@ -440,27 +430,25 @@ specific_place_nodegroupid::uuid
                 INSERT INTO place.statement (
                     resourceinstanceid, 
 tileid, 
-content, 
-type_metatype, 
-type, 
-language, 
-nodegroupid
+statement_content, 
+statement_type_metatype, 
+statement_type, 
+statement_language
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 statement_tileid::uuid, 
-statement_content::jsonb, 
-statement_type_metatype::jsonb, 
-statement_type::jsonb, 
-statement_language::jsonb, 
-statement_nodegroupid::uuid
+statement_statement_content::jsonb, 
+statement_statement_type_metatype::jsonb, 
+statement_statement_type::jsonb, 
+statement_statement_language::jsonb
                 
-                FROM staging.place
-                WHERE (staging.place.statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.place.statement_tileid::uuid IS NOT NULL) AND 
-((staging.place.statement_content::jsonb IS NOT NULL))
+                FROM staging.etl_place
+                WHERE (staging.etl_place.statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_place.statement_tileid::uuid IS NOT NULL) AND 
+((staging.etl_place.statement_statement_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.place.resourceinstanceid
+                ORDER BY staging.etl_place.resourceinstanceid
                 
                 ;
                 
@@ -469,21 +457,19 @@ statement_nodegroupid::uuid
                 INSERT INTO place.external_uri (
                     resourceinstanceid, 
 tileid, 
-external_uri, 
-nodegroupid
+external_uri
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 specific_place_uri_tileid::uuid, 
-specific_place_uri_external_uri::jsonb, 
-specific_place_uri_nodegroupid::uuid
+specific_place_uri_external_uri::jsonb
                 
-                FROM staging.place
-                WHERE (staging.place.specific_place_uri_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.place.specific_place_uri_tileid::uuid IS NOT NULL) AND 
-((staging.place.specific_place_uri_external_uri::jsonb IS NOT NULL))
+                FROM staging.etl_place
+                WHERE (staging.etl_place.specific_place_uri_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_place.specific_place_uri_tileid::uuid IS NOT NULL) AND 
+((staging.etl_place.specific_place_uri_external_uri::jsonb IS NOT NULL))
                 
-                ORDER BY staging.place.resourceinstanceid
+                ORDER BY staging.etl_place.resourceinstanceid
                 
                 ;
                 
@@ -492,21 +478,19 @@ specific_place_uri_nodegroupid::uuid
                 INSERT INTO place.defined_by (
                     resourceinstanceid, 
 tileid, 
-defined_by, 
-nodegroupid
+defined_by
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 geo_point_tileid::uuid, 
-ST_AsText(ST_GeomFromGeoJSON(geo_point_defined_by)), 
-geo_point_nodegroupid::uuid
+ST_AsText(ST_GeomFromGeoJSON(geo_point_defined_by))
                 
-                FROM staging.place
-                WHERE (staging.place.geo_point_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.place.geo_point_tileid::uuid IS NOT NULL) AND 
-((staging.place.geo_point_defined_by::jsonb IS NOT NULL))
+                FROM staging.etl_place
+                WHERE (staging.etl_place.geo_point_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_place.geo_point_tileid::uuid IS NOT NULL) AND 
+((staging.etl_place.geo_point_defined_by::jsonb IS NOT NULL))
                 
-                ORDER BY staging.place.resourceinstanceid
+                ORDER BY staging.etl_place.resourceinstanceid
                 
                 ;
                 
@@ -530,11 +514,11 @@ graphid::uuid,
 graphpublicationid::uuid, 
 principaluser_id::integer
                 
-                FROM staging.group_
-                WHERE (staging.group_.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM group_.instances)) AND 
-((staging.group_.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_group_
+                WHERE (staging.etl_group_.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM group_.instances)) AND 
+((staging.etl_group_.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.group_.resourceinstanceid
+                ORDER BY staging.etl_group_.resourceinstanceid
                 
                 ;
                 
@@ -545,23 +529,21 @@ principaluser_id::integer
 tileid, 
 name_content, 
 name_type, 
-name_language, 
-nodegroupid
+name_language
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 group_name_tileid::uuid, 
 group_name_name_content::jsonb, 
 group_name_name_type::jsonb, 
-group_name_name_language::jsonb, 
-group_name_nodegroupid::uuid
+group_name_name_language::jsonb
                 
-                FROM staging.group_
-                WHERE (staging.group_.group_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.group_.group_name_tileid::uuid IS NOT NULL) AND 
-((staging.group_.group_name_name_content::jsonb IS NOT NULL))
+                FROM staging.etl_group_
+                WHERE (staging.etl_group_.group_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_group_.group_name_tileid::uuid IS NOT NULL) AND 
+((staging.etl_group_.group_name_name_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.group_.resourceinstanceid
+                ORDER BY staging.etl_group_.resourceinstanceid
                 
                 ;
                 
@@ -585,11 +567,11 @@ graphid::uuid,
 graphpublicationid::uuid, 
 principaluser_id::integer
                 
-                FROM staging.person
-                WHERE (staging.person.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM person.instances)) AND 
-((staging.person.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_person
+                WHERE (staging.etl_person.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM person.instances)) AND 
+((staging.etl_person.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.person.resourceinstanceid
+                ORDER BY staging.etl_person.resourceinstanceid
                 
                 ;
                 
@@ -600,23 +582,21 @@ principaluser_id::integer
 tileid, 
 name_content, 
 name_type, 
-name_language, 
-nodegroupid
+name_language
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 person_name_tileid::uuid, 
 person_name_name_content::jsonb, 
 person_name_name_type::jsonb, 
-person_name_name_language::jsonb, 
-person_name_nodegroupid::uuid
+person_name_name_language::jsonb
                 
-                FROM staging.person
-                WHERE (staging.person.person_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.person.person_name_tileid::uuid IS NOT NULL) AND 
-((staging.person.person_name_name_content::jsonb IS NOT NULL))
+                FROM staging.etl_person
+                WHERE (staging.etl_person.person_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_person.person_name_tileid::uuid IS NOT NULL) AND 
+((staging.etl_person.person_name_name_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.person.resourceinstanceid
+                ORDER BY staging.etl_person.resourceinstanceid
                 
                 ;
                 
@@ -640,11 +620,11 @@ graphid::uuid,
 graphpublicationid::uuid, 
 principaluser_id::integer
                 
-                FROM staging.collection_or_set
-                WHERE (staging.collection_or_set.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM collection_or_set.instances)) AND 
-((staging.collection_or_set.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_collection_or_set
+                WHERE (staging.etl_collection_or_set.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM collection_or_set.instances)) AND 
+((staging.etl_collection_or_set.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.collection_or_set.resourceinstanceid
+                ORDER BY staging.etl_collection_or_set.resourceinstanceid
                 
                 ;
                 
@@ -655,23 +635,21 @@ principaluser_id::integer
 tileid, 
 name_content, 
 name_type, 
-name_language, 
-nodegroupid
+name_language
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 tileid::uuid, 
 name_content::jsonb, 
 name_type::jsonb, 
-name_language::jsonb, 
-nodegroupid::uuid
+name_language::jsonb
                 
-                FROM staging.collection_or_set
-                WHERE (staging.collection_or_set.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.collection_or_set.tileid::uuid IS NOT NULL) AND 
-((staging.collection_or_set.name_content::jsonb IS NOT NULL))
+                FROM staging.etl_collection_or_set
+                WHERE (staging.etl_collection_or_set.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_collection_or_set.tileid::uuid IS NOT NULL) AND 
+((staging.etl_collection_or_set.name_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.collection_or_set.resourceinstanceid
+                ORDER BY staging.etl_collection_or_set.resourceinstanceid
                 
                 ;
                 
@@ -695,11 +673,11 @@ graphid::uuid,
 graphpublicationid::uuid, 
 principaluser_id::integer
                 
-                FROM staging.rsci_statements
-                WHERE (staging.rsci_statements.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
-((staging.rsci_statements.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_rsci_statements
+                WHERE (staging.etl_rsci_statements.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.etl_rsci_statements.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.rsci_statements.resourceinstanceid
+                ORDER BY staging.etl_rsci_statements.resourceinstanceid
                 
                 ;
                 
@@ -719,12 +697,12 @@ notes_statement_content::jsonb,
 notes_statement_type::jsonb, 
 notes_statement_language_::jsonb
                 
-                FROM staging.rsci_statements
-                WHERE (staging.rsci_statements.notes_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_statements.notes_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_statements.notes_statement_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_statements
+                WHERE (staging.etl_rsci_statements.notes_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_statements.notes_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_statements.notes_statement_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_statements.resourceinstanceid
+                ORDER BY staging.etl_rsci_statements.resourceinstanceid
                 
                 ;
                 
@@ -744,12 +722,12 @@ physical_form_statement_content::jsonb,
 physical_form_statement_type::jsonb, 
 physical_form_statement_language_::jsonb
                 
-                FROM staging.rsci_statements
-                WHERE (staging.rsci_statements.physical_form_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_statements.physical_form_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_statements.physical_form_statement_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_statements
+                WHERE (staging.etl_rsci_statements.physical_form_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_statements.physical_form_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_statements.physical_form_statement_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_statements.resourceinstanceid
+                ORDER BY staging.etl_rsci_statements.resourceinstanceid
                 
                 ;
                 
@@ -769,12 +747,12 @@ exp_statement_content::jsonb,
 exp_statement_type::jsonb, 
 exp_statement_language_::jsonb
                 
-                FROM staging.rsci_statements
-                WHERE (staging.rsci_statements.exp_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_statements.exp_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_statements.exp_statement_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_statements
+                WHERE (staging.etl_rsci_statements.exp_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_statements.exp_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_statements.exp_statement_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_statements.resourceinstanceid
+                ORDER BY staging.etl_rsci_statements.resourceinstanceid
                 
                 ;
                 
@@ -798,11 +776,11 @@ graphid::uuid,
 graphpublicationid::uuid, 
 principaluser_id::integer
                 
-                FROM staging.rsci_group_safety
-                WHERE (staging.rsci_group_safety.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
-((staging.rsci_group_safety.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_rsci_group_safety
+                WHERE (staging.etl_rsci_group_safety.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.etl_rsci_group_safety.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.rsci_group_safety.resourceinstanceid
+                ORDER BY staging.etl_rsci_group_safety.resourceinstanceid
                 
                 ;
                 
@@ -828,12 +806,12 @@ nfpa_safety_classification_classification::jsonb,
                             ) as related_objs_1
                         
                 
-                FROM staging.rsci_group_safety
-                WHERE (staging.rsci_group_safety.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_group_safety.tileid::uuid IS NOT NULL) AND 
-((staging.rsci_group_safety.nfpa_safety_classifcation_type::jsonb IS NOT NULL) OR (staging.rsci_group_safety.related_objs::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_group_safety
+                WHERE (staging.etl_rsci_group_safety.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_group_safety.tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_group_safety.nfpa_safety_classifcation_type::jsonb IS NOT NULL) OR (staging.etl_rsci_group_safety.related_objs::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_group_safety.resourceinstanceid
+                ORDER BY staging.etl_rsci_group_safety.resourceinstanceid
                 
                 ;
                 
@@ -857,11 +835,11 @@ graphid::uuid,
 graphpublicationid::uuid, 
 principaluser_id::integer
                 
-                FROM staging.rsci_acquistition
-                WHERE (staging.rsci_acquistition.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
-((staging.rsci_acquistition.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_rsci_acquistition
+                WHERE (staging.etl_rsci_acquistition.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.etl_rsci_acquistition.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.rsci_acquistition.resourceinstanceid
+                ORDER BY staging.etl_rsci_acquistition.resourceinstanceid
                 
                 ;
                 
@@ -893,12 +871,12 @@ acq_acquisition_type::jsonb,
                             ) as acq_transferred_title_from_related_objs_5
                         
                 
-                FROM staging.rsci_acquistition
-                WHERE (staging.rsci_acquistition.acq_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_acquistition.acq_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_acquistition.acq_acquisition_type::jsonb IS NOT NULL) OR (staging.rsci_acquistition.acq_carried_out_by_related_objs::jsonb IS NOT NULL) OR (staging.rsci_acquistition.acq_transferred_title_from_related_objs::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_acquistition
+                WHERE (staging.etl_rsci_acquistition.acq_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_acquistition.acq_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_acquistition.acq_acquisition_type::jsonb IS NOT NULL) OR (staging.etl_rsci_acquistition.acq_carried_out_by_related_objs::jsonb IS NOT NULL) OR (staging.etl_rsci_acquistition.acq_transferred_title_from_related_objs::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_acquistition.resourceinstanceid
+                ORDER BY staging.etl_rsci_acquistition.resourceinstanceid
                 
                 ;
                 
@@ -920,12 +898,12 @@ acq_state_acquisition_statement_type::jsonb,
 acq_state_acquisition_statement_language::jsonb, 
 acq_tileid::uuid
                 
-                FROM staging.rsci_acquistition
-                WHERE (staging.rsci_acquistition.acq_state_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_acquistition.acq_state_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_acquistition.acq_state_acquisition_statement_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_acquistition
+                WHERE (staging.etl_rsci_acquistition.acq_state_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_acquistition.acq_state_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_acquistition.acq_state_acquisition_statement_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_acquistition.resourceinstanceid
+                ORDER BY staging.etl_rsci_acquistition.resourceinstanceid
                 
                 ;
                 
@@ -951,12 +929,12 @@ acq_time_acquisition_timespan_end_of_the_begin::timestamp,
 acq_time_acquisition_timespan_begin_of_the_end::timestamp, 
 acq_time_acquisition_timespan_end_of_the_end::timestamp
                 
-                FROM staging.rsci_acquistition
-                WHERE (staging.rsci_acquistition.acq_time_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_acquistition.acq_time_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_acquistition.acq_time_acquisition_timespan_begin_of_the_begin::timestamp IS NOT NULL) OR (staging.rsci_acquistition.acq_time_acquisition_timespan_end_of_the_begin::timestamp IS NOT NULL) OR (staging.rsci_acquistition.acq_time_acquisition_timespan_begin_of_the_end::timestamp IS NOT NULL) OR (staging.rsci_acquistition.acq_time_acquisition_timespan_end_of_the_end::timestamp IS NOT NULL))
+                FROM staging.etl_rsci_acquistition
+                WHERE (staging.etl_rsci_acquistition.acq_time_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_acquistition.acq_time_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_acquistition.acq_time_acquisition_timespan_begin_of_the_begin::timestamp IS NOT NULL) OR (staging.etl_rsci_acquistition.acq_time_acquisition_timespan_end_of_the_begin::timestamp IS NOT NULL) OR (staging.etl_rsci_acquistition.acq_time_acquisition_timespan_begin_of_the_end::timestamp IS NOT NULL) OR (staging.etl_rsci_acquistition.acq_time_acquisition_timespan_end_of_the_end::timestamp IS NOT NULL))
                 
-                ORDER BY staging.rsci_acquistition.resourceinstanceid
+                ORDER BY staging.etl_rsci_acquistition.resourceinstanceid
                 
                 ;
                 
@@ -980,11 +958,11 @@ graphid::uuid,
 graphpublicationid::uuid, 
 principaluser_id::integer
                 
-                FROM staging.rsci_production
-                WHERE (staging.rsci_production.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
-((staging.rsci_production.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_rsci_production
+                WHERE (staging.etl_rsci_production.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.etl_rsci_production.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.rsci_production.resourceinstanceid
+                ORDER BY staging.etl_rsci_production.resourceinstanceid
                 
                 ;
                 
@@ -1027,12 +1005,12 @@ prod_1_production_type::jsonb,
                         END AS prod_1_production_location_geo_geom
                         
                 
-                FROM staging.rsci_production
-                WHERE (staging.rsci_production.prod_1_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_production.prod_1_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_production.prod_1_production__label::jsonb IS NOT NULL) OR (staging.rsci_production.prod_1_production_carried_out_by_related_objs::jsonb IS NOT NULL) OR (staging.rsci_production.prod_1_production_location_related_objs::jsonb IS NOT NULL) OR (staging.rsci_production.prod_1_production_location_geo::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_production
+                WHERE (staging.etl_rsci_production.prod_1_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_production.prod_1_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_production.prod_1_production__label::jsonb IS NOT NULL) OR (staging.etl_rsci_production.prod_1_production_carried_out_by_related_objs::jsonb IS NOT NULL) OR (staging.etl_rsci_production.prod_1_production_location_related_objs::jsonb IS NOT NULL) OR (staging.etl_rsci_production.prod_1_production_location_geo::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_production.resourceinstanceid
+                ORDER BY staging.etl_rsci_production.resourceinstanceid
                 
                 ;
                 
@@ -1056,12 +1034,12 @@ pt_production_time_end_of_the_begin::timestamp,
 pt_production_time_begin_of_the_end::timestamp, 
 pt_production_time_end_of_the_end::timestamp
                 
-                FROM staging.rsci_production
-                WHERE (staging.rsci_production.pt_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_production.pt_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_production.pt_production_time_begin_of_the_begin::timestamp IS NOT NULL) OR (staging.rsci_production.pt_production_time_end_of_the_begin::timestamp IS NOT NULL) OR (staging.rsci_production.pt_production_time_begin_of_the_end::timestamp IS NOT NULL) OR (staging.rsci_production.pt_production_time_end_of_the_end::timestamp IS NOT NULL))
+                FROM staging.etl_rsci_production
+                WHERE (staging.etl_rsci_production.pt_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_production.pt_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_production.pt_production_time_begin_of_the_begin::timestamp IS NOT NULL) OR (staging.etl_rsci_production.pt_production_time_end_of_the_begin::timestamp IS NOT NULL) OR (staging.etl_rsci_production.pt_production_time_begin_of_the_end::timestamp IS NOT NULL) OR (staging.etl_rsci_production.pt_production_time_end_of_the_end::timestamp IS NOT NULL))
                 
-                ORDER BY staging.rsci_production.resourceinstanceid
+                ORDER BY staging.etl_rsci_production.resourceinstanceid
                 
                 ;
                 
@@ -1083,12 +1061,12 @@ prod_statement_production_statement_type::jsonb,
 prod_statement_production_statement_language::jsonb, 
 prod_1_tileid::uuid
                 
-                FROM staging.rsci_production
-                WHERE (staging.rsci_production.prod_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_production.prod_statement_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_production.prod_statement_production_statement_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_production
+                WHERE (staging.etl_rsci_production.prod_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_production.prod_statement_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_production.prod_statement_production_statement_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_production.resourceinstanceid
+                ORDER BY staging.etl_rsci_production.resourceinstanceid
                 
                 ;
                 
@@ -1112,11 +1090,11 @@ graphid::uuid,
 graphpublicationid::uuid, 
 principaluser_id::integer
                 
-                FROM staging.rsci_materials_types
-                WHERE (staging.rsci_materials_types.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
-((staging.rsci_materials_types.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_rsci_materials_types
+                WHERE (staging.etl_rsci_materials_types.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.etl_rsci_materials_types.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.rsci_materials_types.resourceinstanceid
+                ORDER BY staging.etl_rsci_materials_types.resourceinstanceid
                 
                 ;
                 
@@ -1127,23 +1105,21 @@ principaluser_id::integer
 tileid, 
 material_data_assignment_name_content, 
 material_data_assignment_name_type, 
-material_data_assignment_name_language, 
-nodegroupid
+material_data_assignment_name_language
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 chem_tileid::uuid, 
 chem_material_data_assignment_name_content::jsonb, 
 chem_material_data_assignment_name_type::jsonb, 
-chem_material_data_assignment_name_language::jsonb, 
-chem_nodegroupid::uuid
+chem_material_data_assignment_name_language::jsonb
                 
-                FROM staging.rsci_materials_types
-                WHERE (staging.rsci_materials_types.chem_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_materials_types.chem_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_materials_types.chem_material_data_assignment_name_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_materials_types
+                WHERE (staging.etl_rsci_materials_types.chem_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_materials_types.chem_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_materials_types.chem_material_data_assignment_name_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_materials_types.resourceinstanceid
+                ORDER BY staging.etl_rsci_materials_types.resourceinstanceid
                 
                 ;
                 
@@ -1154,23 +1130,21 @@ chem_nodegroupid::uuid
 tileid, 
 name_content, 
 name_type_, 
-name_language_, 
-nodegroupid
+name_language_
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 gbif_name_tileid::uuid, 
 gbif_name_name_content::jsonb, 
 gbif_name_name_type_::jsonb, 
-gbif_name_name_language_::jsonb, 
-gbif_name_nodegroupid::uuid
+gbif_name_name_language_::jsonb
                 
-                FROM staging.rsci_materials_types
-                WHERE (staging.rsci_materials_types.gbif_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_materials_types.gbif_name_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_materials_types.gbif_name_name_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_materials_types
+                WHERE (staging.etl_rsci_materials_types.gbif_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_materials_types.gbif_name_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_materials_types.gbif_name_name_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_materials_types.resourceinstanceid
+                ORDER BY staging.etl_rsci_materials_types.resourceinstanceid
                 
                 ;
                 
@@ -1190,12 +1164,12 @@ gbif_statement_content::jsonb,
 gbif_statement_type::jsonb, 
 gbif_statement_language_::jsonb
                 
-                FROM staging.rsci_materials_types
-                WHERE (staging.rsci_materials_types.gbif_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_materials_types.gbif_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_materials_types.gbif_statement_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_materials_types
+                WHERE (staging.etl_rsci_materials_types.gbif_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_materials_types.gbif_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_materials_types.gbif_statement_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_materials_types.resourceinstanceid
+                ORDER BY staging.etl_rsci_materials_types.resourceinstanceid
                 
                 ;
                 
@@ -1213,12 +1187,12 @@ tileid::uuid,
 mixture_type::jsonb, 
 mixture_type_metatype::jsonb
                 
-                FROM staging.rsci_materials_types
-                WHERE (staging.rsci_materials_types.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_materials_types.tileid::uuid IS NOT NULL) AND 
-((staging.rsci_materials_types.mixture_type::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_materials_types
+                WHERE (staging.etl_rsci_materials_types.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_materials_types.tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_materials_types.mixture_type::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_materials_types.resourceinstanceid
+                ORDER BY staging.etl_rsci_materials_types.resourceinstanceid
                 
                 ;
                 
@@ -1234,12 +1208,12 @@ attribute_type
 atribs_tileid::uuid, 
 atribs_attribute_type::jsonb
                 
-                FROM staging.rsci_materials_types
-                WHERE (staging.rsci_materials_types.atribs_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_materials_types.atribs_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_materials_types.atribs_attribute_type::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_materials_types
+                WHERE (staging.etl_rsci_materials_types.atribs_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_materials_types.atribs_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_materials_types.atribs_attribute_type::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_materials_types.resourceinstanceid
+                ORDER BY staging.etl_rsci_materials_types.resourceinstanceid
                 
                 ;
                 
@@ -1255,12 +1229,12 @@ object_type
 object_type_tileid::uuid, 
 object_type_object_type::jsonb
                 
-                FROM staging.rsci_materials_types
-                WHERE (staging.rsci_materials_types.object_type_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_materials_types.object_type_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_materials_types.object_type_object_type::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_materials_types
+                WHERE (staging.etl_rsci_materials_types.object_type_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_materials_types.object_type_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_materials_types.object_type_object_type::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_materials_types.resourceinstanceid
+                ORDER BY staging.etl_rsci_materials_types.resourceinstanceid
                 
                 ;
                 
@@ -1276,12 +1250,12 @@ material
 mat_tileid::uuid, 
 mat_material::jsonb
                 
-                FROM staging.rsci_materials_types
-                WHERE (staging.rsci_materials_types.mat_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_materials_types.mat_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_materials_types.mat_material::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_materials_types
+                WHERE (staging.etl_rsci_materials_types.mat_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_materials_types.mat_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_materials_types.mat_material::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_materials_types.resourceinstanceid
+                ORDER BY staging.etl_rsci_materials_types.resourceinstanceid
                 
                 ;
                 
@@ -1305,11 +1279,11 @@ graphid::uuid,
 graphpublicationid::uuid, 
 principaluser_id::integer
                 
-                FROM staging.rsci_components
-                WHERE (staging.rsci_components.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
-((staging.rsci_components.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_rsci_components
+                WHERE (staging.etl_rsci_components.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.etl_rsci_components.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.rsci_components.resourceinstanceid
+                ORDER BY staging.etl_rsci_components.resourceinstanceid
                 
                 ;
                 
@@ -1331,12 +1305,12 @@ comp1_part_name_type::jsonb,
 comp1_part_name_language::jsonb, 
 comp1_part_type::jsonb
                 
-                FROM staging.rsci_components
-                WHERE (staging.rsci_components.comp1_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_components.comp1_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_components.comp1_part_name_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_components
+                WHERE (staging.etl_rsci_components.comp1_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_components.comp1_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_components.comp1_part_name_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_components.resourceinstanceid
+                ORDER BY staging.etl_rsci_components.resourceinstanceid
                 
                 ;
                 
@@ -1358,12 +1332,12 @@ comp1_statement_part_statement_type::jsonb,
 comp1_statement_part_statement_language::jsonb, 
 comp1_tileid::uuid
                 
-                FROM staging.rsci_components
-                WHERE (staging.rsci_components.comp1_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_components.comp1_statement_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_components.comp1_statement_part_statement_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_components
+                WHERE (staging.etl_rsci_components.comp1_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_components.comp1_statement_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_components.comp1_statement_part_statement_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_components.resourceinstanceid
+                ORDER BY staging.etl_rsci_components.resourceinstanceid
                 
                 ;
                 
@@ -1385,12 +1359,12 @@ comp1_n_part_dimension_type_::jsonb,
 comp1_n_part_dimension_unit::jsonb, 
 comp1_tileid::uuid
                 
-                FROM staging.rsci_components
-                WHERE (staging.rsci_components.comp1_n_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_components.comp1_n_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_components.comp1_n_part_dimension_value_::numeric IS NOT NULL))
+                FROM staging.etl_rsci_components
+                WHERE (staging.etl_rsci_components.comp1_n_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_components.comp1_n_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_components.comp1_n_part_dimension_value_::numeric IS NOT NULL))
                 
-                ORDER BY staging.rsci_components.resourceinstanceid
+                ORDER BY staging.etl_rsci_components.resourceinstanceid
                 
                 ;
                 
@@ -1412,12 +1386,12 @@ comp2_part_name_type::jsonb,
 comp2_part_name_language::jsonb, 
 comp2_part_type::jsonb
                 
-                FROM staging.rsci_components
-                WHERE (staging.rsci_components.comp2_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_components.comp2_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_components.comp2_part_name_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_components
+                WHERE (staging.etl_rsci_components.comp2_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_components.comp2_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_components.comp2_part_name_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_components.resourceinstanceid
+                ORDER BY staging.etl_rsci_components.resourceinstanceid
                 
                 ;
                 
@@ -1439,12 +1413,12 @@ comp2_statement_part_statement_type::jsonb,
 comp2_statement_part_statement_language::jsonb, 
 comp2_tileid::uuid
                 
-                FROM staging.rsci_components
-                WHERE (staging.rsci_components.comp2_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_components.comp2_statement_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_components.comp2_statement_part_statement_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_components
+                WHERE (staging.etl_rsci_components.comp2_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_components.comp2_statement_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_components.comp2_statement_part_statement_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_components.resourceinstanceid
+                ORDER BY staging.etl_rsci_components.resourceinstanceid
                 
                 ;
                 
@@ -1466,12 +1440,12 @@ comp2_n_part_dimension_type_::jsonb,
 comp2_n_part_dimension_unit::jsonb, 
 comp2_tileid::uuid
                 
-                FROM staging.rsci_components
-                WHERE (staging.rsci_components.comp2_n_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_components.comp2_n_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_components.comp2_n_part_dimension_value_::numeric IS NOT NULL))
+                FROM staging.etl_rsci_components
+                WHERE (staging.etl_rsci_components.comp2_n_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_components.comp2_n_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_components.comp2_n_part_dimension_value_::numeric IS NOT NULL))
                 
-                ORDER BY staging.rsci_components.resourceinstanceid
+                ORDER BY staging.etl_rsci_components.resourceinstanceid
                 
                 ;
                 
@@ -1487,12 +1461,12 @@ part_type
 comp3_tileid::uuid, 
 comp3_part_type::jsonb
                 
-                FROM staging.rsci_components
-                WHERE (staging.rsci_components.comp3_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_components.comp3_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_components.comp3_part_type::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_components
+                WHERE (staging.etl_rsci_components.comp3_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_components.comp3_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_components.comp3_part_type::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_components.resourceinstanceid
+                ORDER BY staging.etl_rsci_components.resourceinstanceid
                 
                 ;
                 
@@ -1514,12 +1488,12 @@ comp3_statement_part_statement_type::jsonb,
 comp3_statement_part_statement_language::jsonb, 
 comp3_tileid::uuid
                 
-                FROM staging.rsci_components
-                WHERE (staging.rsci_components.comp3_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_components.comp3_statement_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_components.comp3_statement_part_statement_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_components
+                WHERE (staging.etl_rsci_components.comp3_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_components.comp3_statement_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_components.comp3_statement_part_statement_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_components.resourceinstanceid
+                ORDER BY staging.etl_rsci_components.resourceinstanceid
                 
                 ;
                 
@@ -1543,11 +1517,11 @@ graphid::uuid,
 graphpublicationid::uuid, 
 principaluser_id::integer
                 
-                FROM staging.rsci_colors
-                WHERE (staging.rsci_colors.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
-((staging.rsci_colors.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_rsci_colors
+                WHERE (staging.etl_rsci_colors.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.etl_rsci_colors.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.rsci_colors.resourceinstanceid
+                ORDER BY staging.etl_rsci_colors.resourceinstanceid
                 
                 ;
                 
@@ -1563,39 +1537,12 @@ color_type
 has_color_tileid::uuid, 
 has_color_color_type::jsonb
                 
-                FROM staging.rsci_colors
-                WHERE (staging.rsci_colors.has_color_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_colors.has_color_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_colors.has_color_color_type::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_colors
+                WHERE (staging.etl_rsci_colors.has_color_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_colors.has_color_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_colors.has_color_color_type::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_colors.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.color_name (
-                    resourceinstanceid, 
-tileid, 
-color_name_content, 
-color_name_type, 
-color_name_language, 
-has_color
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-color_name_tileid::uuid, 
-color_name_color_name_content::jsonb, 
-color_name_color_name_type::jsonb, 
-color_name_color_name_language::jsonb, 
-has_color_tileid::uuid
-                
-                FROM staging.rsci_colors
-                WHERE (staging.rsci_colors.color_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_colors.color_name_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_colors.color_name_color_name_content::jsonb IS NOT NULL))
-                
-                ORDER BY staging.rsci_colors.resourceinstanceid
+                ORDER BY staging.etl_rsci_colors.resourceinstanceid
                 
                 ;
                 
@@ -1617,39 +1564,12 @@ color_name_color_name_type::jsonb,
 color_name_color_name_language::jsonb, 
 has_color_tileid::uuid
                 
-                FROM staging.rsci_colors
-                WHERE (staging.rsci_colors.color_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_colors.color_name_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_colors.color_name_color_name_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_colors
+                WHERE (staging.etl_rsci_colors.color_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_colors.color_name_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_colors.color_name_color_name_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_colors.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.color_name (
-                    resourceinstanceid, 
-tileid, 
-color_name_content, 
-color_name_type, 
-color_name_language, 
-has_color
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-color_name_tileid::uuid, 
-color_name_color_name_content::jsonb, 
-color_name_color_name_type::jsonb, 
-color_name_color_name_language::jsonb, 
-has_color_tileid::uuid
-                
-                FROM staging.rsci_colors
-                WHERE (staging.rsci_colors.color_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_colors.color_name_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_colors.color_name_color_name_content::jsonb IS NOT NULL))
-                
-                ORDER BY staging.rsci_colors.resourceinstanceid
+                ORDER BY staging.etl_rsci_colors.resourceinstanceid
                 
                 ;
                 
@@ -1671,12 +1591,12 @@ color_name_color_name_type::jsonb,
 color_name_color_name_language::jsonb, 
 has_color_tileid::uuid
                 
-                FROM staging.rsci_colors
-                WHERE (staging.rsci_colors.color_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_colors.color_name_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_colors.color_name_color_name_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_colors
+                WHERE (staging.etl_rsci_colors.color_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_colors.color_name_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_colors.color_name_color_name_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_colors.resourceinstanceid
+                ORDER BY staging.etl_rsci_colors.resourceinstanceid
                 
                 ;
                 
@@ -1698,12 +1618,66 @@ color_name_color_name_type::jsonb,
 color_name_color_name_language::jsonb, 
 has_color_tileid::uuid
                 
-                FROM staging.rsci_colors
-                WHERE (staging.rsci_colors.color_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_colors.color_name_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_colors.color_name_color_name_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_colors
+                WHERE (staging.etl_rsci_colors.color_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_colors.color_name_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_colors.color_name_color_name_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_colors.resourceinstanceid
+                ORDER BY staging.etl_rsci_colors.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.color_name (
+                    resourceinstanceid, 
+tileid, 
+color_name_content, 
+color_name_type, 
+color_name_language, 
+has_color
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+color_name_tileid::uuid, 
+color_name_color_name_content::jsonb, 
+color_name_color_name_type::jsonb, 
+color_name_color_name_language::jsonb, 
+has_color_tileid::uuid
+                
+                FROM staging.etl_rsci_colors
+                WHERE (staging.etl_rsci_colors.color_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_colors.color_name_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_colors.color_name_color_name_content::jsonb IS NOT NULL))
+                
+                ORDER BY staging.etl_rsci_colors.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.color_name (
+                    resourceinstanceid, 
+tileid, 
+color_name_content, 
+color_name_type, 
+color_name_language, 
+has_color
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+color_name_tileid::uuid, 
+color_name_color_name_content::jsonb, 
+color_name_color_name_type::jsonb, 
+color_name_color_name_language::jsonb, 
+has_color_tileid::uuid
+                
+                FROM staging.etl_rsci_colors
+                WHERE (staging.etl_rsci_colors.color_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_colors.color_name_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_colors.color_name_color_name_content::jsonb IS NOT NULL))
+                
+                ORDER BY staging.etl_rsci_colors.resourceinstanceid
                 
                 ;
                 
@@ -1727,11 +1701,11 @@ graphid::uuid,
 graphpublicationid::uuid, 
 principaluser_id::integer
                 
-                FROM staging.rsci_current_location
-                WHERE (staging.rsci_current_location.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
-((staging.rsci_current_location.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_rsci_current_location
+                WHERE (staging.etl_rsci_current_location.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.etl_rsci_current_location.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.rsci_current_location.resourceinstanceid
+                ORDER BY staging.etl_rsci_current_location.resourceinstanceid
                 
                 ;
                 
@@ -1747,12 +1721,12 @@ current_location
 cur_loc_tileid::uuid, 
 cur_loc_current_location::jsonb
                 
-                FROM staging.rsci_current_location
-                WHERE (staging.rsci_current_location.cur_loc_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_current_location.cur_loc_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_current_location.cur_loc_current_location::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_current_location
+                WHERE (staging.etl_rsci_current_location.cur_loc_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_current_location.cur_loc_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_current_location.cur_loc_current_location::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_current_location.resourceinstanceid
+                ORDER BY staging.etl_rsci_current_location.resourceinstanceid
                 
                 ;
                 
@@ -1774,12 +1748,12 @@ cur_loc_statement_current_location_statement_type::jsonb,
 cur_loc_statement_current_location_statement_language::jsonb, 
 cur_loc_tileid::uuid
                 
-                FROM staging.rsci_current_location
-                WHERE (staging.rsci_current_location.cur_loc_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_current_location.cur_loc_statement_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_current_location.cur_loc_statement_current_location_statement_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_current_location
+                WHERE (staging.etl_rsci_current_location.cur_loc_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_current_location.cur_loc_statement_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_current_location.cur_loc_statement_current_location_statement_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_current_location.resourceinstanceid
+                ORDER BY staging.etl_rsci_current_location.resourceinstanceid
                 
                 ;
                 
@@ -1803,11 +1777,11 @@ graphid::uuid,
 graphpublicationid::uuid, 
 principaluser_id::integer
                 
-                FROM staging.rsci_chemical_attributes
-                WHERE (staging.rsci_chemical_attributes.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
-((staging.rsci_chemical_attributes.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_rsci_chemical_attributes
+                WHERE (staging.etl_rsci_chemical_attributes.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.etl_rsci_chemical_attributes.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.rsci_chemical_attributes.resourceinstanceid
+                ORDER BY staging.etl_rsci_chemical_attributes.resourceinstanceid
                 
                 ;
                 
@@ -1825,12 +1799,12 @@ old_barcode_no_tileid::uuid,
 old_barcode_no_identifier_content::jsonb, 
 old_barcode_no_identifier_type::jsonb
                 
-                FROM staging.rsci_chemical_attributes
-                WHERE (staging.rsci_chemical_attributes.old_barcode_no_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_chemical_attributes.old_barcode_no_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_chemical_attributes.old_barcode_no_identifier_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_chemical_attributes
+                WHERE (staging.etl_rsci_chemical_attributes.old_barcode_no_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_chemical_attributes.old_barcode_no_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_chemical_attributes.old_barcode_no_identifier_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_chemical_attributes.resourceinstanceid
+                ORDER BY staging.etl_rsci_chemical_attributes.resourceinstanceid
                 
                 ;
                 
@@ -1848,12 +1822,12 @@ cat_id_tileid::uuid,
 cat_id_identifier_content::jsonb, 
 cat_id_identifier_type::jsonb
                 
-                FROM staging.rsci_chemical_attributes
-                WHERE (staging.rsci_chemical_attributes.cat_id_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_chemical_attributes.cat_id_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_chemical_attributes.cat_id_identifier_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_chemical_attributes
+                WHERE (staging.etl_rsci_chemical_attributes.cat_id_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_chemical_attributes.cat_id_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_chemical_attributes.cat_id_identifier_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_chemical_attributes.resourceinstanceid
+                ORDER BY staging.etl_rsci_chemical_attributes.resourceinstanceid
                 
                 ;
                 
@@ -1869,12 +1843,12 @@ standard_type
 standard_type_tileid::uuid, 
 standard_type_standard_type::jsonb
                 
-                FROM staging.rsci_chemical_attributes
-                WHERE (staging.rsci_chemical_attributes.standard_type_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_chemical_attributes.standard_type_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_chemical_attributes.standard_type_standard_type::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_chemical_attributes
+                WHERE (staging.etl_rsci_chemical_attributes.standard_type_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_chemical_attributes.standard_type_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_chemical_attributes.standard_type_standard_type::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_chemical_attributes.resourceinstanceid
+                ORDER BY staging.etl_rsci_chemical_attributes.resourceinstanceid
                 
                 ;
                 
@@ -1894,12 +1868,12 @@ chem_name_name_content::jsonb,
 chem_name_name_type_::jsonb, 
 chem_name_name_language_::jsonb
                 
-                FROM staging.rsci_chemical_attributes
-                WHERE (staging.rsci_chemical_attributes.chem_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_chemical_attributes.chem_name_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_chemical_attributes.chem_name_name_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_chemical_attributes
+                WHERE (staging.etl_rsci_chemical_attributes.chem_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_chemical_attributes.chem_name_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_chemical_attributes.chem_name_name_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.rsci_chemical_attributes.resourceinstanceid
+                ORDER BY staging.etl_rsci_chemical_attributes.resourceinstanceid
                 
                 ;
                 
@@ -1919,12 +1893,12 @@ chem_no_chemical_material_identifier_content::jsonb,
 chem_no_chemical_material_identifier_type::jsonb, 
 chem_no_chemical_material_name_content::text
                 
-                FROM staging.rsci_chemical_attributes
-                WHERE (staging.rsci_chemical_attributes.chem_no_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.rsci_chemical_attributes.chem_no_tileid::uuid IS NOT NULL) AND 
-((staging.rsci_chemical_attributes.chem_no_chemical_material_identifier_content::jsonb IS NOT NULL) OR (staging.rsci_chemical_attributes.chem_no_chemical_material_name_content::text IS NOT NULL))
+                FROM staging.etl_rsci_chemical_attributes
+                WHERE (staging.etl_rsci_chemical_attributes.chem_no_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_chemical_attributes.chem_no_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_chemical_attributes.chem_no_chemical_material_identifier_content::jsonb IS NOT NULL) OR (staging.etl_rsci_chemical_attributes.chem_no_chemical_material_name_content::text IS NOT NULL))
                 
-                ORDER BY staging.rsci_chemical_attributes.resourceinstanceid
+                ORDER BY staging.etl_rsci_chemical_attributes.resourceinstanceid
                 
                 ;
                 

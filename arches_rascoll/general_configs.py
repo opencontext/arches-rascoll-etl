@@ -31,7 +31,7 @@ IMPORT_TABLE_NAME = 'rsci'
 
 # For this demo, we're using the AfRSC resource and sample collection resource model.
 # Alter this as needed to fit your own
-RSCI_UUID = 'bda239c6-d376-11ef-a239-0275dc2ded29'
+RSCI_UUID = 'd4e956f7-9fad-4fd2-94e3-563a3b2c3585'
 RSCI_MODEL_NAME = 'reference_and_sample_collection_item'
 
 
@@ -165,7 +165,7 @@ def value_transform_facet_type_list_items_obj(value, default_value=FACET_TYPE_RS
 
 RSCI_MAPPING_CONFIGS = {
     'model_id': RSCI_UUID,
-    'staging_table': 'rsci',
+    'staging_table': 'etl_rsci',
     'model_staging_schema': RSCI_MODEL_NAME,
     'raw_pk_col': 'rsci_uuid',
     'mappings': [
@@ -194,7 +194,7 @@ RSCI_MAPPING_CONFIGS = {
             'default_values': [
                 ('name_type_', JSONB, NAME_TYPES_PHYSICAL_THING_PRIMARY_LIST_ITEMS,),
                 ('name_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
+                # ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
             ], 
         },
         {
@@ -208,7 +208,7 @@ RSCI_MAPPING_CONFIGS = {
             'default_values': [
                 ('name_type_', JSONB, NAME_TYPES_PHYSICAL_THING_ALTERNATE_LIST_ITEMS,),
                 ('name_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
+                # ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
             ],
         },
         {
@@ -221,7 +221,7 @@ RSCI_MAPPING_CONFIGS = {
             'make_tileid': True,
             'default_values': [
                 ('identifier_type', JSONB, ID_TYPE_PHYSICAL_THING_BARCODE_LIST_ITEMS,),
-                ('nodegroupid', UUID, 'bda3962c-d376-11ef-a239-0275dc2ded29',),
+                # ('nodegroupid', UUID, 'bda3962c-d376-11ef-a239-0275dc2ded29',),
             ],
         },
         {
@@ -234,7 +234,7 @@ RSCI_MAPPING_CONFIGS = {
             'make_tileid': True,
             'default_values': [
                 ('facet_type_metatype', JSONB, METATYPE_FACET_TYPE_LIST_ITEMS,),
-                ('nodegroupid', UUID, 'e9b8d73c-09b7-11f0-b84f-0275dc2ded29',),
+                # ('nodegroupid', UUID, 'e9b8d73c-09b7-11f0-b84f-0275dc2ded29',),
             ],
         }
     ],
@@ -262,7 +262,7 @@ PLACE_STATEMENT_TYPE_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
 
 PLACE_MAPPING_CONFIGS = {
     'model_id': PLACE_MODEL_UUID,
-    'staging_table': PLACE_MODEL_NAME,
+    'staging_table': f'etl_{PLACE_MODEL_NAME}',
     'model_staging_schema': PLACE_MODEL_NAME,
     'raw_pk_col': 'place_uuid',
     'load_path': IMPORT_PLACES_CSV,
@@ -287,13 +287,13 @@ PLACE_MAPPING_CONFIGS = {
             'targ_table': 'name',
             'stage_field_prefix': 'specific_place_',
             'value_transform': make_lang_dict_value,
-            'targ_field': 'content',
+            'targ_field': 'name_content',
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('type', JSONB, NAME_TYPES_GENERIC_PREFERRED_LIST_ITEMS,),
-                ('language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                ('nodegroupid', UUID, '3ddab19c-d771-11ef-825b-0275dc2ded29',),
+                ('name_type', JSONB, NAME_TYPES_GENERIC_PREFERRED_LIST_ITEMS,),
+                ('name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # ('nodegroupid', UUID, '3ddab19c-d771-11ef-825b-0275dc2ded29',),
             ],
         },
         {
@@ -301,14 +301,14 @@ PLACE_MAPPING_CONFIGS = {
             'targ_table': 'statement',
             'stage_field_prefix': 'statement_',
             'value_transform': make_lang_dict_value,
-            'targ_field': 'content',
+            'targ_field': 'statement_content',
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('type_metatype', JSONB, METATYPE_BRIEF_TEXT_LIST_ITEMS),
-                ('type', JSONB,  PLACE_STATEMENT_TYPE_LIST_ITEMS,),
-                ('language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                ('nodegroupid', UUID, '3ddac588-d771-11ef-825b-0275dc2ded29',),
+                ('statement_type_metatype', JSONB, METATYPE_BRIEF_TEXT_LIST_ITEMS),
+                ('statement_type', JSONB,  PLACE_STATEMENT_TYPE_LIST_ITEMS,),
+                ('statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # ('nodegroupid', UUID, '3ddac588-d771-11ef-825b-0275dc2ded29',),
             ],
         },
         {
@@ -320,7 +320,7 @@ PLACE_MAPPING_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('nodegroupid', UUID, '3ddaa8e6-d771-11ef-825b-0275dc2ded29',),
+                # ('nodegroupid', UUID, '3ddaa8e6-d771-11ef-825b-0275dc2ded29',),
             ], 
         },
         {
@@ -333,7 +333,7 @@ PLACE_MAPPING_CONFIGS = {
             'make_tileid': True,
             'source_geojson': True,
             'default_values': [
-                ('nodegroupid', UUID, '3ddabeda-d771-11ef-825b-0275dc2ded29',),
+                # ('nodegroupid', UUID, '3ddabeda-d771-11ef-825b-0275dc2ded29',),
             ], 
         },
     ],
@@ -362,7 +362,7 @@ GROUP_DATA = [
 
 GROUP_MAPPING_CONFIGS = {
     'model_id': GROUP_MODEL_UUID,
-    'staging_table': GROUP_MODEL_NAME,
+    'staging_table': f'etl_{GROUP_MODEL_NAME}',
     'model_staging_schema': GROUP_MODEL_NAME,
     'raw_pk_col': 'group_uuid',
     'load_path': IMPORT_RAW_GROUP_CSV,
@@ -392,7 +392,7 @@ GROUP_MAPPING_CONFIGS = {
             'default_values': [
                 ('name_type', JSONB, NAME_TYPES_GENERIC_PREFERRED_LIST_ITEMS,),
                 ('name_language',  JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                ('nodegroupid', UUID, '3695cff8-d770-11ef-8f5d-0275dc2ded29',),
+                # ('nodegroupid', UUID, '3695cff8-d770-11ef-8f5d-0275dc2ded29',),
             ],
         },
         
@@ -418,7 +418,7 @@ PERSON_FULL_NAME_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
 
 PERSON_MAPPING_CONFIGS = {
     'model_id': PERSON_MODEL_UUID,
-    'staging_table': PERSON_MODEL_NAME,
+    'staging_table': f'etl_{PERSON_MODEL_NAME}',
     'model_staging_schema': PERSON_MODEL_NAME,
     'raw_pk_col': 'person_uuid',
     'load_path': IMPORT_RAW_PERSON_CSV,
@@ -448,7 +448,7 @@ PERSON_MAPPING_CONFIGS = {
             'default_values': [
                 ('name_type', JSONB, PERSON_FULL_NAME_LIST_ITEMS,),
                 ('name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                ('nodegroupid', UUID, 'e1d0f244-d770-11ef-8c40-0275dc2ded29',),
+                # ('nodegroupid', UUID, 'e1d0f244-d770-11ef-8c40-0275dc2ded29',),
             ],
         },      
     ],
@@ -474,7 +474,7 @@ SET_DATA = [
 
 SET_MAPPING_CONFIGS = {
     'model_id': SET_MODEL_UUID,
-    'staging_table': SET_MODEL_NAME,
+    'staging_table': f'etl_{SET_MODEL_NAME}',
     'model_staging_schema': SET_MODEL_NAME,
     'raw_pk_col': 'set_uuid',
     'load_path': IMPORT_RAW_SET_CSV,
@@ -504,7 +504,7 @@ SET_MAPPING_CONFIGS = {
             'default_values': [
                 ('name_type', JSONB, NAME_TYPES_GENERIC_PREFERRED_LIST_ITEMS,),
                 ('name_language',  JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                ('nodegroupid', UUID, 'da0ef9d8-d771-11ef-af99-0275dc2ded29',),
+                # ('nodegroupid', UUID, 'da0ef9d8-d771-11ef-af99-0275dc2ded29',),
             ],
         },
         
@@ -547,7 +547,7 @@ STATEMENT_PHYS_THING_EXPERIMENT_DESCRIPTION_LIST_ITEMS = get_controlled_list_obj
 
 RSCI_STATEMENTS_CONFIGS = {
     'model_id': RSCI_UUID,
-    'staging_table': 'rsci_statements',
+    'staging_table': 'etl_rsci_statements',
     'model_staging_schema': RSCI_MODEL_NAME,
     'raw_pk_col': 'rsci_uuid',
     'mappings': [
@@ -576,7 +576,7 @@ RSCI_STATEMENTS_CONFIGS = {
             'default_values': [
                 ('statement_type', JSONB, STATEMENT_PHYS_THING_NOTE_LIST_ITEMS,),
                 ('statement_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
+                # # ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
             ],
         },
         {
@@ -590,7 +590,7 @@ RSCI_STATEMENTS_CONFIGS = {
             'default_values': [
                 ('statement_type', JSONB, STATEMENT_PHYS_THING_SAMPLE_DESCRIPTION_LIST_ITEMS,),
                 ('statement_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
+                # # ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
             ],
         },
         {
@@ -604,7 +604,7 @@ RSCI_STATEMENTS_CONFIGS = {
             'default_values': [
                 ('statement_type', JSONB, STATEMENT_PHYS_THING_EXPERIMENT_DESCRIPTION_LIST_ITEMS,),
                 ('statement_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
+                # # ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
             ],
         }
     ],
@@ -632,7 +632,7 @@ SAFETY_CLASSIFICATION_NFPA_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
 
 RSCI_SAFETY_GROUP_MAPPINGS = {
     'model_id': RSCI_UUID,
-    'staging_table': 'rsci_group_safety',
+    'staging_table': 'etl_rsci_group_safety',
     'model_staging_schema': RSCI_MODEL_NAME,
     'raw_pk_col': 'rsci_uuid',
     'load_path': IMPORT_RSCI_GROUPS_SAFTEY_CSV,
@@ -661,7 +661,7 @@ RSCI_SAFETY_GROUP_MAPPINGS = {
             'make_tileid': True,
             'default_values': [
                 ('nfpa_safety_classification_classification', JSONB, SAFETY_CLASSIFICATION_NFPA_LIST_ITEMS,),
-                # ('nodegroupid', UUID, 'bda455bc-d376-11ef-a239-0275dc2ded29',),
+                # # ('nodegroupid', UUID, 'bda455bc-d376-11ef-a239-0275dc2ded29',),
             ],
             'related_resources': [
                 {
@@ -711,7 +711,7 @@ TIMESPAN_TYPES_APPROXIMATE_LIST_ITEMS = None
 
 RSCI_ACQUISITION_MAPPINGS = {
     'model_id': RSCI_UUID,
-    'staging_table': 'rsci_acquistition',
+    'staging_table': 'etl_rsci_acquistition',
     'model_staging_schema': RSCI_MODEL_NAME,
     'raw_pk_col': 'rsci_uuid',
     'load_path': IMPORT_RSCI_ACQUISITION_CSV,
@@ -889,7 +889,7 @@ REL_RSCI_PLACE_NODEID = None
 
 RSCI_PRODUCTION_CONFIGS = {
     'model_id': RSCI_UUID,
-    'staging_table': 'rsci_production',
+    'staging_table': 'etl_rsci_production',
     'model_staging_schema': RSCI_MODEL_NAME,
     'raw_pk_col': 'rsci_uuid',
     'load_path': IMPORT_RAW_PROD_CSV,
@@ -918,7 +918,7 @@ RSCI_PRODUCTION_CONFIGS = {
             'make_tileid': True,
             'default_values': [
                 ('production_type', JSONB, EVENT_TYPE_PRODUCTION_LIST_ITEMS,),
-                # ('nodegroupid', UUID, PRODUCTION_NODE_ID,),
+                # # ('nodegroupid', UUID, PRODUCTION_NODE_ID,),
             ],
             'related_resources': [
                 {
@@ -972,7 +972,7 @@ RSCI_PRODUCTION_CONFIGS = {
             'data_type': DateTime,
             'make_tileid': True,
             'default_values': [
-                # ('nodegroupid', UUID, 'bda37764-d376-11ef-a239-0275dc2ded29',),
+                # # ('nodegroupid', UUID, 'bda37764-d376-11ef-a239-0275dc2ded29',),
             ],
             'related_tileid': {
                 'source_tile_field': 'prod_1_tileid',
@@ -1015,7 +1015,7 @@ RSCI_PRODUCTION_CONFIGS = {
             'default_values': [
                 ('production_statement_type', JSONB, STATEMENT_PRODUCER_DESC_LIST_ITEMS,),
                 ('production_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # ('nodegroupid', UUID, 'bda36f9e-d376-11ef-a239-0275dc2ded29',),
+                # # ('nodegroupid', UUID, 'bda36f9e-d376-11ef-a239-0275dc2ded29',),
             ],
         },
     ],
@@ -1111,7 +1111,7 @@ def make_material_list_items(value):
 
 RSCI_MATERIALS_TYPE_CONFIGS = {
     'model_id': RSCI_UUID,
-    'staging_table': 'rsci_materials_types',
+    'staging_table': 'etl_rsci_materials_types',
     'model_staging_schema': RSCI_MODEL_NAME,
     'raw_pk_col': 'rsci_uuid',
     'load_path': IMPORT_RAW_RSCI_MATERIALS_OBJ_TYPE_CSV,
@@ -1141,7 +1141,7 @@ RSCI_MATERIALS_TYPE_CONFIGS = {
             'default_values': [
                 ('material_data_assignment_name_type', JSONB, NAME_PHYSICAL_THINGS_CHEMICAL_NAMES_LIST_ITEMS,),
                 ('material_data_assignment_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
+                # ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
             ], 
         },
         {
@@ -1155,7 +1155,7 @@ RSCI_MATERIALS_TYPE_CONFIGS = {
             'default_values': [
                 ('name_type_', JSONB, NAME_PHYSICAL_THINGS_GBIF_LIST_ITEMS,),
                 ('name_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
+                # ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
             ], 
         },
          {
@@ -1169,7 +1169,7 @@ RSCI_MATERIALS_TYPE_CONFIGS = {
             'default_values': [
                 ('statement_type', JSONB, STATEMENT_PHYS_THING_BIO_TAXON_LIST_ITEMS,),
                 ('statement_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
+                # # ('nodegroupid', UUID, 'bda499a0-d376-11ef-a239-0275dc2ded29',),
             ], 
         },
         {
@@ -1182,7 +1182,7 @@ RSCI_MATERIALS_TYPE_CONFIGS = {
             'make_tileid': True,
             'default_values': [
                 ('mixture_type_metatype', JSONB, METATYPE_MATERIAL_COMPONENTS_LIST_ITEMS,),
-                # ('nodegroupid', UUID, '53f96a86-0908-11f0-9f70-0275dc2ded29',),
+                # # ('nodegroupid', UUID, '53f96a86-0908-11f0-9f70-0275dc2ded29',),
             ], 
         },
         {
@@ -1194,7 +1194,7 @@ RSCI_MATERIALS_TYPE_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                # ('nodegroupid', UUID, '398111dc-0907-11f0-9e45-0275dc2ded29',),
+                # # ('nodegroupid', UUID, '398111dc-0907-11f0-9e45-0275dc2ded29',),
             ], 
         },
         {
@@ -1206,7 +1206,7 @@ RSCI_MATERIALS_TYPE_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                # ('nodegroupid', UUID, '398111dc-0907-11f0-9e45-0275dc2ded29',),
+                # # ('nodegroupid', UUID, '398111dc-0907-11f0-9e45-0275dc2ded29',),
             ], 
         },
         {
@@ -1218,7 +1218,7 @@ RSCI_MATERIALS_TYPE_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                # ('nodegroupid', UUID, 'bda47b64-d376-11ef-a239-0275dc2ded29',),
+                # # ('nodegroupid', UUID, 'bda47b64-d376-11ef-a239-0275dc2ded29',),
             ], 
         },
     ],
@@ -1273,10 +1273,12 @@ DIMENSION_TYPES_PHYSICAL_UNITS_GRAMS_LIST_ITEMS = get_controlled_list_objs_by_pr
     list_id='44295221-1215-4359-a079-234b317f65b7',
 )
 
+# NOTE: TODO Add "Mixture Pigment" to the component has part mappings and etl.
+# The specific pigment won't be a controlled vocab, but will go intop the part name.
 
 RSCI_COMPONENT_CONFIGS = {
     'model_id': RSCI_UUID,
-    'staging_table': 'rsci_components',
+    'staging_table': 'etl_rsci_components',
     'model_staging_schema': RSCI_MODEL_NAME,
     'raw_pk_col': 'rsci_uuid',
     'load_path': IMPORT_RAW_RSCI_COMPONENTS_CSV,
@@ -1307,7 +1309,7 @@ RSCI_COMPONENT_CONFIGS = {
                 ('part_name_type', JSONB, NAME_PHYSICAL_THINGS_COMPONENT_NAME_LIST_ITEMS,),
                 ('part_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('part_type', JSONB, OBJECT_PART_TYPES_COMPONENTS_LIST_ITEMS,),
-                # ('nodegroupid', UUID, '6ee83c9c-08e4-11f0-81c1-0275dc2ded29',),
+                # # ('nodegroupid', UUID, '6ee83c9c-08e4-11f0-81c1-0275dc2ded29',),
             ],
         },
         {
@@ -1321,7 +1323,7 @@ RSCI_COMPONENT_CONFIGS = {
             'default_values': [
                 ('part_statement_type', JSONB, STATEMENT_PHYS_THING_MATERIALS_DESCRIPTION_LIST_ITEMS,),
                 ('part_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+                # # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
             ],
             'related_tileid': {
                 'source_tile_field': 'comp1_tileid',
@@ -1339,7 +1341,7 @@ RSCI_COMPONENT_CONFIGS = {
             'default_values': [
                 ('part_dimension_type_', JSONB, DIMENSION_TYPES_PHYSICAL_THING_MASS_LIST_ITEMS,),
                 ('part_dimension_unit', JSONB, DIMENSION_TYPES_PHYSICAL_UNITS_GRAMS_LIST_ITEMS,),
-                # ('nodegroupid', UUID, '6ee8420a-08e4-11f0-81c1-0275dc2ded29',),
+                # # ('nodegroupid', UUID, '6ee8420a-08e4-11f0-81c1-0275dc2ded29',),
             ],
             'related_tileid': {
                 'source_tile_field': 'comp1_tileid',
@@ -1359,7 +1361,7 @@ RSCI_COMPONENT_CONFIGS = {
                 ('part_name_type', JSONB, NAME_PHYSICAL_THINGS_COMPONENT_NAME_LIST_ITEMS,),
                 ('part_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('part_type', JSONB, OBJECT_PART_TYPES_COMPONENTS_LIST_ITEMS,),
-                # ('nodegroupid', UUID, '6ee83c9c-08e4-11f0-81c1-0275dc2ded29',),
+                # # ('nodegroupid', UUID, '6ee83c9c-08e4-11f0-81c1-0275dc2ded29',),
             ],
         },
         {
@@ -1373,7 +1375,7 @@ RSCI_COMPONENT_CONFIGS = {
             'default_values': [
                 ('part_statement_type', JSONB, STATEMENT_PHYS_THING_MATERIALS_DESCRIPTION_LIST_ITEMS,),
                 ('part_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+                # # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
             ],
             'related_tileid': {
                 'source_tile_field': 'comp2_tileid',
@@ -1391,7 +1393,7 @@ RSCI_COMPONENT_CONFIGS = {
             'default_values': [
                 ('part_dimension_type_', JSONB, DIMENSION_TYPES_PHYSICAL_THING_MASS_LIST_ITEMS,),
                 ('part_dimension_unit', JSONB, DIMENSION_TYPES_PHYSICAL_UNITS_GRAMS_LIST_ITEMS,),
-                # ('nodegroupid', UUID, '6ee8420a-08e4-11f0-81c1-0275dc2ded29',),
+                # # ('nodegroupid', UUID, '6ee8420a-08e4-11f0-81c1-0275dc2ded29',),
             ],
             'related_tileid': {
                 'source_tile_field': 'comp2_tileid',
@@ -1408,7 +1410,7 @@ RSCI_COMPONENT_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                # ('nodegroupid', UUID, '6ee83594-08e4-11f0-81c1-0275dc2ded29',),
+                # # ('nodegroupid', UUID, '6ee83594-08e4-11f0-81c1-0275dc2ded29',),
             ], 
         },
         {
@@ -1422,7 +1424,7 @@ RSCI_COMPONENT_CONFIGS = {
             'default_values': [
                 ('part_statement_type', JSONB, STATEMENT_PHYS_THING_MATERIALS_DESCRIPTION_LIST_ITEMS,),
                 ('part_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+                # # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
             ],
             'related_tileid': {
                 'source_tile_field': 'comp3_tileid',
@@ -1480,7 +1482,7 @@ COLOR_NAMES_COLOUR_INDEX_TYPE_LIST_ITEMS = get_controlled_list_objs_by_pref_labe
 
 RSCI_COLORS_CONFIGS = {
     'model_id': RSCI_UUID,
-    'staging_table': 'rsci_colors',
+    'staging_table': 'etl_rsci_colors',
     'model_staging_schema': RSCI_MODEL_NAME,
     'raw_pk_col': 'rsci_uuid',
     'load_path': IMPORT_RAW_RSCI_COLORS_CSV ,
@@ -1508,7 +1510,7 @@ RSCI_COLORS_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                # ('nodegroupid', UUID, '6ee83594-08e4-11f0-81c1-0275dc2ded29',),
+                # # ('nodegroupid', UUID, '6ee83594-08e4-11f0-81c1-0275dc2ded29',),
             ], 
         },
         {
@@ -1522,7 +1524,7 @@ RSCI_COLORS_CONFIGS = {
             'default_values': [
                 ('color_name_type', JSONB, COLOR_NAMES_LEGACY_COLOR_NAMES_TYPE_LIST_ITEMS,),
                 ('color_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+                # # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
             ],
             'related_tileid': {
                 'source_tile_field': 'has_color_tileid',
@@ -1540,7 +1542,7 @@ RSCI_COLORS_CONFIGS = {
             'default_values': [
                 ('color_name_type', JSONB, COLOR_NAMES_COLOUR_INDEX_TYPE_LIST_ITEMS,),
                 ('color_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+                # # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
             ],
             'related_tileid': {
                 'source_tile_field': 'has_color_tileid',
@@ -1558,7 +1560,7 @@ RSCI_COLORS_CONFIGS = {
             'default_values': [
                 ('color_name_type', JSONB, COLOR_NAMES_COLOUR_INDEX_TYPE_LIST_ITEMS,),
                 ('color_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+                # # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
             ],
             'related_tileid': {
                 'source_tile_field': 'has_color_tileid',
@@ -1576,7 +1578,7 @@ RSCI_COLORS_CONFIGS = {
             'default_values': [
                 ('color_name_type', JSONB, COLOR_NAMES_COLOUR_INDEX_TYPE_LIST_ITEMS,),
                 ('color_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+                # # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
             ],
             'related_tileid': {
                 'source_tile_field': 'has_color_tileid',
@@ -1594,7 +1596,7 @@ RSCI_COLORS_CONFIGS = {
             'default_values': [
                 ('color_name_type', JSONB, COLOR_NAMES_COLOUR_INDEX_TYPE_LIST_ITEMS,),
                 ('color_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+                # # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
             ],
             'related_tileid': {
                 'source_tile_field': 'has_color_tileid',
@@ -1615,7 +1617,7 @@ IMPORT_RAW_RSCI_CURRENT_LOCATION_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-curr
 
 RSCI_CURRENT_LOCATION_CONFIGS = {
     'model_id': RSCI_UUID,
-    'staging_table': 'rsci_current_location',
+    'staging_table': 'etl_rsci_current_location',
     'model_staging_schema': RSCI_MODEL_NAME,
     'raw_pk_col': 'rsci_uuid',
     'load_path': IMPORT_RAW_RSCI_CURRENT_LOCATION_CSV,
@@ -1643,7 +1645,7 @@ RSCI_CURRENT_LOCATION_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                # ('nodegroupid', UUID, 'bda4a954-d376-11ef-a239-0275dc2ded29',),
+                # # ('nodegroupid', UUID, 'bda4a954-d376-11ef-a239-0275dc2ded29',),
             ], 
         },
         {
@@ -1657,7 +1659,7 @@ RSCI_CURRENT_LOCATION_CONFIGS = {
             'default_values': [
                 ('current_location_statement_type', JSONB, PLACE_STATEMENT_TYPE_LIST_ITEMS,),
                 ('current_location_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # ('nodegroupid', UUID, 'c7ab9e8a-08e1-11f0-a3e8-0275dc2ded29',),
+                # # ('nodegroupid', UUID, 'c7ab9e8a-08e1-11f0-a3e8-0275dc2ded29',),
             ],
             'related_tileid': {
                 'source_tile_field': 'cur_loc_tileid',
@@ -1721,7 +1723,7 @@ def make_standard_type_list_items(value):
 
 RSCI_CHEMICALS_CONFIGS = {
     'model_id': RSCI_UUID,
-    'staging_table': 'rsci_chemical_attributes',
+    'staging_table': 'etl_rsci_chemical_attributes',
     'model_staging_schema': RSCI_MODEL_NAME,
     'raw_pk_col': 'rsci_uuid',
     'mappings': [
@@ -1749,7 +1751,7 @@ RSCI_CHEMICALS_CONFIGS = {
             'make_tileid': True,
             'default_values': [
                 ('identifier_type', JSONB, ID_TYPE_PHYSICAL_THING_OLD_BARCODE_LIST_ITEMS,),
-                # ('nodegroupid', UUID, 'bda3962c-d376-11ef-a239-0275dc2ded29',),
+                # # ('nodegroupid', UUID, 'bda3962c-d376-11ef-a239-0275dc2ded29',),
             ],
         },
         {
@@ -1762,7 +1764,7 @@ RSCI_CHEMICALS_CONFIGS = {
             'make_tileid': True,
             'default_values': [
                 ('identifier_type', JSONB, ID_TYPE_PHYSICAL_THING_MANUFACTURER_CATALOG_ID_LIST_ITEMS,),
-                # ('nodegroupid', UUID, 'bda3962c-d376-11ef-a239-0275dc2ded29',),
+                # # ('nodegroupid', UUID, 'bda3962c-d376-11ef-a239-0275dc2ded29',),
             ],
         },
         {
@@ -1788,7 +1790,7 @@ RSCI_CHEMICALS_CONFIGS = {
             'default_values': [
                 ('name_type_', JSONB, NAME_TYPES_PHYSICAL_THING_CHEMICAL_NAME_LIST_ITEMS,),
                 ('name_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # ('nodegroupid', UUID, '6ee83c9c-08e4-11f0-81c1-0275dc2ded29',),
+                # # ('nodegroupid', UUID, '6ee83c9c-08e4-11f0-81c1-0275dc2ded29',),
             ],
         },
         {
