@@ -119,6 +119,12 @@ $$ language plpgsql;
 
 
 
+UPDATE nodes
+SET name = REPLACE(name, '_time-span_edtf', '_time_span_edtf')
+WHERE name LIKE '%_time-span_edtf%';
+
+
+
 -- FUNCTION: public.__arches_instance_view_update()
 
 -- DROP FUNCTION IF EXISTS public.__arches_instance_view_update();
@@ -912,27 +918,21 @@ acq_tileid::uuid
                 INSERT INTO reference_and_sample_collection_item.acquisition_timespan (
                     resourceinstanceid, 
 tileid, 
-acquisition_timespan_begin_of_the_begin, 
+acquisition_timespan_edtf, 
 acquisition_timespan_type, 
-acquisition, 
-acquisition_timespan_end_of_the_begin, 
-acquisition_timespan_begin_of_the_end, 
-acquisition_timespan_end_of_the_end
+acquisition
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 acq_time_tileid::uuid, 
-acq_time_acquisition_timespan_begin_of_the_begin::timestamp, 
+acq_time_acquisition_timespan_edtf::text, 
 acq_time_acquisition_timespan_type::jsonb, 
-acq_tileid::uuid, 
-acq_time_acquisition_timespan_end_of_the_begin::timestamp, 
-acq_time_acquisition_timespan_begin_of_the_end::timestamp, 
-acq_time_acquisition_timespan_end_of_the_end::timestamp
+acq_tileid::uuid
                 
                 FROM staging.etl_rsci_acquistition
                 WHERE (staging.etl_rsci_acquistition.acq_time_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.etl_rsci_acquistition.acq_time_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_acquistition.acq_time_acquisition_timespan_begin_of_the_begin::timestamp IS NOT NULL) OR (staging.etl_rsci_acquistition.acq_time_acquisition_timespan_end_of_the_begin::timestamp IS NOT NULL) OR (staging.etl_rsci_acquistition.acq_time_acquisition_timespan_begin_of_the_end::timestamp IS NOT NULL) OR (staging.etl_rsci_acquistition.acq_time_acquisition_timespan_end_of_the_end::timestamp IS NOT NULL))
+((staging.etl_rsci_acquistition.acq_time_acquisition_timespan_edtf::text IS NOT NULL))
                 
                 ORDER BY staging.etl_rsci_acquistition.resourceinstanceid
                 

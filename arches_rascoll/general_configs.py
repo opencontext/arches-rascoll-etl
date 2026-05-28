@@ -822,12 +822,12 @@ RSCI_ACQUISITION_MAPPINGS = {
             },
         },
         {
-            'raw_col': 'Acquisition Date__begin_of_the_begin',
+            'raw_col': 'Acquisition Date__edtf',
             'targ_table': 'acquisition_timespan',
             'stage_field_prefix': 'acq_time_',
             'value_transform': copy_value,
-            'targ_field': 'acquisition_timespan_begin_of_the_begin',
-            'data_type': DateTime,
+            'targ_field': 'acquisition_timespan_edtf',
+            'data_type': Text,
             'make_tileid': True,
             'default_values': [
                 ('acquisition_timespan_type', JSONB, TIMESPAN_TYPES_APPROXIMATE_LIST_ITEMS,),
@@ -836,27 +836,6 @@ RSCI_ACQUISITION_MAPPINGS = {
                 'source_tile_field': 'acq_tileid',
                 'targ_tile_field': 'acquisition',
             },
-            'tile_other_fields': [
-                # Mappings for other fields to include in the same tile
-                {
-                    'raw_col': 'Acquisition Date__end_of_the_begin',
-                    'targ_field': 'acquisition_timespan_end_of_the_begin',
-                    'data_type': DateTime,
-                    'value_transform': copy_value,
-                },
-                {
-                    'raw_col': 'Acquisition Date__begin_of_the_end',
-                    'targ_field': 'acquisition_timespan_begin_of_the_end',
-                    'data_type': DateTime,
-                    'value_transform': copy_value,
-                },
-                {
-                    'raw_col': 'Acquisition Date__end_of_the_end',
-                    'targ_field': 'acquisition_timespan_end_of_the_end',
-                    'data_type': DateTime,
-                    'value_transform': copy_value,
-                }
-            ],
         },
     ],
 }

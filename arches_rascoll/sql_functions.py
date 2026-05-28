@@ -271,6 +271,13 @@ POSTGRESQL_AFTER_ETL_FUNCTION = """
 select * from refresh_geojson_geometries();
 """
 
+NODE_SLUG_CHARACTER_FIX = """
+UPDATE nodes
+SET name = REPLACE(name, '_time-span_edtf', '_time_span_edtf')
+WHERE name LIKE '%_time-span_edtf%';
+"""
+
+
 
 CONTROLLED_LIST_ITEM_JSON_FIX = """
 create or replace function __arches_get_node_value_sql(node nodes) returns text as
