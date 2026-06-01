@@ -943,12 +943,12 @@ RSCI_PRODUCTION_CONFIGS = {
             ]
         },
         {
-            'raw_col': 'origin_date_begin_of_begin',
+            'raw_col': 'origin_date_edtf',
             'targ_table': 'production_time',
             'stage_field_prefix': 'pt_',
             'value_transform': copy_value,
-            'targ_field': 'production_time_begin_of_the_begin',
-            'data_type': DateTime,
+            'targ_field': 'production_time_edtf',
+            'data_type': Text,
             'make_tileid': True,
             'default_values': [
                 # # ('nodegroupid', UUID, 'bda37764-d376-11ef-a239-0275dc2ded29',),
@@ -957,27 +957,6 @@ RSCI_PRODUCTION_CONFIGS = {
                 'source_tile_field': 'prod_1_tileid',
                 'targ_tile_field': 'production_',
             },
-            'tile_other_fields': [
-                # Mappings for other fields to include in the same tile
-                {
-                    'raw_col': 'origin_date_end_of_begin',
-                    'targ_field': 'production_time_end_of_the_begin',
-                    'data_type': DateTime,
-                    'value_transform': copy_value,
-                },
-                {
-                    'raw_col': 'origin_date_begin_of_end',
-                    'targ_field': 'production_time_begin_of_the_end',
-                    'data_type': DateTime,
-                    'value_transform': copy_value,
-                },
-                {
-                    'raw_col': 'origin_date_end_of_end',
-                    'targ_field': 'production_time_end_of_the_end',
-                    'data_type': DateTime,
-                    'value_transform': copy_value,
-                }
-            ],
         },
         {
             'raw_col': 'origination_date_statement',
@@ -1000,9 +979,11 @@ RSCI_PRODUCTION_CONFIGS = {
     ],
 }
 
+
 #---------------------------------#
-#- RSCI MATERIAL CONFIGS --------#
+#- RSCI CHEMICAL MATERIAL CONFIGS #
 #---------------------------------#
+
 
 # Name Types - Physical Thing list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce'
 # pref_labels=['chemical name',]
@@ -1010,6 +991,54 @@ NAME_PHYSICAL_THINGS_CHEMICAL_NAMES_LIST_ITEMS = get_controlled_list_objs_by_pre
     pref_labels=['chemical name',],
     list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce',
 )
+
+IMPORT_RAW_RSCI_CHEMICAL_MATERIAL_CSV = os.path.join(DATA_DIR, 'gci-all-chemical-material.csv')
+
+RSCI_CHEMICAL_MATERIAL_CONFIGS = {
+    'model_id': RSCI_UUID,
+    'staging_table': 'etl_rsci_chemical_material',
+    'model_staging_schema': RSCI_MODEL_NAME,
+    'raw_pk_col': 'rsci_uuid',
+    'load_path': IMPORT_RAW_RSCI_CHEMICAL_MATERIAL_CSV,
+    'mappings': [
+        {
+            'raw_col': 'rsci_uuid',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'default_values': [
+                ('graphid', UUID, RSCI_UUID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+            ], 
+        },
+        {
+            'raw_col': 'Chemical Name',
+            'targ_table': 'chemical_material',
+            'stage_field_prefix': 'chem_',
+            'value_transform': copy_value,
+            'targ_field': 'chemical_material_name_content',
+            'data_type': Text,
+            'make_tileid': True,
+            'default_values': [
+                ('chemical_material_name_type_', JSONB, NAME_PHYSICAL_THINGS_CHEMICAL_NAMES_LIST_ITEMS,),
+                # ('material_data_assignment_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
+            ], 
+        },
+    ],
+}
+
+
+
+#---------------------------------#
+#- RSCI MATERIAL CONFIGS --------#
+#---------------------------------#
+
+
 
 # Name Types - Physical Thing list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce'
 # pref_labels=['GBIF name',]
@@ -1087,7 +1116,6 @@ def make_material_list_items(value):
     )
 
 
-
 RSCI_MATERIALS_TYPE_CONFIGS = {
     'model_id': RSCI_UUID,
     'staging_table': 'etl_rsci_materials_types',
@@ -1107,20 +1135,6 @@ RSCI_MATERIALS_TYPE_CONFIGS = {
                 ('graphid', UUID, RSCI_UUID,),
                 ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
                 ('principaluser_id', Integer, 1,),
-            ], 
-        },
-        {
-            'raw_col': 'Chemical Name',
-            'targ_table': 'material_data_assignment_name',
-            'stage_field_prefix': 'chem_',
-            'value_transform': make_lang_dict_value,
-            'targ_field': 'material_data_assignment_name_content',
-            'data_type': JSONB,
-            'make_tileid': True,
-            'default_values': [
-                ('material_data_assignment_name_type', JSONB, NAME_PHYSICAL_THINGS_CHEMICAL_NAMES_LIST_ITEMS,),
-                ('material_data_assignment_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
             ], 
         },
         {
