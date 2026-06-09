@@ -433,7 +433,9 @@ def prepare_all_sql_inserts(
     sqls = [
         'CREATE SCHEMA IF NOT EXISTS "staging";',
         sql_functions.POSTGRESQL_PERFORMANCE_FIX,
+        sql_functions.CONTROLLED_LIST_ITEM_JSON_FIX,
         sql_functions.NODE_SLUG_CHARACTER_FIX,
+        sql_functions.NODE_CARDINALITY_FIX,
     ]
     if general_configs.ARCHES_V8:
         sqls.append(

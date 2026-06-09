@@ -119,9 +119,91 @@ $$ language plpgsql;
 
 
 
+create or replace function __arches_get_node_value_sql(node nodes) returns text as
+$$
+declare
+    node_value_sql text;
+    select_sql     text = '(t.tiledata->>%L)';
+    datatype       text = 'text';
+begin
+    select_sql = format(select_sql, node.nodeid);
+    if (node.config ->> 'pgDatatype' is not null) then
+        datatype = node.config ->> 'pgDatatype';
+    else
+        case node.datatype
+            when 'geojson-feature-collection' then datatype = 'geometry';
+            when 'string' then datatype = 'jsonb';
+            when 'number' then datatype = 'numeric';
+            when 'boolean' then datatype = 'boolean';
+            when 'resource-instance' then datatype = 'jsonb';
+            when 'resource-instance-list' then datatype = 'jsonb';
+            when 'annotation' then datatype = 'jsonb';
+            when 'file-list' then datatype = 'jsonb';
+            when 'url' then datatype = 'jsonb';
+            when 'date' then datatype = 'timestamp';
+            when 'node-value' then datatype = 'uuid';
+            when 'domain-value' then datatype = 'uuid';
+            when 'domain-value-list' then datatype = 'uuid[]';
+            when 'concept' then datatype = 'uuid';
+            when 'concept-list' then datatype = 'uuid[]';
+            when 'reference' then datatype = 'jsonb';
+            else datatype = 'text';
+            end case;
+    end if;
+    case datatype
+        when 'geometry' then select_sql = format('
+                                st_collect(
+                                    array(
+                                        select st_transform(geom, 4326) from geojson_geometries
+                                        where geojson_geometries.tileid = t.tileid and nodeid = %L
+                                    )
+                                )',
+                                                 node.nodeid
+                                          );
+        when 'timestamp' then select_sql = format(
+                'to_date(
+                    t.tiledata->>%L::text,
+                    %L
+                )',
+                node.nodeid,
+                node.config ->> 'dateFormat'
+                                           );
+        when 'uuid[]' then select_sql = format('(
+                                    CASE
+                                        WHEN t.tiledata->>%1$L is null THEN null
+                                        ELSE ARRAY(
+                                            SELECT jsonb_array_elements_text(
+                                                t.tiledata->%1$L
+                                            )::uuid
+                                        )
+                                    END
+                                )', node.nodeid
+                                        );
+        else null;
+        end case;
+
+
+    node_value_sql = format(
+            '%s::%s as "%s"',
+            select_sql,
+            datatype,
+            __arches_slugify(node.name)
+                     );
+    return node_value_sql;
+end
+$$ language plpgsql volatile;
+
+
+
 UPDATE nodes
 SET name = REPLACE(name, '_time-span_edtf', '_time_span_edtf')
 WHERE name LIKE '%_time-span_edtf%';
+
+
+
+UPDATE node_groups
+SET cardinality = 'n'
+WHERE nodegroupid = '2924a04c-73c0-4d09-972e-089a6630e232';
 
 
 
@@ -1019,25 +1101,19 @@ prod_1_production_type::jsonb,
                 INSERT INTO reference_and_sample_collection_item.production_time (
                     resourceinstanceid, 
 tileid, 
-production_time_begin_of_the_begin, 
-production_, 
-production_time_end_of_the_begin, 
-production_time_begin_of_the_end, 
-production_time_end_of_the_end
+production_time_edtf, 
+production_
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 pt_tileid::uuid, 
-pt_production_time_begin_of_the_begin::timestamp, 
-prod_1_tileid::uuid, 
-pt_production_time_end_of_the_begin::timestamp, 
-pt_production_time_begin_of_the_end::timestamp, 
-pt_production_time_end_of_the_end::timestamp
+pt_production_time_edtf::text, 
+prod_1_tileid::uuid
                 
                 FROM staging.etl_rsci_production
                 WHERE (staging.etl_rsci_production.pt_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.etl_rsci_production.pt_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_production.pt_production_time_begin_of_the_begin::timestamp IS NOT NULL) OR (staging.etl_rsci_production.pt_production_time_end_of_the_begin::timestamp IS NOT NULL) OR (staging.etl_rsci_production.pt_production_time_begin_of_the_end::timestamp IS NOT NULL) OR (staging.etl_rsci_production.pt_production_time_end_of_the_end::timestamp IS NOT NULL))
+((staging.etl_rsci_production.pt_production_time_edtf::text IS NOT NULL))
                 
                 ORDER BY staging.etl_rsci_production.resourceinstanceid
                 
@@ -1090,410 +1166,61 @@ graphid::uuid,
 graphpublicationid::uuid, 
 principaluser_id::integer
                 
-                FROM staging.etl_rsci_materials_types
-                WHERE (staging.etl_rsci_materials_types.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
-((staging.etl_rsci_materials_types.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_rsci_chemical_material
+                WHERE (staging.etl_rsci_chemical_material.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.etl_rsci_chemical_material.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.etl_rsci_materials_types.resourceinstanceid
+                ORDER BY staging.etl_rsci_chemical_material.resourceinstanceid
                 
                 ;
                 
 
 
-                INSERT INTO reference_and_sample_collection_item.material_data_assignment_name (
+                INSERT INTO reference_and_sample_collection_item.chemical_material (
                     resourceinstanceid, 
 tileid, 
-material_data_assignment_name_content, 
-material_data_assignment_name_type, 
-material_data_assignment_name_language
+chemical_material_name_content, 
+chemical_material_name_type_, 
+chemical_material_identifier_type, 
+chemical_material_identifier_content
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 chem_tileid::uuid, 
-chem_material_data_assignment_name_content::jsonb, 
-chem_material_data_assignment_name_type::jsonb, 
-chem_material_data_assignment_name_language::jsonb
+chem_chemical_material_name_content::text, 
+chem_chemical_material_name_type_::jsonb, 
+chem_chemical_material_identifier_type::jsonb, 
+chem_chemical_material_identifier_content::jsonb
                 
-                FROM staging.etl_rsci_materials_types
-                WHERE (staging.etl_rsci_materials_types.chem_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_materials_types.chem_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_materials_types.chem_material_data_assignment_name_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_chemical_material
+                WHERE (staging.etl_rsci_chemical_material.chem_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_chemical_material.chem_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_chemical_material.chem_chemical_material_name_content::text IS NOT NULL) OR (staging.etl_rsci_chemical_material.chem_chemical_material_identifier_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.etl_rsci_materials_types.resourceinstanceid
+                ORDER BY staging.etl_rsci_chemical_material.resourceinstanceid
                 
                 ;
                 
 
 
-                INSERT INTO reference_and_sample_collection_item.name (
+                INSERT INTO reference_and_sample_collection_item.chemical_material (
                     resourceinstanceid, 
 tileid, 
-name_content, 
-name_type_, 
-name_language_
+chemical_material_name_content, 
+chemical_material_name_type_
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
-gbif_name_tileid::uuid, 
-gbif_name_name_content::jsonb, 
-gbif_name_name_type_::jsonb, 
-gbif_name_name_language_::jsonb
+chem_form_tileid::uuid, 
+chem_form_chemical_material_name_content::text, 
+chem_form_chemical_material_name_type_::jsonb
                 
-                FROM staging.etl_rsci_materials_types
-                WHERE (staging.etl_rsci_materials_types.gbif_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_materials_types.gbif_name_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_materials_types.gbif_name_name_content::jsonb IS NOT NULL))
+                FROM staging.etl_rsci_chemical_material
+                WHERE (staging.etl_rsci_chemical_material.chem_form_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_chemical_material.chem_form_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_chemical_material.chem_form_chemical_material_name_content::text IS NOT NULL))
                 
-                ORDER BY staging.etl_rsci_materials_types.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.statement (
-                    resourceinstanceid, 
-tileid, 
-statement_content, 
-statement_type, 
-statement_language_
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-gbif_tileid::uuid, 
-gbif_statement_content::jsonb, 
-gbif_statement_type::jsonb, 
-gbif_statement_language_::jsonb
-                
-                FROM staging.etl_rsci_materials_types
-                WHERE (staging.etl_rsci_materials_types.gbif_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_materials_types.gbif_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_materials_types.gbif_statement_content::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_materials_types.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.mixture_type (
-                    resourceinstanceid, 
-tileid, 
-mixture_type, 
-mixture_type_metatype
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-tileid::uuid, 
-mixture_type::jsonb, 
-mixture_type_metatype::jsonb
-                
-                FROM staging.etl_rsci_materials_types
-                WHERE (staging.etl_rsci_materials_types.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_materials_types.tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_materials_types.mixture_type::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_materials_types.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.attribute_type (
-                    resourceinstanceid, 
-tileid, 
-attribute_type
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-atribs_tileid::uuid, 
-atribs_attribute_type::jsonb
-                
-                FROM staging.etl_rsci_materials_types
-                WHERE (staging.etl_rsci_materials_types.atribs_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_materials_types.atribs_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_materials_types.atribs_attribute_type::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_materials_types.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.object_type (
-                    resourceinstanceid, 
-tileid, 
-object_type
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-object_type_tileid::uuid, 
-object_type_object_type::jsonb
-                
-                FROM staging.etl_rsci_materials_types
-                WHERE (staging.etl_rsci_materials_types.object_type_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_materials_types.object_type_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_materials_types.object_type_object_type::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_materials_types.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.material (
-                    resourceinstanceid, 
-tileid, 
-material
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-mat_tileid::uuid, 
-mat_material::jsonb
-                
-                FROM staging.etl_rsci_materials_types
-                WHERE (staging.etl_rsci_materials_types.mat_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_materials_types.mat_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_materials_types.mat_material::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_materials_types.resourceinstanceid
-                
-                ;
-                
-
-/* ---------------------------------------------------------------------------------- */ 
-
-
-
-                INSERT INTO reference_and_sample_collection_item.instances (
-                    resourceinstanceid, 
-resource_instance_lifecycle_state_id, 
-graphid, 
-graphpublicationid, 
-principaluser_id
-                ) SELECT
-                    
- DISTINCT
-                    resourceinstanceid::uuid, 
-'f75bb034-36e3-4ab4-8167-f520cf0b4c58'::uuid AS state_id, 
-graphid::uuid, 
-graphpublicationid::uuid, 
-principaluser_id::integer
-                
-                FROM staging.etl_rsci_components
-                WHERE (staging.etl_rsci_components.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
-((staging.etl_rsci_components.resourceinstanceid::uuid IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_components.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.has_part (
-                    resourceinstanceid, 
-tileid, 
-part_name_content, 
-part_name_type, 
-part_name_language, 
-part_type
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-comp1_tileid::uuid, 
-comp1_part_name_content::jsonb, 
-comp1_part_name_type::jsonb, 
-comp1_part_name_language::jsonb, 
-comp1_part_type::jsonb
-                
-                FROM staging.etl_rsci_components
-                WHERE (staging.etl_rsci_components.comp1_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_components.comp1_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_components.comp1_part_name_content::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_components.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.part_statement (
-                    resourceinstanceid, 
-tileid, 
-part_statement_content, 
-part_statement_type, 
-part_statement_language, 
-has_part
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-comp1_statement_tileid::uuid, 
-comp1_statement_part_statement_content::jsonb, 
-comp1_statement_part_statement_type::jsonb, 
-comp1_statement_part_statement_language::jsonb, 
-comp1_tileid::uuid
-                
-                FROM staging.etl_rsci_components
-                WHERE (staging.etl_rsci_components.comp1_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_components.comp1_statement_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_components.comp1_statement_part_statement_content::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_components.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.part_dimension (
-                    resourceinstanceid, 
-tileid, 
-part_dimension_value_, 
-part_dimension_type_, 
-part_dimension_unit, 
-has_part
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-comp1_n_tileid::uuid, 
-comp1_n_part_dimension_value_::numeric, 
-comp1_n_part_dimension_type_::jsonb, 
-comp1_n_part_dimension_unit::jsonb, 
-comp1_tileid::uuid
-                
-                FROM staging.etl_rsci_components
-                WHERE (staging.etl_rsci_components.comp1_n_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_components.comp1_n_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_components.comp1_n_part_dimension_value_::numeric IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_components.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.has_part (
-                    resourceinstanceid, 
-tileid, 
-part_name_content, 
-part_name_type, 
-part_name_language, 
-part_type
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-comp2_tileid::uuid, 
-comp2_part_name_content::jsonb, 
-comp2_part_name_type::jsonb, 
-comp2_part_name_language::jsonb, 
-comp2_part_type::jsonb
-                
-                FROM staging.etl_rsci_components
-                WHERE (staging.etl_rsci_components.comp2_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_components.comp2_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_components.comp2_part_name_content::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_components.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.part_statement (
-                    resourceinstanceid, 
-tileid, 
-part_statement_content, 
-part_statement_type, 
-part_statement_language, 
-has_part
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-comp2_statement_tileid::uuid, 
-comp2_statement_part_statement_content::jsonb, 
-comp2_statement_part_statement_type::jsonb, 
-comp2_statement_part_statement_language::jsonb, 
-comp2_tileid::uuid
-                
-                FROM staging.etl_rsci_components
-                WHERE (staging.etl_rsci_components.comp2_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_components.comp2_statement_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_components.comp2_statement_part_statement_content::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_components.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.part_dimension (
-                    resourceinstanceid, 
-tileid, 
-part_dimension_value_, 
-part_dimension_type_, 
-part_dimension_unit, 
-has_part
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-comp2_n_tileid::uuid, 
-comp2_n_part_dimension_value_::numeric, 
-comp2_n_part_dimension_type_::jsonb, 
-comp2_n_part_dimension_unit::jsonb, 
-comp2_tileid::uuid
-                
-                FROM staging.etl_rsci_components
-                WHERE (staging.etl_rsci_components.comp2_n_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_components.comp2_n_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_components.comp2_n_part_dimension_value_::numeric IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_components.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.has_part (
-                    resourceinstanceid, 
-tileid, 
-part_type
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-comp3_tileid::uuid, 
-comp3_part_type::jsonb
-                
-                FROM staging.etl_rsci_components
-                WHERE (staging.etl_rsci_components.comp3_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_components.comp3_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_components.comp3_part_type::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_components.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.part_statement (
-                    resourceinstanceid, 
-tileid, 
-part_statement_content, 
-part_statement_type, 
-part_statement_language, 
-has_part
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-comp3_statement_tileid::uuid, 
-comp3_statement_part_statement_content::jsonb, 
-comp3_statement_part_statement_type::jsonb, 
-comp3_statement_part_statement_language::jsonb, 
-comp3_tileid::uuid
-                
-                FROM staging.etl_rsci_components
-                WHERE (staging.etl_rsci_components.comp3_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_components.comp3_statement_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_components.comp3_statement_part_statement_content::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_components.resourceinstanceid
+                ORDER BY staging.etl_rsci_chemical_material.resourceinstanceid
                 
                 ;
                 
@@ -1754,151 +1481,6 @@ cur_loc_tileid::uuid
 ((staging.etl_rsci_current_location.cur_loc_statement_current_location_statement_content::jsonb IS NOT NULL))
                 
                 ORDER BY staging.etl_rsci_current_location.resourceinstanceid
-                
-                ;
-                
-
-/* ---------------------------------------------------------------------------------- */ 
-
-
-
-                INSERT INTO reference_and_sample_collection_item.instances (
-                    resourceinstanceid, 
-resource_instance_lifecycle_state_id, 
-graphid, 
-graphpublicationid, 
-principaluser_id
-                ) SELECT
-                    
- DISTINCT
-                    resourceinstanceid::uuid, 
-'f75bb034-36e3-4ab4-8167-f520cf0b4c58'::uuid AS state_id, 
-graphid::uuid, 
-graphpublicationid::uuid, 
-principaluser_id::integer
-                
-                FROM staging.etl_rsci_chemical_attributes
-                WHERE (staging.etl_rsci_chemical_attributes.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
-((staging.etl_rsci_chemical_attributes.resourceinstanceid::uuid IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_chemical_attributes.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.identifier (
-                    resourceinstanceid, 
-tileid, 
-identifier_content, 
-identifier_type
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-old_barcode_no_tileid::uuid, 
-old_barcode_no_identifier_content::jsonb, 
-old_barcode_no_identifier_type::jsonb
-                
-                FROM staging.etl_rsci_chemical_attributes
-                WHERE (staging.etl_rsci_chemical_attributes.old_barcode_no_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_chemical_attributes.old_barcode_no_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_chemical_attributes.old_barcode_no_identifier_content::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_chemical_attributes.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.identifier (
-                    resourceinstanceid, 
-tileid, 
-identifier_content, 
-identifier_type
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-cat_id_tileid::uuid, 
-cat_id_identifier_content::jsonb, 
-cat_id_identifier_type::jsonb
-                
-                FROM staging.etl_rsci_chemical_attributes
-                WHERE (staging.etl_rsci_chemical_attributes.cat_id_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_chemical_attributes.cat_id_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_chemical_attributes.cat_id_identifier_content::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_chemical_attributes.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.standard_type (
-                    resourceinstanceid, 
-tileid, 
-standard_type
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-standard_type_tileid::uuid, 
-standard_type_standard_type::jsonb
-                
-                FROM staging.etl_rsci_chemical_attributes
-                WHERE (staging.etl_rsci_chemical_attributes.standard_type_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_chemical_attributes.standard_type_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_chemical_attributes.standard_type_standard_type::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_chemical_attributes.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.name (
-                    resourceinstanceid, 
-tileid, 
-name_content, 
-name_type_, 
-name_language_
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-chem_name_tileid::uuid, 
-chem_name_name_content::jsonb, 
-chem_name_name_type_::jsonb, 
-chem_name_name_language_::jsonb
-                
-                FROM staging.etl_rsci_chemical_attributes
-                WHERE (staging.etl_rsci_chemical_attributes.chem_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_chemical_attributes.chem_name_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_chemical_attributes.chem_name_name_content::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_chemical_attributes.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.chemical_material (
-                    resourceinstanceid, 
-tileid, 
-chemical_material_identifier_content, 
-chemical_material_identifier_type, 
-chemical_material_name_content
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-chem_no_tileid::uuid, 
-chem_no_chemical_material_identifier_content::jsonb, 
-chem_no_chemical_material_identifier_type::jsonb, 
-chem_no_chemical_material_name_content::text
-                
-                FROM staging.etl_rsci_chemical_attributes
-                WHERE (staging.etl_rsci_chemical_attributes.chem_no_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_chemical_attributes.chem_no_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_chemical_attributes.chem_no_chemical_material_identifier_content::jsonb IS NOT NULL) OR (staging.etl_rsci_chemical_attributes.chem_no_chemical_material_name_content::text IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_chemical_attributes.resourceinstanceid
                 
                 ;
                 

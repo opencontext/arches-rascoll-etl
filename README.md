@@ -71,6 +71,8 @@ Here's a quick way to dump the Arches-RASColl PostgreSQL database:
 # Make a database dump
 docker exec -it arches bash -c "pg_dump -U postgres -h arches_db -F c -b rascolls > '/arches_data/rascolls_v8_draft.dump'"
 
+# Reindex the data
+docker exec -it arches python manage.py es reindex_database -rd
 ```
 
 

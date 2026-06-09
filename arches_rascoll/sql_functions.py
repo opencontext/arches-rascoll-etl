@@ -277,6 +277,14 @@ SET name = REPLACE(name, '_time-span_edtf', '_time_span_edtf')
 WHERE name LIKE '%_time-span_edtf%';
 """
 
+NODE_CARDINALITY_FIX = """
+UPDATE node_groups
+SET cardinality = 'n'
+WHERE nodegroupid = '2924a04c-73c0-4d09-972e-089a6630e232';
+"""
+
+
+
 
 
 CONTROLLED_LIST_ITEM_JSON_FIX = """

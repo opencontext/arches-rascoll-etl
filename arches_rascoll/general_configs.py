@@ -992,6 +992,17 @@ NAME_PHYSICAL_THINGS_CHEMICAL_NAMES_LIST_ITEMS = get_controlled_list_objs_by_pre
     list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce',
 )
 
+NAME_CHEMICAL_FORMULA_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['Chemical Formula',],
+    list_id='c6b8b496-ff23-49e4-a001-464c1934eb47',
+)
+
+NAME_CAS_REGISTRY_NUMBER_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['CAS Registry Number (CAS RN®)',],
+    list_id='70b5d993-8545-4a07-a105-4bbeb40f362a',
+)
+
+
 IMPORT_RAW_RSCI_CHEMICAL_MATERIAL_CSV = os.path.join(DATA_DIR, 'gci-all-chemical-material.csv')
 
 RSCI_CHEMICAL_MATERIAL_CONFIGS = {
@@ -1025,12 +1036,280 @@ RSCI_CHEMICAL_MATERIAL_CONFIGS = {
             'make_tileid': True,
             'default_values': [
                 ('chemical_material_name_type_', JSONB, NAME_PHYSICAL_THINGS_CHEMICAL_NAMES_LIST_ITEMS,),
+                ('chemical_material_identifier_type', JSONB, NAME_CAS_REGISTRY_NUMBER_LIST_ITEMS,),
+                # ('material_data_assignment_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
+            ],
+            'tile_other_fields': [
+                # Mappings for other fields to include in the same tile
+                {
+                    'raw_col': 'Chemical (CAS) No.',
+                    'targ_field': 'chemical_material_identifier_content',
+                    'data_type': JSONB,
+                    'value_transform': make_lang_dict_value,
+                },
+            ] 
+        },
+        {
+            'raw_col': 'Chemical Formula',
+            'targ_table': 'chemical_material',
+            'stage_field_prefix': 'chem_form_',
+            'value_transform': copy_value,
+            'targ_field': 'chemical_material_name_content',
+            'data_type': Text,
+            'make_tileid': True,
+            'default_values': [
+                ('chemical_material_name_type_', JSONB, NAME_CHEMICAL_FORMULA_LIST_ITEMS,),
                 # ('material_data_assignment_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 # ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
             ], 
         },
     ],
 }
+
+
+
+#---------------------------------#
+#- RSCI COLORS CONFIGS -----------#
+#---------------------------------#
+
+# NOTE: These are deprecated
+COLOR_CONCEPT_MAPPINGS_CSV = os.path.join(DATA_DIR, 'color_concept_mappings.csv')
+IMPORT_RAW_RSCI_COLORS_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-colors.csv')
+
+
+def make_color_type_list_items(value):
+    """Make list items list objects from color type pref_label values"""
+    if not value:
+        return None
+    if not isinstance(value, list):
+        raw_pref_labels = json.loads(value)
+    else:
+        raw_pref_labels = value
+    raw_pref_labels = list(set(raw_pref_labels))
+    pref_labels = []
+    no_suffix_pref_labels = ['colorless', 'multicolored',]
+    for label in raw_pref_labels:
+        if not label in no_suffix_pref_labels:
+            # add a suffix to the label
+            label += ' (color)'
+        pref_labels.append(label)
+    # Color list_id='1008354b-3ac2-4a8c-88b8-6aad2302a916'
+    return get_controlled_list_objs_by_pref_labels(
+        pref_labels=pref_labels,
+        list_id='1008354b-3ac2-4a8c-88b8-6aad2302a916',
+    )
+
+# Color Names list_id='080ddad2-56e9-4492-b59d-50a10ecdf26c'
+COLOR_NAMES_LEGACY_COLOR_NAMES_TYPE_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['Legacy Color Name',],
+    list_id='080ddad2-56e9-4492-b59d-50a10ecdf26c',
+)
+
+# Color Names list_id='080ddad2-56e9-4492-b59d-50a10ecdf26c'
+COLOR_NAMES_COLOUR_INDEX_TYPE_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['Colour Index™ Generic Name',],
+    list_id='080ddad2-56e9-4492-b59d-50a10ecdf26c',
+)
+
+
+RSCI_COLORS_CONFIGS = {
+    'model_id': RSCI_UUID,
+    'staging_table': 'etl_rsci_colors',
+    'model_staging_schema': RSCI_MODEL_NAME,
+    'raw_pk_col': 'rsci_uuid',
+    'load_path': IMPORT_RAW_RSCI_COLORS_CSV ,
+    'mappings': [
+        {
+            'raw_col': 'rsci_uuid',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'default_values': [
+                ('graphid', UUID, RSCI_UUID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+            ], 
+        },
+        {
+            'raw_col': 'color_pref_labels',
+            'targ_table': 'has_color',
+            'stage_field_prefix': 'has_color_',
+            'value_transform': make_color_type_list_items,
+            'targ_field': 'color_type',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                # # ('nodegroupid', UUID, '6ee83594-08e4-11f0-81c1-0275dc2ded29',),
+            ], 
+        },
+        {
+            'raw_col': 'Color',
+            'targ_table': 'color_name',
+            'stage_field_prefix': 'color_name_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'color_name_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('color_name_type', JSONB, COLOR_NAMES_LEGACY_COLOR_NAMES_TYPE_LIST_ITEMS,),
+                ('color_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'has_color_tileid',
+                'targ_tile_field': 'has_color',
+            },
+        },
+        {
+            'raw_col': 'Color Index (CI) No. 1',
+            'targ_table': 'color_name',
+            'stage_field_prefix': 'color_name_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'color_name_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('color_name_type', JSONB, COLOR_NAMES_COLOUR_INDEX_TYPE_LIST_ITEMS,),
+                ('color_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'has_color_tileid',
+                'targ_tile_field': 'has_color',
+            },
+        },
+        {
+            'raw_col': 'Color Index (CI) No. 2',
+            'targ_table': 'color_name',
+            'stage_field_prefix': 'color_name_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'color_name_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('color_name_type', JSONB, COLOR_NAMES_COLOUR_INDEX_TYPE_LIST_ITEMS,),
+                ('color_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'has_color_tileid',
+                'targ_tile_field': 'has_color',
+            },
+        },
+        {
+            'raw_col': 'Color Index (CI) No. 3',
+            'targ_table': 'color_name',
+            'stage_field_prefix': 'color_name_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'color_name_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('color_name_type', JSONB, COLOR_NAMES_COLOUR_INDEX_TYPE_LIST_ITEMS,),
+                ('color_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'has_color_tileid',
+                'targ_tile_field': 'has_color',
+            },
+        },
+        {
+            'raw_col': 'Color Index (CI) No. 4',
+            'targ_table': 'color_name',
+            'stage_field_prefix': 'color_name_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'color_name_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('color_name_type', JSONB, COLOR_NAMES_COLOUR_INDEX_TYPE_LIST_ITEMS,),
+                ('color_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'has_color_tileid',
+                'targ_tile_field': 'has_color',
+            },
+        },
+    ],
+}
+
+
+#---------------------------------#
+#- RSCI CURRENT LOCATION CONFIGS -#
+#---------------------------------#
+
+GETTY_CENTER_PLACE_UUID = '52c75bc1-7797-4ef8-b829-7ce771e4968a'
+
+IMPORT_RAW_RSCI_CURRENT_LOCATION_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-current-location.csv')
+
+RSCI_CURRENT_LOCATION_CONFIGS = {
+    'model_id': RSCI_UUID,
+    'staging_table': 'etl_rsci_current_location',
+    'model_staging_schema': RSCI_MODEL_NAME,
+    'raw_pk_col': 'rsci_uuid',
+    'load_path': IMPORT_RAW_RSCI_CURRENT_LOCATION_CSV,
+    'mappings': [
+        {
+            'raw_col': 'rsci_uuid',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'default_values': [
+                ('graphid', UUID, RSCI_UUID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+            ], 
+        },
+        {
+            'raw_col': 'current_location_place_dict',
+            'targ_table': 'current_location',
+            'stage_field_prefix': 'cur_loc_',
+            'value_transform': copy_value,
+            'targ_field': 'current_location',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                # # ('nodegroupid', UUID, 'bda4a954-d376-11ef-a239-0275dc2ded29',),
+            ], 
+        },
+        {
+            'raw_col': 'current_location_statement',
+            'targ_table': 'current_location_statement',
+            'stage_field_prefix': 'cur_loc_statement_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'current_location_statement_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('current_location_statement_type', JSONB, PLACE_STATEMENT_TYPE_LIST_ITEMS,),
+                ('current_location_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # # ('nodegroupid', UUID, 'c7ab9e8a-08e1-11f0-a3e8-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'cur_loc_tileid',
+                'targ_tile_field': 'current_location',
+            },
+        },
+    ],
+}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1429,238 +1708,6 @@ RSCI_COMPONENT_CONFIGS = {
 }
 
 
-#---------------------------------#
-#- RSCI COLORS CONFIGS -----------#
-#---------------------------------#
-
-# NOTE: These are deprecated
-COLOR_CONCEPT_MAPPINGS_CSV = os.path.join(DATA_DIR, 'color_concept_mappings.csv')
-IMPORT_RAW_RSCI_COLORS_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-colors.csv')
-
-
-def make_color_type_list_items(value):
-    """Make list items list objects from color type pref_label values"""
-    if not value:
-        return None
-    if not isinstance(value, list):
-        raw_pref_labels = json.loads(value)
-    else:
-        raw_pref_labels = value
-    raw_pref_labels = list(set(raw_pref_labels))
-    pref_labels = []
-    no_suffix_pref_labels = ['colorless', 'multicolored',]
-    for label in raw_pref_labels:
-        if not label in no_suffix_pref_labels:
-            # add a suffix to the label
-            label += ' (color)'
-        pref_labels.append(label)
-    # Color list_id='1008354b-3ac2-4a8c-88b8-6aad2302a916'
-    return get_controlled_list_objs_by_pref_labels(
-        pref_labels=pref_labels,
-        list_id='1008354b-3ac2-4a8c-88b8-6aad2302a916',
-    )
-
-# Color Names list_id='080ddad2-56e9-4492-b59d-50a10ecdf26c'
-COLOR_NAMES_LEGACY_COLOR_NAMES_TYPE_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
-    pref_labels=['Legacy Color Name',],
-    list_id='080ddad2-56e9-4492-b59d-50a10ecdf26c',
-)
-
-# Color Names list_id='080ddad2-56e9-4492-b59d-50a10ecdf26c'
-COLOR_NAMES_COLOUR_INDEX_TYPE_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
-    pref_labels=['Colour Index™ Generic Name',],
-    list_id='080ddad2-56e9-4492-b59d-50a10ecdf26c',
-)
-
-
-RSCI_COLORS_CONFIGS = {
-    'model_id': RSCI_UUID,
-    'staging_table': 'etl_rsci_colors',
-    'model_staging_schema': RSCI_MODEL_NAME,
-    'raw_pk_col': 'rsci_uuid',
-    'load_path': IMPORT_RAW_RSCI_COLORS_CSV ,
-    'mappings': [
-        {
-            'raw_col': 'rsci_uuid',
-            'targ_table': 'instances',
-            'stage_field_prefix': '',
-            'value_transform': copy_value,
-            'targ_field': 'resourceinstanceid',
-            'data_type': UUID,
-            'make_tileid': False,
-            'default_values': [
-                ('graphid', UUID, RSCI_UUID,),
-                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
-                ('principaluser_id', Integer, 1,),
-            ], 
-        },
-        {
-            'raw_col': 'color_pref_labels',
-            'targ_table': 'has_color',
-            'stage_field_prefix': 'has_color_',
-            'value_transform': make_color_type_list_items,
-            'targ_field': 'color_type',
-            'data_type': JSONB,
-            'make_tileid': True,
-            'default_values': [
-                # # ('nodegroupid', UUID, '6ee83594-08e4-11f0-81c1-0275dc2ded29',),
-            ], 
-        },
-        {
-            'raw_col': 'Color',
-            'targ_table': 'color_name',
-            'stage_field_prefix': 'color_name_',
-            'value_transform': make_lang_dict_value,
-            'targ_field': 'color_name_content',
-            'data_type': JSONB,
-            'make_tileid': True,
-            'default_values': [
-                ('color_name_type', JSONB, COLOR_NAMES_LEGACY_COLOR_NAMES_TYPE_LIST_ITEMS,),
-                ('color_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
-            ],
-            'related_tileid': {
-                'source_tile_field': 'has_color_tileid',
-                'targ_tile_field': 'has_color',
-            },
-        },
-        {
-            'raw_col': 'Color Index (CI) No. 1',
-            'targ_table': 'color_name',
-            'stage_field_prefix': 'color_name_',
-            'value_transform': make_lang_dict_value,
-            'targ_field': 'color_name_content',
-            'data_type': JSONB,
-            'make_tileid': True,
-            'default_values': [
-                ('color_name_type', JSONB, COLOR_NAMES_COLOUR_INDEX_TYPE_LIST_ITEMS,),
-                ('color_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
-            ],
-            'related_tileid': {
-                'source_tile_field': 'has_color_tileid',
-                'targ_tile_field': 'has_color',
-            },
-        },
-        {
-            'raw_col': 'Color Index (CI) No. 2',
-            'targ_table': 'color_name',
-            'stage_field_prefix': 'color_name_',
-            'value_transform': make_lang_dict_value,
-            'targ_field': 'color_name_content',
-            'data_type': JSONB,
-            'make_tileid': True,
-            'default_values': [
-                ('color_name_type', JSONB, COLOR_NAMES_COLOUR_INDEX_TYPE_LIST_ITEMS,),
-                ('color_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
-            ],
-            'related_tileid': {
-                'source_tile_field': 'has_color_tileid',
-                'targ_tile_field': 'has_color',
-            },
-        },
-        {
-            'raw_col': 'Color Index (CI) No. 3',
-            'targ_table': 'color_name',
-            'stage_field_prefix': 'color_name_',
-            'value_transform': make_lang_dict_value,
-            'targ_field': 'color_name_content',
-            'data_type': JSONB,
-            'make_tileid': True,
-            'default_values': [
-                ('color_name_type', JSONB, COLOR_NAMES_COLOUR_INDEX_TYPE_LIST_ITEMS,),
-                ('color_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
-            ],
-            'related_tileid': {
-                'source_tile_field': 'has_color_tileid',
-                'targ_tile_field': 'has_color',
-            },
-        },
-        {
-            'raw_col': 'Color Index (CI) No. 4',
-            'targ_table': 'color_name',
-            'stage_field_prefix': 'color_name_',
-            'value_transform': make_lang_dict_value,
-            'targ_field': 'color_name_content',
-            'data_type': JSONB,
-            'make_tileid': True,
-            'default_values': [
-                ('color_name_type', JSONB, COLOR_NAMES_COLOUR_INDEX_TYPE_LIST_ITEMS,),
-                ('color_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # # ('nodegroupid', UUID, '6ee83f62-08e4-11f0-81c1-0275dc2ded29',),
-            ],
-            'related_tileid': {
-                'source_tile_field': 'has_color_tileid',
-                'targ_tile_field': 'has_color',
-            },
-        },
-    ],
-}
-
-
-#---------------------------------#
-#- RSCI CURRENT LOCATION CONFIGS -#
-#---------------------------------#
-
-GETTY_CENTER_PLACE_UUID = '52c75bc1-7797-4ef8-b829-7ce771e4968a'
-
-IMPORT_RAW_RSCI_CURRENT_LOCATION_CSV = os.path.join(DATA_DIR, 'gci-all-rsci-current-location.csv')
-
-RSCI_CURRENT_LOCATION_CONFIGS = {
-    'model_id': RSCI_UUID,
-    'staging_table': 'etl_rsci_current_location',
-    'model_staging_schema': RSCI_MODEL_NAME,
-    'raw_pk_col': 'rsci_uuid',
-    'load_path': IMPORT_RAW_RSCI_CURRENT_LOCATION_CSV,
-    'mappings': [
-        {
-            'raw_col': 'rsci_uuid',
-            'targ_table': 'instances',
-            'stage_field_prefix': '',
-            'value_transform': copy_value,
-            'targ_field': 'resourceinstanceid',
-            'data_type': UUID,
-            'make_tileid': False,
-            'default_values': [
-                ('graphid', UUID, RSCI_UUID,),
-                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
-                ('principaluser_id', Integer, 1,),
-            ], 
-        },
-        {
-            'raw_col': 'current_location_place_dict',
-            'targ_table': 'current_location',
-            'stage_field_prefix': 'cur_loc_',
-            'value_transform': copy_value,
-            'targ_field': 'current_location',
-            'data_type': JSONB,
-            'make_tileid': True,
-            'default_values': [
-                # # ('nodegroupid', UUID, 'bda4a954-d376-11ef-a239-0275dc2ded29',),
-            ], 
-        },
-        {
-            'raw_col': 'current_location_statement',
-            'targ_table': 'current_location_statement',
-            'stage_field_prefix': 'cur_loc_statement_',
-            'value_transform': make_lang_dict_value,
-            'targ_field': 'current_location_statement_content',
-            'data_type': JSONB,
-            'make_tileid': True,
-            'default_values': [
-                ('current_location_statement_type', JSONB, PLACE_STATEMENT_TYPE_LIST_ITEMS,),
-                ('current_location_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # # ('nodegroupid', UUID, 'c7ab9e8a-08e1-11f0-a3e8-0275dc2ded29',),
-            ],
-            'related_tileid': {
-                'source_tile_field': 'cur_loc_tileid',
-                'targ_tile_field': 'current_location',
-            },
-        },
-    ],
-}
 
 
 # Name Types - Physical Thing list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce'
@@ -1827,8 +1874,7 @@ ALL_MAPPING_CONFIGS = [
     RSCI_PRODUCTION_CONFIGS,
 
     # Materials
-    RSCI_MATERIALS_TYPE_CONFIGS,
-    RSCI_COMPONENT_CONFIGS,
+    RSCI_CHEMICAL_MATERIAL_CONFIGS,
 
     # Colors
     RSCI_COLORS_CONFIGS,
@@ -1836,7 +1882,10 @@ ALL_MAPPING_CONFIGS = [
     # Current location
     RSCI_CURRENT_LOCATION_CONFIGS,
 
-    RSCI_CHEMICALS_CONFIGS,
+    # RSCI_MATERIALS_TYPE_CONFIGS,
+    # RSCI_COMPONENT_CONFIGS,
+
+    # RSCI_CHEMICALS_CONFIGS,
 ]
 
 
