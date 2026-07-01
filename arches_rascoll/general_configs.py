@@ -99,6 +99,15 @@ REL_LINK_REL_TYPE_ID = 'ac41d9be-79db-4256-b368-2f4559cfbe55'
 REL_LINK_INVERSE_REL_TYPE_ID = 'ac41d9be-79db-4256-b368-2f4559cfbe55'
 
 
+def copy_numeric_value(value):
+    if not value:
+        return None
+    try:
+        f_value = float(value)
+    except:
+        f_value = None
+    return f_value
+
 
 def copy_value(value):
     if isinstance(value, dict):
@@ -1048,7 +1057,7 @@ RSCI_CHEMICAL_MATERIAL_CONFIGS = {
                     'data_type': JSONB,
                     'value_transform': make_lang_dict_value,
                 },
-            ] 
+            ], 
         },
         {
             'raw_col': 'Chemical Formula',
@@ -1305,9 +1314,150 @@ RSCI_CURRENT_LOCATION_CONFIGS = {
 
 
 
+#---------------------------------#
+#- RSCI DIMENSIONS CONFIGS       -#
+#---------------------------------#
+IMPORT_RAW_RSCI_DIMENSIONS_CSV = os.path.join(DATA_DIR, 'gci-all-clean-dimensions.csv')
+
+def make_dimension_unit_list_items(value):
+    """Make list items list objects from QUDT Units pref_label values"""
+    if not value:
+        return None
+    # QUDT Units list_id='1737a1b8-263e-4876-aef6-95a471546d80'
+    return get_controlled_list_objs_by_pref_labels(
+        pref_labels=[value],
+        list_id='1737a1b8-263e-4876-aef6-95a471546d80',
+    )
 
 
+def make_dimension_kind_list_items(value):
+    """Make list items list objects from QUDT Quantity Kinds pref_label values"""
+    if not value:
+        return None
+    # QUDT Units list_id='792e80fe-a092-43b5-9ccf-4dcd7bbcbe86'
+    return get_controlled_list_objs_by_pref_labels(
+        pref_labels=[value],
+        list_id='792e80fe-a092-43b5-9ccf-4dcd7bbcbe86',
+    )
 
+
+RSCI_DIMENSIONS_CONFIGS = {
+    'model_id': RSCI_UUID,
+    'staging_table': 'etl_rsci_dimensions',
+    'model_staging_schema': RSCI_MODEL_NAME,
+    'raw_pk_col': 'rsci_uuid',
+    'load_path': IMPORT_RAW_RSCI_DIMENSIONS_CSV,
+    'mappings': [
+        {
+            'raw_col': 'rsci_uuid',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'default_values': [
+                ('graphid', UUID, RSCI_UUID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+            ], 
+        },
+        {
+           'raw_col': 'READY_dim1_type',
+            'targ_table': 'dimension',
+            'stage_field_prefix': 'dim1_',
+            'value_transform': make_dimension_kind_list_items,
+            'targ_field': 'dimension_type_',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                # # ('nodegroupid', UUID, 'bda4a954-d376-11ef-a239-0275dc2ded29',),
+            ],
+            'tile_other_fields': [
+                # Mappings for other fields to include in the same tile
+                {
+                    'raw_col': 'READY_dim1_value',
+                    'targ_field': 'dimension_value_',
+                    'data_type': Numeric,
+                    'value_transform': copy_numeric_value,
+                },
+                {
+                    'raw_col': 'READY_dim1_lowestvalue',
+                    'targ_field': 'dimension_lowest_possible_value',
+                    'data_type': Numeric,
+                    'value_transform': copy_numeric_value,
+                },
+                {
+                    'raw_col': 'READY_dim1_highestvalue',
+                    'targ_field': 'dimension_highest_possible_value',
+                    'data_type': Numeric,
+                    'value_transform': copy_numeric_value,
+                },
+                {
+                    'raw_col': 'READY_dim1_unit',
+                    'targ_field': 'dimension_unit',
+                    'data_type': JSONB,
+                    'value_transform': make_dimension_unit_list_items,
+                },
+                {
+                    'raw_col': 'READY_dim1_note',
+                    'targ_field': 'dimension_statement_content',
+                    'data_type': JSONB,
+                    'value_transform': make_lang_dict_value,
+                },
+            ], 
+        },
+        {
+            'raw_col': 'READY_dim2_type',
+            'targ_table': 'dimension',
+            'stage_field_prefix': 'dim2_',
+            'value_transform': make_dimension_kind_list_items,
+            'targ_field': 'dimension_type_',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                # # ('nodegroupid', UUID, 'bda4a954-d376-11ef-a239-0275dc2ded29',),
+            ],
+            'tile_other_fields': [
+                # Mappings for other fields to include in the same tile
+                {
+                    'raw_col': 'READY_dim2_value',
+                    'targ_field': 'dimension_value_',
+                    'data_type': Numeric,
+                    'value_transform': copy_numeric_value,
+                },
+                
+                # these values are totally empty.
+                #{
+                #    'raw_col': 'READY_dim2_lowestvalue',
+                #    'targ_field': 'dimension_lowest_possible_value',
+                #    'data_type': Numeric,
+                #    'value_transform': copy_numeric_value,
+                #},
+                #{
+                #    'raw_col': 'READY_dim2_highestvalue',
+                #    'targ_field': 'dimension_highest_possible_value',
+                #    'data_type': Numeric,
+                #    'value_transform': copy_numeric_value,
+                #},
+               
+                {
+                    'raw_col': 'READY_dim2_unit',
+                    'targ_field': 'dimension_unit',
+                    'data_type': JSONB,
+                    'value_transform': make_dimension_unit_list_items,
+                },
+                # this is empty
+                #{
+                #    'raw_col': 'READY_dim2_note',
+                #    'targ_field': 'dimension_statement_content',
+                #    'data_type': JSONB,
+                #    'value_transform': make_lang_dict_value,
+                #},
+            ], 
+        },
+    ],
+}
 
 
 
@@ -1881,6 +2031,9 @@ ALL_MAPPING_CONFIGS = [
 
     # Current location
     RSCI_CURRENT_LOCATION_CONFIGS,
+
+    # Dimensions
+    RSCI_DIMENSIONS_CONFIGS,
 
     # RSCI_MATERIALS_TYPE_CONFIGS,
     # RSCI_COMPONENT_CONFIGS,

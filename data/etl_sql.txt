@@ -1485,6 +1485,90 @@ cur_loc_tileid::uuid
                 ;
                 
 
+/* ---------------------------------------------------------------------------------- */ 
+
+
+
+                INSERT INTO reference_and_sample_collection_item.instances (
+                    resourceinstanceid, 
+resource_instance_lifecycle_state_id, 
+graphid, 
+graphpublicationid, 
+principaluser_id
+                ) SELECT
+                    
+ DISTINCT
+                    resourceinstanceid::uuid, 
+'f75bb034-36e3-4ab4-8167-f520cf0b4c58'::uuid AS state_id, 
+graphid::uuid, 
+graphpublicationid::uuid, 
+principaluser_id::integer
+                
+                FROM staging.etl_rsci_dimensions
+                WHERE (staging.etl_rsci_dimensions.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.etl_rsci_dimensions.resourceinstanceid::uuid IS NOT NULL))
+                
+                ORDER BY staging.etl_rsci_dimensions.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.dimension (
+                    resourceinstanceid, 
+tileid, 
+dimension_type_, 
+dimension_value_, 
+dimension_lowest_possible_value, 
+dimension_highest_possible_value, 
+dimension_unit, 
+dimension_statement_content
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+dim1_tileid::uuid, 
+dim1_dimension_type_::jsonb, 
+dim1_dimension_value_::numeric, 
+dim1_dimension_lowest_possible_value::numeric, 
+dim1_dimension_highest_possible_value::numeric, 
+dim1_dimension_unit::jsonb, 
+dim1_dimension_statement_content::jsonb
+                
+                FROM staging.etl_rsci_dimensions
+                WHERE (staging.etl_rsci_dimensions.dim1_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_dimensions.dim1_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_dimensions.dim1_dimension_type_::jsonb IS NOT NULL) OR (staging.etl_rsci_dimensions.dim1_dimension_value_::numeric IS NOT NULL) OR (staging.etl_rsci_dimensions.dim1_dimension_lowest_possible_value::numeric IS NOT NULL) OR (staging.etl_rsci_dimensions.dim1_dimension_highest_possible_value::numeric IS NOT NULL) OR (staging.etl_rsci_dimensions.dim1_dimension_unit::jsonb IS NOT NULL) OR (staging.etl_rsci_dimensions.dim1_dimension_statement_content::jsonb IS NOT NULL))
+                
+                ORDER BY staging.etl_rsci_dimensions.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.dimension (
+                    resourceinstanceid, 
+tileid, 
+dimension_type_, 
+dimension_value_, 
+dimension_unit
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+dim2_tileid::uuid, 
+dim2_dimension_type_::jsonb, 
+dim2_dimension_value_::numeric, 
+dim2_dimension_unit::jsonb
+                
+                FROM staging.etl_rsci_dimensions
+                WHERE (staging.etl_rsci_dimensions.dim2_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_dimensions.dim2_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_dimensions.dim2_dimension_type_::jsonb IS NOT NULL) OR (staging.etl_rsci_dimensions.dim2_dimension_value_::numeric IS NOT NULL) OR (staging.etl_rsci_dimensions.dim2_dimension_unit::jsonb IS NOT NULL))
+                
+                ORDER BY staging.etl_rsci_dimensions.resourceinstanceid
+                
+                ;
+                
+
 
 /*
 ALTER TABLE TILES ENABLE TRIGGER __arches_check_excess_tiles_trigger;
