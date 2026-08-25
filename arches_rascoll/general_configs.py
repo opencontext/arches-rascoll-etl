@@ -23,7 +23,7 @@ ARCHES_V8_RESOURCE_INSTANCE_LIFECYCLE_STATE_ID = 'f75bb034-36e3-4ab4-8167-f520cf
 
 current_directory = os.getcwd()
 DATA_DIR = os.getenv('RASCOLL_ETL_DIR', os.path.join(current_directory, 'data'))
-RAW_IMPORT_CSV = os.path.join(DATA_DIR, 'gci-all-orig.csv')
+RAW_IMPORT_CSV = os.path.join(DATA_DIR, 'gci-rsci-all-with-edits.csv')
 ARCHES_INSERT_SQL_PATH =  os.path.join(DATA_DIR, 'etl_sql.txt')
 
 STAGING_SCHEMA_NAME = 'staging'
@@ -195,7 +195,7 @@ RSCI_MAPPING_CONFIGS = {
             ], 
         },
         {
-            'raw_col': 'Common Name',
+            'raw_col': 'READY_common_name',
             'targ_table': 'name',
             'stage_field_prefix': 'common_name_',
             'value_transform': make_lang_dict_value,
@@ -209,7 +209,7 @@ RSCI_MAPPING_CONFIGS = {
             ], 
         },
         {
-            'raw_col': 'Additional Names',
+            'raw_col': 'READY_additional_names',
             'targ_table': 'name',
             'stage_field_prefix': 'additional_names_',
             'value_transform': make_lang_dict_value,
@@ -591,7 +591,7 @@ RSCI_STATEMENTS_CONFIGS = {
             ],
         },
         {
-            'raw_col': 'Physical Form',
+            'raw_col': 'READY_physical_form',
             'targ_table': 'statement',
             'stage_field_prefix': 'physical_form_',
             'value_transform': make_lang_dict_value,
@@ -871,6 +871,13 @@ STATEMENT_PRODUCER_DESC_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
     list_id='1adae7ea-4884-432f-af44-c9aea3a48a3d',
 )
 
+# Statement Types list_id='1adae7ea-4884-432f-af44-c9aea3a48a3d'
+# pref_labels = ['expiration date statement',]
+STATEMENT_EXPIRE_DATE_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels = ['expiration date statement', ],
+    list_id='1adae7ea-4884-432f-af44-c9aea3a48a3d',
+)
+
 REL_RSCI_PLACE_REL_TYPE_ID = REL_LINK_REL_TYPE_ID
 REL_RSCI_PLACE_INVERSE_REL_TYPE_ID = REL_LINK_INVERSE_REL_TYPE_ID
 # REL_RSCI_PLACE_NODEID = 'bda5889c-d376-11ef-a239-0275dc2ded29'
@@ -954,9 +961,41 @@ RSCI_PRODUCTION_CONFIGS = {
             ]
         },
         {
-            'raw_col': 'origin_date_edtf',
+            'raw_col': 'READY_origination_date_edtf_1',
             'targ_table': 'production_time',
-            'stage_field_prefix': 'pt_',
+            'stage_field_prefix': 'pt_d1_',
+            'value_transform': copy_value,
+            'targ_field': 'production_time_edtf',
+            'data_type': Text,
+            'make_tileid': True,
+            'default_values': [
+                # # ('nodegroupid', UUID, 'bda37764-d376-11ef-a239-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'prod_1_tileid',
+                'targ_tile_field': 'production_',
+            },
+        },
+        {
+            'raw_col': 'READY_origination_date_edtf_2',
+            'targ_table': 'production_time',
+            'stage_field_prefix': 'pt_d2_',
+            'value_transform': copy_value,
+            'targ_field': 'production_time_edtf',
+            'data_type': Text,
+            'make_tileid': True,
+            'default_values': [
+                # # ('nodegroupid', UUID, 'bda37764-d376-11ef-a239-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'prod_1_tileid',
+                'targ_tile_field': 'production_',
+            },
+        },
+        {
+            'raw_col': 'READY_origination_date_edtf_3',
+            'targ_table': 'production_time',
+            'stage_field_prefix': 'pt_d3_',
             'value_transform': copy_value,
             'targ_field': 'production_time_edtf',
             'data_type': Text,
@@ -983,6 +1022,24 @@ RSCI_PRODUCTION_CONFIGS = {
             },
             'default_values': [
                 ('production_statement_type', JSONB, STATEMENT_PRODUCER_DESC_LIST_ITEMS,),
+                ('production_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # # ('nodegroupid', UUID, 'bda36f9e-d376-11ef-a239-0275dc2ded29',),
+            ],
+        },
+        {
+            'raw_col': 'READY_expiration_date_statement',
+            'targ_table': 'production_statement',
+            'stage_field_prefix': 'prod_exp_statement_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'production_statement_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'related_tileid': {
+                'source_tile_field': 'prod_1_tileid',
+                'targ_tile_field': 'production_',
+            },
+            'default_values': [
+                ('production_statement_type', JSONB, STATEMENT_EXPIRE_DATE_LIST_ITEMS,),
                 ('production_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 # # ('nodegroupid', UUID, 'bda36f9e-d376-11ef-a239-0275dc2ded29',),
             ],
@@ -2139,12 +2196,23 @@ ID_TYPE_PHYSICAL_THING_INTERNAL_ID_LIST_ITEMS = get_controlled_list_objs_by_pref
     list_id='f4a87a34-8288-4cec-8e20-b28bd567ce0a',
 )
 
+FACET_TYPE_BUILDING_MATERIALS_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['building materials',],
+    list_id='44984237-b8fc-49c1-a94d-06fc8e38c48e',
+)
+
+def set_building_materials(value, default=FACET_TYPE_BUILDING_MATERIALS_LIST_ITEMS):
+    if not value:
+        return None
+    return default
+
+
 
 FIELD_RSCI_MAPPING_CONFIGS = {
     'model_id': RSCI_UUID,
     'staging_table': 'etl_field_rsci',
     'model_staging_schema': RSCI_MODEL_NAME,
-    'raw_pk_col': 'rsci_uuid',
+    'raw_pk_col': 'sample_uuid',
     'load_path': IMPORT_FIELD_RSCI_CSV,
     'mappings': [
         {
@@ -2190,10 +2258,11 @@ FIELD_RSCI_MAPPING_CONFIGS = {
             ],
         },
         {
-            'raw_col': 'facet_type_value_uuid',
+            # do this for each resourceinstance uuid
+            'raw_col': 'sample_uuid',
             'targ_table': 'facet_type',
             'stage_field_prefix': '',
-            'value_transform': value_transform_facet_type_list_items_obj,
+            'value_transform': set_building_materials,
             'targ_field': 'facet_type',
             'data_type': JSONB,
             'make_tileid': True,
@@ -2201,7 +2270,7 @@ FIELD_RSCI_MAPPING_CONFIGS = {
                 ('facet_type_metatype', JSONB, METATYPE_FACET_TYPE_LIST_ITEMS,),
                 ('transactionid', UUID, FIELD_SAMPLES_TRANSACTION_ID,),
             ],
-        }
+        },
     ],
 }
 

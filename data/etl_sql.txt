@@ -1598,6 +1598,245 @@ dim2_dimension_unit::jsonb
                 ;
                 
 
+/* ---------------------------------------------------------------------------------- */ 
+
+
+
+                INSERT INTO place.instances (
+                    resourceinstanceid, 
+resource_instance_lifecycle_state_id, 
+graphid, 
+graphpublicationid, 
+principaluser_id, 
+transactionid
+                ) SELECT
+                    
+ DISTINCT
+                    resourceinstanceid::uuid, 
+'f75bb034-36e3-4ab4-8167-f520cf0b4c58'::uuid AS state_id, 
+graphid::uuid, 
+graphpublicationid::uuid, 
+principaluser_id::integer, 
+transactionid::uuid
+                
+                FROM staging.etl_field_place
+                WHERE (staging.etl_field_place.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM place.instances)) AND 
+((staging.etl_field_place.resourceinstanceid::uuid IS NOT NULL))
+                
+                ORDER BY staging.etl_field_place.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO place.name (
+                    resourceinstanceid, 
+tileid, 
+name_content, 
+name_type, 
+name_language, 
+transactionid
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+specific_place_tileid::uuid, 
+specific_place_name_content::jsonb, 
+specific_place_name_type::jsonb, 
+specific_place_name_language::jsonb, 
+specific_place_transactionid::uuid
+                
+                FROM staging.etl_field_place
+                WHERE (staging.etl_field_place.specific_place_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_field_place.specific_place_tileid::uuid IS NOT NULL) AND 
+((staging.etl_field_place.specific_place_name_content::jsonb IS NOT NULL))
+                
+                ORDER BY staging.etl_field_place.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO place.statement (
+                    resourceinstanceid, 
+tileid, 
+statement_content, 
+statement_type_metatype, 
+statement_type, 
+statement_language, 
+transactionid
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+statement_tileid::uuid, 
+statement_statement_content::jsonb, 
+statement_statement_type_metatype::jsonb, 
+statement_statement_type::jsonb, 
+statement_statement_language::jsonb, 
+statement_transactionid::uuid
+                
+                FROM staging.etl_field_place
+                WHERE (staging.etl_field_place.statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_field_place.statement_tileid::uuid IS NOT NULL) AND 
+((staging.etl_field_place.statement_statement_content::jsonb IS NOT NULL))
+                
+                ORDER BY staging.etl_field_place.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO place.external_uri (
+                    resourceinstanceid, 
+tileid, 
+external_uri, 
+transactionid
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+specific_place_uri_tileid::uuid, 
+specific_place_uri_external_uri::jsonb, 
+specific_place_uri_transactionid::uuid
+                
+                FROM staging.etl_field_place
+                WHERE (staging.etl_field_place.specific_place_uri_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_field_place.specific_place_uri_tileid::uuid IS NOT NULL) AND 
+((staging.etl_field_place.specific_place_uri_external_uri::jsonb IS NOT NULL))
+                
+                ORDER BY staging.etl_field_place.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO place.defined_by (
+                    resourceinstanceid, 
+tileid, 
+defined_by, 
+transactionid
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+geo_point_tileid::uuid, 
+ST_AsText(ST_GeomFromGeoJSON(geo_point_defined_by)), 
+geo_point_transactionid::uuid
+                
+                FROM staging.etl_field_place
+                WHERE (staging.etl_field_place.geo_point_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_field_place.geo_point_tileid::uuid IS NOT NULL) AND 
+((staging.etl_field_place.geo_point_defined_by::jsonb IS NOT NULL))
+                
+                ORDER BY staging.etl_field_place.resourceinstanceid
+                
+                ;
+                
+
+/* ---------------------------------------------------------------------------------- */ 
+
+
+
+                INSERT INTO reference_and_sample_collection_item.instances (
+                    resourceinstanceid, 
+resource_instance_lifecycle_state_id, 
+graphid, 
+graphpublicationid, 
+principaluser_id, 
+transactionid
+                ) SELECT
+                    
+ DISTINCT
+                    resourceinstanceid::uuid, 
+'f75bb034-36e3-4ab4-8167-f520cf0b4c58'::uuid AS state_id, 
+graphid::uuid, 
+graphpublicationid::uuid, 
+principaluser_id::integer, 
+transactionid::uuid
+                
+                FROM staging.etl_field_rsci
+                WHERE (staging.etl_field_rsci.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.etl_field_rsci.resourceinstanceid::uuid IS NOT NULL))
+                
+                ORDER BY staging.etl_field_rsci.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.name (
+                    resourceinstanceid, 
+tileid, 
+name_content, 
+name_type_, 
+name_language_, 
+transactionid
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+field_name_tileid::uuid, 
+field_name_name_content::jsonb, 
+field_name_name_type_::jsonb, 
+field_name_name_language_::jsonb, 
+field_name_transactionid::uuid
+                
+                FROM staging.etl_field_rsci
+                WHERE (staging.etl_field_rsci.field_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_field_rsci.field_name_tileid::uuid IS NOT NULL) AND 
+((staging.etl_field_rsci.field_name_name_content::jsonb IS NOT NULL))
+                
+                ORDER BY staging.etl_field_rsci.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.identifier (
+                    resourceinstanceid, 
+tileid, 
+identifier_content, 
+identifier_type, 
+transactionid
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+samp_id_id_tileid::uuid, 
+samp_id_id_identifier_content::jsonb, 
+samp_id_id_identifier_type::jsonb, 
+samp_id_id_transactionid::uuid
+                
+                FROM staging.etl_field_rsci
+                WHERE (staging.etl_field_rsci.samp_id_id_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_field_rsci.samp_id_id_tileid::uuid IS NOT NULL) AND 
+((staging.etl_field_rsci.samp_id_id_identifier_content::jsonb IS NOT NULL))
+                
+                ORDER BY staging.etl_field_rsci.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.facet_type (
+                    resourceinstanceid, 
+tileid, 
+facet_type, 
+facet_type_metatype, 
+transactionid
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+tileid::uuid, 
+facet_type::jsonb, 
+facet_type_metatype::jsonb, 
+transactionid::uuid
+                
+                FROM staging.etl_field_rsci
+                WHERE (staging.etl_field_rsci.tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_field_rsci.tileid::uuid IS NOT NULL) AND 
+((staging.etl_field_rsci.facet_type::jsonb IS NOT NULL))
+                
+                ORDER BY staging.etl_field_rsci.resourceinstanceid
+                
+                ;
+                
+
 
 /*
 ALTER TABLE TILES ENABLE TRIGGER __arches_check_excess_tiles_trigger;
