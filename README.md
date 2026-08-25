@@ -54,6 +54,8 @@ Execute the following management command to "publish" the newly ETL'd records:
 docker exec -it arches python manage.py migrate arches_rascolls 0004_search_layer
 docker exec -it arches python manage.py migrate arches_rascolls
 docker exec -it arches python manage.py graph publish --update -ui
+docker exec -it arches python manage.py report_configs load
+docker exec -it arches python manage.py arches_search reindex_database
 ```
 
 

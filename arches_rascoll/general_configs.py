@@ -34,6 +34,8 @@ IMPORT_TABLE_NAME = 'rsci'
 RSCI_UUID = 'd4e956f7-9fad-4fd2-94e3-563a3b2c3585'
 RSCI_MODEL_NAME = 'reference_and_sample_collection_item'
 
+FIELD_SAMPLES_TRANSACTION_ID = '723b9446-9488-4df9-a4e3-ed18041c2632'
+
 
 CONTROLLED_LIST_CACHE_DICT = {}
 # NOTE: Lots of the UUIDs to concept items are actually the UUIDs for
@@ -662,7 +664,7 @@ RSCI_SAFETY_GROUP_MAPPINGS = {
         },
         {
             'raw_col': 'all_safety',
-            'targ_table': 'safety_classification',
+            'targ_table': 'nfpa_safety_classification',
             'stage_field_prefix': '',
             'value_transform': copy_value,
             'targ_field': 'nfpa_safety_classifcation_type',
@@ -996,6 +998,18 @@ RSCI_PRODUCTION_CONFIGS = {
 
 # Name Types - Physical Thing list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce'
 # pref_labels=['chemical name',]
+
+def make_material_type_list_items(value):
+    """Make list items list objects from material type pref_label values"""
+    if not value:
+        return None
+    pref_labels = [str(value).strip()]
+    # Material list_id='9a2ee63b-d696-4686-979b-994597790289'
+    return get_controlled_list_objs_by_pref_labels(
+        pref_labels=pref_labels,
+        list_id='9a2ee63b-d696-4686-979b-994597790289',
+    )
+
 NAME_PHYSICAL_THINGS_CHEMICAL_NAMES_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
     pref_labels=['chemical name',],
     list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce',
@@ -1036,8 +1050,20 @@ RSCI_CHEMICAL_MATERIAL_CONFIGS = {
             ], 
         },
         {
-            'raw_col': 'Chemical Name',
+            'raw_col': 'READY_sample_type',
             'targ_table': 'chemical_material',
+            'stage_field_prefix': 'chem_',
+            'value_transform': make_material_type_list_items,
+            'targ_field': 'chemical_material',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+            
+            ], 
+        },
+        {
+            'raw_col': 'Chemical Name',
+            'targ_table': 'chemical_material_name',
             'stage_field_prefix': 'chem_',
             'value_transform': copy_value,
             'targ_field': 'chemical_material_name_content',
@@ -1045,23 +1071,35 @@ RSCI_CHEMICAL_MATERIAL_CONFIGS = {
             'make_tileid': True,
             'default_values': [
                 ('chemical_material_name_type_', JSONB, NAME_PHYSICAL_THINGS_CHEMICAL_NAMES_LIST_ITEMS,),
+                # ('material_data_assignment_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                # ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
+            ],
+            'related_tileid': {
+                'source_tile_field': 'chem_tileid',
+                'targ_tile_field': 'chemical_material',
+            }, 
+        },
+        {
+            'raw_col': 'Chemical (CAS) No.',
+            'targ_table': 'chemical_material_identifier',
+            'stage_field_prefix': 'chem_id_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'chemical_material_identifier_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
                 ('chemical_material_identifier_type', JSONB, NAME_CAS_REGISTRY_NUMBER_LIST_ITEMS,),
                 # ('material_data_assignment_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 # ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
             ],
-            'tile_other_fields': [
-                # Mappings for other fields to include in the same tile
-                {
-                    'raw_col': 'Chemical (CAS) No.',
-                    'targ_field': 'chemical_material_identifier_content',
-                    'data_type': JSONB,
-                    'value_transform': make_lang_dict_value,
-                },
-            ], 
+            'related_tileid': {
+                'source_tile_field': 'chem_tileid',
+                'targ_tile_field': 'chemical_material',
+            }, 
         },
         {
             'raw_col': 'Chemical Formula',
-            'targ_table': 'chemical_material',
+            'targ_table': 'chemical_material_name',
             'stage_field_prefix': 'chem_form_',
             'value_transform': copy_value,
             'targ_field': 'chemical_material_name_content',
@@ -1072,6 +1110,10 @@ RSCI_CHEMICAL_MATERIAL_CONFIGS = {
                 # ('material_data_assignment_name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 # ('nodegroupid', UUID, 'bda409e0-d376-11ef-a239-0275dc2ded29',),
             ], 
+            'related_tileid': {
+                'source_tile_field': 'chem_tileid',
+                'targ_tile_field': 'chemical_material',
+            },
         },
     ],
 }
@@ -1287,26 +1329,18 @@ RSCI_CURRENT_LOCATION_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                # # ('nodegroupid', UUID, 'bda4a954-d376-11ef-a239-0275dc2ded29',),
-            ], 
-        },
-        {
-            'raw_col': 'current_location_statement',
-            'targ_table': 'current_location_statement',
-            'stage_field_prefix': 'cur_loc_statement_',
-            'value_transform': make_lang_dict_value,
-            'targ_field': 'current_location_statement_content',
-            'data_type': JSONB,
-            'make_tileid': True,
-            'default_values': [
                 ('current_location_statement_type', JSONB, PLACE_STATEMENT_TYPE_LIST_ITEMS,),
                 ('current_location_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                # # ('nodegroupid', UUID, 'c7ab9e8a-08e1-11f0-a3e8-0275dc2ded29',),
             ],
-            'related_tileid': {
-                'source_tile_field': 'cur_loc_tileid',
-                'targ_tile_field': 'current_location',
-            },
+            'tile_other_fields': [
+                # Mappings for other fields to include in the same tile
+                {
+                    'raw_col': 'current_location_statement',
+                    'targ_field': 'current_location_statement_content',
+                    'data_type': JSONB,
+                    'value_transform': make_lang_dict_value,
+                },
+            ],
         },
     ],
 }
@@ -2009,6 +2043,176 @@ RSCI_CHEMICALS_CONFIGS = {
 
 
 
+
+
+
+
+# FIELD MAPPINGS
+IMPORT_FIELD_PLACES_CSV = os.path.join(DATA_DIR, 'gci-field-places.csv')
+
+FIELD_PLACE_MAPPING_CONFIGS = {
+    'model_id': PLACE_MODEL_UUID,
+    'staging_table': f'etl_field_{PLACE_MODEL_NAME}',
+    'model_staging_schema': PLACE_MODEL_NAME,
+    'raw_pk_col': 'place_uuid',
+    'load_path': IMPORT_FIELD_PLACES_CSV,
+    'mappings': [
+        {
+            'raw_col': 'place_uuid',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'do_distinct': True,
+            'default_values': [
+                ('graphid', UUID, PLACE_MODEL_UUID,),
+                ('graphpublicationid', UUID, 'a3e9145b-ba55-4793-a0fa-189e0f404ca7',),
+                ('principaluser_id', Integer, 1,),
+                ('transactionid', UUID, FIELD_SAMPLES_TRANSACTION_ID,),
+            ], 
+        },
+        {
+            'raw_col': 'specific_place',
+            'targ_table': 'name',
+            'stage_field_prefix': 'specific_place_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'name_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('name_type', JSONB, NAME_TYPES_GENERIC_PREFERRED_LIST_ITEMS,),
+                ('name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                ('transactionid', UUID, FIELD_SAMPLES_TRANSACTION_ID,),
+            ],
+        },
+        {
+            'raw_col': 'statement',
+            'targ_table': 'statement',
+            'stage_field_prefix': 'statement_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'statement_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('statement_type_metatype', JSONB, METATYPE_BRIEF_TEXT_LIST_ITEMS),
+                ('statement_type', JSONB,  PLACE_STATEMENT_TYPE_LIST_ITEMS,),
+                ('statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                ('transactionid', UUID, FIELD_SAMPLES_TRANSACTION_ID,),
+            ],
+        },
+        {
+            'raw_col': 'specific_place_uri',
+            'targ_table': 'external_uri',
+            'stage_field_prefix': 'specific_place_uri_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'external_uri',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('transactionid', UUID, FIELD_SAMPLES_TRANSACTION_ID,),
+            ], 
+        },
+        {
+            'raw_col': 'geo_point',
+            'targ_table': 'defined_by',
+            'stage_field_prefix': 'geo_point_',
+            'value_transform': copy_value,
+            'targ_field': 'defined_by',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'source_geojson': True,
+            'default_values': [
+                ('transactionid', UUID, FIELD_SAMPLES_TRANSACTION_ID,),
+            ], 
+        },
+    ],
+}
+
+
+
+IMPORT_FIELD_RSCI_CSV = os.path.join(DATA_DIR, 'gci-field-all.csv')
+
+ID_TYPE_PHYSICAL_THING_INTERNAL_ID_LIST_ITEMS = get_controlled_list_objs_by_pref_labels(
+    pref_labels=['internal identifier',],
+    list_id='f4a87a34-8288-4cec-8e20-b28bd567ce0a',
+)
+
+
+FIELD_RSCI_MAPPING_CONFIGS = {
+    'model_id': RSCI_UUID,
+    'staging_table': 'etl_field_rsci',
+    'model_staging_schema': RSCI_MODEL_NAME,
+    'raw_pk_col': 'rsci_uuid',
+    'load_path': IMPORT_FIELD_RSCI_CSV,
+    'mappings': [
+        {
+            'raw_col': 'sample_uuid',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'default_values': [
+                ('graphid', UUID, RSCI_UUID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+                ('transactionid', UUID, FIELD_SAMPLES_TRANSACTION_ID,),
+            ], 
+        },
+        {
+            'raw_col': 'field_name',
+            'targ_table': 'name',
+            'stage_field_prefix': 'field_name_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'name_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('name_type_', JSONB, NAME_TYPES_PHYSICAL_THING_PRIMARY_LIST_ITEMS,),
+                ('name_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                ('transactionid', UUID, FIELD_SAMPLES_TRANSACTION_ID,),
+            ], 
+        },
+        {
+            'raw_col': 'SampID',
+            'targ_table': 'identifier',
+            'stage_field_prefix': 'samp_id_id_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'identifier_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('identifier_type', JSONB, ID_TYPE_PHYSICAL_THING_INTERNAL_ID_LIST_ITEMS,),
+                ('transactionid', UUID, FIELD_SAMPLES_TRANSACTION_ID,),
+            ],
+        },
+        {
+            'raw_col': 'facet_type_value_uuid',
+            'targ_table': 'facet_type',
+            'stage_field_prefix': '',
+            'value_transform': value_transform_facet_type_list_items_obj,
+            'targ_field': 'facet_type',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('facet_type_metatype', JSONB, METATYPE_FACET_TYPE_LIST_ITEMS,),
+                ('transactionid', UUID, FIELD_SAMPLES_TRANSACTION_ID,),
+            ],
+        }
+    ],
+}
+
+
+
+
+
+
+
+
+
 ALL_MAPPING_CONFIGS = [
     # Create resource instances for different models
     RSCI_MAPPING_CONFIGS,
@@ -2039,6 +2243,9 @@ ALL_MAPPING_CONFIGS = [
     # RSCI_COMPONENT_CONFIGS,
 
     # RSCI_CHEMICALS_CONFIGS,
+
+    FIELD_PLACE_MAPPING_CONFIGS,
+    FIELD_RSCI_MAPPING_CONFIGS,
 ]
 
 

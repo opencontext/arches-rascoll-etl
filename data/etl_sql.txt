@@ -199,6 +199,10 @@ UPDATE nodes
 SET name = REPLACE(name, '_time-span_edtf', '_time_span_edtf')
 WHERE name LIKE '%_time-span_edtf%';
 
+UPDATE nodes
+SET name = REPLACE(name, '_time-span_type', '_time_span_type')
+WHERE name LIKE '%_time-span_type%';
+
 
 
 UPDATE node_groups
@@ -874,7 +878,7 @@ principaluser_id::integer
                 
 
 
-                INSERT INTO reference_and_sample_collection_item.safety_classification (
+                INSERT INTO reference_and_sample_collection_item.nfpa_safety_classification (
                     resourceinstanceid, 
 tileid, 
 nfpa_safety_classifcation_type, 
@@ -1179,23 +1183,17 @@ principaluser_id::integer
                 INSERT INTO reference_and_sample_collection_item.chemical_material (
                     resourceinstanceid, 
 tileid, 
-chemical_material_name_content, 
-chemical_material_name_type_, 
-chemical_material_identifier_type, 
-chemical_material_identifier_content
+chemical_material
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 chem_tileid::uuid, 
-chem_chemical_material_name_content::text, 
-chem_chemical_material_name_type_::jsonb, 
-chem_chemical_material_identifier_type::jsonb, 
-chem_chemical_material_identifier_content::jsonb
+chem_chemical_material::jsonb
                 
                 FROM staging.etl_rsci_chemical_material
                 WHERE (staging.etl_rsci_chemical_material.chem_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.etl_rsci_chemical_material.chem_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_chemical_material.chem_chemical_material_name_content::text IS NOT NULL) OR (staging.etl_rsci_chemical_material.chem_chemical_material_identifier_content::jsonb IS NOT NULL))
+((staging.etl_rsci_chemical_material.chem_chemical_material::jsonb IS NOT NULL))
                 
                 ORDER BY staging.etl_rsci_chemical_material.resourceinstanceid
                 
@@ -1203,17 +1201,69 @@ chem_chemical_material_identifier_content::jsonb
                 
 
 
-                INSERT INTO reference_and_sample_collection_item.chemical_material (
+                INSERT INTO reference_and_sample_collection_item.chemical_material_name (
                     resourceinstanceid, 
 tileid, 
 chemical_material_name_content, 
-chemical_material_name_type_
+chemical_material_name_type_, 
+chemical_material
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+chem_tileid::uuid, 
+chem_chemical_material_name_content::text, 
+chem_chemical_material_name_type_::jsonb, 
+chem_tileid::uuid
+                
+                FROM staging.etl_rsci_chemical_material
+                WHERE (staging.etl_rsci_chemical_material.chem_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_chemical_material.chem_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_chemical_material.chem_chemical_material_name_content::text IS NOT NULL))
+                
+                ORDER BY staging.etl_rsci_chemical_material.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.chemical_material_identifier (
+                    resourceinstanceid, 
+tileid, 
+chemical_material_identifier_content, 
+chemical_material_identifier_type, 
+chemical_material
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+chem_id_tileid::uuid, 
+chem_id_chemical_material_identifier_content::jsonb, 
+chem_id_chemical_material_identifier_type::jsonb, 
+chem_tileid::uuid
+                
+                FROM staging.etl_rsci_chemical_material
+                WHERE (staging.etl_rsci_chemical_material.chem_id_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_chemical_material.chem_id_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_chemical_material.chem_id_chemical_material_identifier_content::jsonb IS NOT NULL))
+                
+                ORDER BY staging.etl_rsci_chemical_material.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.chemical_material_name (
+                    resourceinstanceid, 
+tileid, 
+chemical_material_name_content, 
+chemical_material_name_type_, 
+chemical_material
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 chem_form_tileid::uuid, 
 chem_form_chemical_material_name_content::text, 
-chem_form_chemical_material_name_type_::jsonb
+chem_form_chemical_material_name_type_::jsonb, 
+chem_tileid::uuid
                 
                 FROM staging.etl_rsci_chemical_material
                 WHERE (staging.etl_rsci_chemical_material.chem_form_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
@@ -1441,44 +1491,23 @@ principaluser_id::integer
                 INSERT INTO reference_and_sample_collection_item.current_location (
                     resourceinstanceid, 
 tileid, 
-current_location
+current_location, 
+current_location_statement_type, 
+current_location_statement_language, 
+current_location_statement_content
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 cur_loc_tileid::uuid, 
-cur_loc_current_location::jsonb
+cur_loc_current_location::jsonb, 
+cur_loc_current_location_statement_type::jsonb, 
+cur_loc_current_location_statement_language::jsonb, 
+cur_loc_current_location_statement_content::jsonb
                 
                 FROM staging.etl_rsci_current_location
                 WHERE (staging.etl_rsci_current_location.cur_loc_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.etl_rsci_current_location.cur_loc_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_current_location.cur_loc_current_location::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_current_location.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.current_location_statement (
-                    resourceinstanceid, 
-tileid, 
-current_location_statement_content, 
-current_location_statement_type, 
-current_location_statement_language, 
-current_location
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-cur_loc_statement_tileid::uuid, 
-cur_loc_statement_current_location_statement_content::jsonb, 
-cur_loc_statement_current_location_statement_type::jsonb, 
-cur_loc_statement_current_location_statement_language::jsonb, 
-cur_loc_tileid::uuid
-                
-                FROM staging.etl_rsci_current_location
-                WHERE (staging.etl_rsci_current_location.cur_loc_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_current_location.cur_loc_statement_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_current_location.cur_loc_statement_current_location_statement_content::jsonb IS NOT NULL))
+((staging.etl_rsci_current_location.cur_loc_current_location::jsonb IS NOT NULL) OR (staging.etl_rsci_current_location.cur_loc_current_location_statement_content::jsonb IS NOT NULL))
                 
                 ORDER BY staging.etl_rsci_current_location.resourceinstanceid
                 

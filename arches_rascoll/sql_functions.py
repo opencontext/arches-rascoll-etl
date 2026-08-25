@@ -275,6 +275,10 @@ NODE_SLUG_CHARACTER_FIX = """
 UPDATE nodes
 SET name = REPLACE(name, '_time-span_edtf', '_time_span_edtf')
 WHERE name LIKE '%_time-span_edtf%';
+
+UPDATE nodes
+SET name = REPLACE(name, '_time-span_type', '_time_span_type')
+WHERE name LIKE '%_time-span_type%';
 """
 
 NODE_CARDINALITY_FIX = """

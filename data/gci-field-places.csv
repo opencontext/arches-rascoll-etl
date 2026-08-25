@@ -1,0 +1,10 @@
+specific_place,specific_place_uri,statement,latitude,longitude,geo_point,place_uuid
+Syria,https://www.geonames.org/163843,Syria (URI: https://www.geonames.org/163843),35,38,"{""type"": ""Point"", ""coordinates"": [35, 38]}",13334d9b-984b-476b-a8e9-16783a549763
+Iraq,https://www.geonames.org/99237,Iraq (URI: https://www.geonames.org/99237),33,44,"{""type"": ""Point"", ""coordinates"": [33, 44]}",60ea2328-4d58-426a-8694-b083da0ef4f4
+Turkmenistan,https://www.geonames.org/1218197,Turkmenistan (URI: https://www.geonames.org/1218197),39.75,59.66667,"{""type"": ""Point"", ""coordinates"": [39.75, 59.66667]}",d4c1423a-2fa8-443f-886c-93d70fbdd444
+El Salvador,https://www.geonames.org/3585968,El Salvador (URI: https://www.geonames.org/3585968),13.83333,-88.91667,"{""type"": ""Point"", ""coordinates"": [13.83333, -88.91667]}",93eba51d-6728-4d12-8e1a-84ebc2f413fd
+Tunisia,https://www.geonames.org/2464461,Tunisia (URI: https://www.geonames.org/2464461),34,9,"{""type"": ""Point"", ""coordinates"": [34, 9]}",a7447f41-9255-4805-a6c3-72c45768c1c2
+Oman,https://www.geonames.org/286963,Oman (URI: https://www.geonames.org/286963),21,57,"{""type"": ""Point"", ""coordinates"": [21, 57]}",56d54813-b40c-47df-9719-3d9244acbe45
+Yemen,https://www.geonames.org/69543,Yemen (URI: https://www.geonames.org/69543),15.5,47.5,"{""type"": ""Point"", ""coordinates"": [15.5, 47.5]}",bae1695a-0d1b-4927-a444-acef0a3b5c81
+Belize,https://www.geonames.org/3582678,Belize (URI: https://www.geonames.org/3582678),17.25,-88.75,"{""type"": ""Point"", ""coordinates"": [17.25, -88.75]}",1c64b3d2-1687-4c37-95a0-7652dd614029
+Benin,https://www.geonames.org/2395170,Benin (URI: https://www.geonames.org/2395170),9.5,2.25,"{""type"": ""Point"", ""coordinates"": [9.5, 2.25]}",4b2bfd3f-4953-4585-bcf4-63355288594f
