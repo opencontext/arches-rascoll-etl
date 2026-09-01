@@ -1742,6 +1742,10 @@ def make_part_type_list_items(value):
         list_id='73a6d800-669d-48b7-a1fb-2ecdaa0a4827',
     )
 
+
+REMOVAL_REL_PROPERY_ID = 'ac41d9be-79db-4256-b368-2f4559cfbe55'
+REMOVAL_INV_REL_PROPERY_ID = 'ac41d9be-79db-4256-b368-2f4559cfbe55'
+
 RSCI_MATERIALS_TYPES_TRANSACTION_ID = '42feb182-0a6e-445e-85c5-8f5839fd687f'
 
 RSCI_MATERIALS_TYPES_CONFIGS = {
@@ -1895,7 +1899,8 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
                     'targ_field': 'part_removed_from',
                     'source_field_from_uuid': 'rsci_uuid',
                     'source_field_to_uuid': 'READY_comp_pigment_INCOLLECTION',
-                    # 'rel_nodeid': PRODUCTION_NODE_ID,
+                    'rel_type_id': REMOVAL_REL_PROPERY_ID,
+                    'inverse_rel_type_id': REMOVAL_INV_REL_PROPERY_ID,
                 },
             ],
             'tile_other_fields': [
@@ -1973,7 +1978,8 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
                     'targ_field': 'part_removed_from',
                     'source_field_from_uuid': 'rsci_uuid',
                     'source_field_to_uuid': 'READY_comp_basemix_INCOLLECTION',
-                    # 'rel_nodeid': PRODUCTION_NODE_ID,
+                    'rel_type_id': REMOVAL_REL_PROPERY_ID,
+                    'inverse_rel_type_id': REMOVAL_INV_REL_PROPERY_ID,
                 },
             ],
             'tile_other_fields': [
@@ -2051,7 +2057,8 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
                     'targ_field': 'part_removed_from',
                     'source_field_from_uuid': 'rsci_uuid',
                     'source_field_to_uuid': 'READY_comp1_INCOLLECTION',
-                    # 'rel_nodeid': PRODUCTION_NODE_ID,
+                    'rel_type_id': REMOVAL_REL_PROPERY_ID,
+                    'inverse_rel_type_id': REMOVAL_INV_REL_PROPERY_ID,
                 },
             ],
             'tile_other_fields': [
@@ -2129,7 +2136,8 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
                     'targ_field': 'part_removed_from',
                     'source_field_from_uuid': 'rsci_uuid',
                     'source_field_to_uuid': 'READY_comp2_INCOLLECTION',
-                    # 'rel_nodeid': PRODUCTION_NODE_ID,
+                    'rel_type_id': REMOVAL_REL_PROPERY_ID,
+                    'inverse_rel_type_id': REMOVAL_INV_REL_PROPERY_ID,
                 },
             ],
             'skip_tile_other_fields': [
@@ -2207,7 +2215,8 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
                     'targ_field': 'part_removed_from',
                     'source_field_from_uuid': 'rsci_uuid',
                     'source_field_to_uuid': 'READY_comp3_INCOLLECTION',
-                    # 'rel_nodeid': PRODUCTION_NODE_ID,
+                    'rel_type_id': REMOVAL_REL_PROPERY_ID,
+                    'inverse_rel_type_id': REMOVAL_INV_REL_PROPERY_ID,
                 },
             ],
             'skip_tile_other_fields': [
