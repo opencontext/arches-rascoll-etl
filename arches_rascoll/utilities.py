@@ -3,6 +3,7 @@ import copy
 import datetime
 import json
 import os
+from openpyxl import load_workbook
 import uuid as GenUUID
 
 import numpy as np
@@ -124,3 +125,15 @@ def get_card_data_for_node_in_graph(node_alias, graph_name):
     if len(d_list) == 0:
         return None
     return d_list[0]
+
+
+def read_excel_to_dataframes(excel_filepath):
+    """Reads an Excel workbook into a dictionary of dataframes keyed by sheet names."""
+    dfs = {}
+    wb = load_workbook(excel_filepath, data_only=True)
+    for sheet_name in wb.sheetnames:
+        print('Reading sheet ' + sheet_name)
+        # This probably needs an upgraded pandas
+        # dfs[sheet_name] = pd.read_excel(xls, sheet_name=sheet_name, engine='xlrd')
+        dfs[sheet_name] = pd.read_excel(wb, sheet_name, engine='openpyxl')
+    return dfs
