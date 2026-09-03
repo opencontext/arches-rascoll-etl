@@ -1,0 +1,5 @@
+resourceinstance_id,statement__statement_language_,statement__statement_type,statement__statement_content,dimension__dimension_lowest_possible_value,dimension__dimension_type_,dimension__dimension_unit,dimension__dimension_value_,dimension__dimension_highest_possible_value
+8fbd01f7-804b-4ae3-98bd-f9f18aa3cf3a,English (language),"brief text,description","a collection of 19th c. pigments painted out on prepared canvas, by graduate intern Veronica Biolcati",40.6,height,centimeters,40.6,40.6
+8fbd01f7-804b-4ae3-98bd-f9f18aa3cf3a,English (language),"brief text,description","a collection of 19th c. pigments painted out on prepared canvas, by graduate intern Veronica Biolcati",50.7,width,centimeters,50.7,50.7
+8fbd01f7-804b-4ae3-98bd-f9f18aa3cf3a,English (language),"brief text,materials/technique description",oil paint on canvas,40.6,height,centimeters,40.6,40.6
+8fbd01f7-804b-4ae3-98bd-f9f18aa3cf3a,English (language),"brief text,materials/technique description",oil paint on canvas,50.7,width,centimeters,50.7,50.7

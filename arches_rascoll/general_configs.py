@@ -2566,6 +2566,139 @@ FIELD_RSCI_MAPPING_CONFIGS = {
 }
 
 
+PHYS_THING_MODEL_ID = 'c08bae61-9726-47d8-9751-2dd04d20a7b4'
+PHYS_THING_MODEL_NAME = 'physical_thing'
+IMPORT_PHYS_THING_CSV = os.path.join(DATA_DIR, 'gci-all-afs-physical-thing.csv')
+PHYS_THING_TRANSACTION_ID = '9dddda78-32b9-4a56-a293-ef08d0f700b2'
+
+
+def make_language_list_items(value):
+    if not value:
+        return None
+    value = value.strip()
+    # Languages Types list_id='f7fc4f6d-fd46-4881-846f-4a08bc1a3fef'
+    return get_controlled_list_objs_by_pref_labels(
+        pref_labels=[value,],
+        list_id='f7fc4f6d-fd46-4881-846f-4a08bc1a3fef',
+    )
+
+def make_statement_type_list_items(value):
+    if not value:
+        return None
+    value = value.strip()
+    # Languages Types list_id='1adae7ea-4884-432f-af44-c9aea3a48a3d'
+    if ',' in value:
+        raw_pref_labels = value.split(',')
+    else:
+        raw_pref_labels = [value]
+    pref_labels = [v.strip() for v in raw_pref_labels]
+    return get_controlled_list_objs_by_pref_labels(
+        pref_labels=pref_labels,
+        list_id='1adae7ea-4884-432f-af44-c9aea3a48a3d',
+    )
+
+
+AFS_PHYS_THING_MAPPING_CONFIGS = {
+    'model_id': PHYS_THING_MODEL_ID,
+    'staging_table': 'etl_afs_phys_things',
+    'model_staging_schema': PHYS_THING_MODEL_NAME,
+    'raw_pk_col': 'resourceinstance_id',
+    'load_path': IMPORT_PHYS_THING_CSV,
+    'mappings': [
+        {
+            'raw_col': 'resourceinstance_id',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'do_distinct': True,
+            'default_values': [
+                ('graphid', UUID, PHYS_THING_MODEL_ID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+                ('transactionid', UUID, PHYS_THING_TRANSACTION_ID,),
+            ], 
+        },
+        {
+            'raw_col': 'name__name_content',
+            'targ_table': 'name',
+            'stage_field_prefix': 'phys_things_name_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'name_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('name_type_', JSONB, NAME_TYPES_PHYSICAL_THING_PRIMARY_LIST_ITEMS,),
+                ('transactionid', UUID, PHYS_THING_TRANSACTION_ID,),
+            ],
+            'tile_other_fields': [
+                # Mappings for other fields to include in the same tile
+                {
+                    'raw_col': 'name__name_language_',
+                    'targ_field': 'name_language_',
+                    'data_type': JSONB,
+                    'value_transform': make_language_list_items,
+                },
+            ],
+        },
+        {
+            'raw_col': 'identifier__identifier_content',
+            'targ_table': 'identifier',
+            'stage_field_prefix': 'phys_things_id_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'identifier_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('identifier_type', JSONB, ID_TYPE_PHYSICAL_THING_INTERNAL_ID_LIST_ITEMS,),
+                ('transactionid', UUID, PHYS_THING_TRANSACTION_ID,),
+            ],
+        },
+        {
+            # do this for each resourceinstance uuid
+            'raw_col': 'object_type__object_type',
+            'targ_table': 'object_type',
+            'stage_field_prefix': 'phys_things_obj_type_',
+            'value_transform': make_sample_object_type_list_items,
+            'targ_field': 'object_type',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('transactionid', UUID, PHYS_THING_TRANSACTION_ID,),
+            ],
+        },
+        {
+            # do this for each resourceinstance uuid
+            'raw_col': 'statement__statement_content',
+            'targ_table': 'statement',
+            'stage_field_prefix': 'phys_things_state_cont_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'statement_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('transactionid', UUID, PHYS_THING_TRANSACTION_ID,),
+            ],
+            'tile_other_fields': [
+                # Mappings for other fields to include in the same tile
+                {
+                    'raw_col': 'statement__statement_type',
+                    'targ_field': 'statement_type',
+                    'data_type': JSONB,
+                    'value_transform': make_statement_type_list_items,
+                },
+                {
+                    'raw_col': 'statement__statement_language_',
+                    'targ_field': 'statement_language_',
+                    'data_type': JSONB,
+                    'value_transform': make_language_list_items,
+                },
+            ],
+        },
+    ],
+}
 
 
 
@@ -2573,7 +2706,8 @@ FIELD_RSCI_MAPPING_CONFIGS = {
 
 
 
-ALL_MAPPING_CONFIGS = [
+
+MAIN_ALL_MAPPING_CONFIGS = [
     # Create resource instances for different models
     RSCI_MAPPING_CONFIGS,
     PLACE_MAPPING_CONFIGS,
@@ -2607,6 +2741,11 @@ ALL_MAPPING_CONFIGS = [
     FIELD_RSCI_MAPPING_CONFIGS,
 ]
 
+ALL_MAPPING_CONFIGS = [
+    # AFS physical things
+    AFS_PHYS_THING_MAPPING_CONFIGS,
+]
+
 
 
 ARCHES_REL_VIEW_PREP_SQLS = [
@@ -2626,5 +2765,8 @@ ARCHES_REL_VIEW_PREP_SQLS = [
     """,
     f"""
     SELECT __arches_create_resource_model_views('{SET_MODEL_UUID}');
+    """,
+    f"""
+    SELECT __arches_create_resource_model_views('{PHYS_THING_MODEL_ID}');
     """,
 ]
