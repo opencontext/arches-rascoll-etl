@@ -2568,7 +2568,7 @@ FIELD_RSCI_MAPPING_CONFIGS = {
 
 PHYS_THING_MODEL_ID = 'c08bae61-9726-47d8-9751-2dd04d20a7b4'
 PHYS_THING_MODEL_NAME = 'physical_thing'
-IMPORT_PHYS_THING_CSV = os.path.join(DATA_DIR, 'gci-all-afs-physical-thing.csv')
+IMPORT_PHYS_THING_NAME_ID_CSV = os.path.join(DATA_DIR, 'gci-all-afs-physical-thing-name-identifier-object_type-current_location-current_owner-production-1.csv')
 PHYS_THING_TRANSACTION_ID = '9dddda78-32b9-4a56-a293-ef08d0f700b2'
 
 
@@ -2597,13 +2597,40 @@ def make_statement_type_list_items(value):
         list_id='1adae7ea-4884-432f-af44-c9aea3a48a3d',
     )
 
+def phys_thing_transaction_id_for_non_blanks(value, transaction_id=PHYS_THING_TRANSACTION_ID):
+    if not value:
+        return None
+    return transaction_id
 
-AFS_PHYS_THING_MAPPING_CONFIGS = {
+
+def make_prod_type_list_items(value):
+    if not value:
+        return None
+    value = value.strip()
+    # Event Types - Production list_id='f0b85b97-f3ae-41dd-ac4e-6f1e249a9dbb'
+    return get_controlled_list_objs_by_pref_labels(
+        pref_labels=[value,],
+        list_id='f0b85b97-f3ae-41dd-ac4e-6f1e249a9dbb',
+    )
+
+
+def make_prod_tech_list_items(value):
+    if not value:
+        return None
+    value = value.strip()
+    # Method Types - Production Technique list_id='1bb3db74-3dff-4e44-a629-7d6a0c1383e9'
+    return get_controlled_list_objs_by_pref_labels(
+        pref_labels=[value,],
+        list_id='1bb3db74-3dff-4e44-a629-7d6a0c1383e9',
+    )
+
+
+AFS_PHYS_THING_NAME_ID_MAPPING_CONFIGS = {
     'model_id': PHYS_THING_MODEL_ID,
     'staging_table': 'etl_afs_phys_things',
     'model_staging_schema': PHYS_THING_MODEL_NAME,
     'raw_pk_col': 'resourceinstance_id',
-    'load_path': IMPORT_PHYS_THING_CSV,
+    'load_path': IMPORT_PHYS_THING_NAME_ID_CSV,
     'mappings': [
         {
             'raw_col': 'resourceinstance_id',
@@ -2668,6 +2695,120 @@ AFS_PHYS_THING_MAPPING_CONFIGS = {
             'default_values': [
                 ('transactionid', UUID, PHYS_THING_TRANSACTION_ID,),
             ],
+        },
+        {
+            # do this for each resourceinstance uuid
+            'raw_col': 'resourceinstance_id',
+            'targ_table': 'current_location',
+            'stage_field_prefix': 'phys_things_cur_loc_',
+            'value_transform': phys_thing_transaction_id_for_non_blanks,
+            'targ_field': 'transactionid',
+            'data_type': UUID,
+            'make_tileid': True,
+            'default_values': [
+                # ('transactionid', UUID, PHYS_THING_TRANSACTION_ID,),
+            ],
+            'related_resources': [
+                {
+                    'targ_field': 'current_location',
+                    'multi_value': True,
+                    'source_field_from_uuid': 'resourceinstanceid',
+                    'source_field_to_uuid': 'current_location__current_location',
+                    'rel_type_id': REL_LINK_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_LINK_INVERSE_REL_TYPE_ID,
+                },
+            ]
+        },
+        {
+            # do this for each resourceinstance uuid
+            'raw_col': 'resourceinstance_id',
+            'targ_table': 'current_owner',
+            'stage_field_prefix': 'phys_things_cur_own_',
+            'value_transform': phys_thing_transaction_id_for_non_blanks,
+            'targ_field': 'transactionid',
+            'data_type': UUID,
+            'make_tileid': True,
+            'default_values': [
+                # ('transactionid', UUID, PHYS_THING_TRANSACTION_ID,),
+            ],
+            'related_resources': [
+                {
+                    'targ_field': 'current_owner',
+                    'multi_value': True,
+                    'source_field_from_uuid': 'resourceinstanceid',
+                    'source_field_to_uuid': 'current_owner__current_owner',
+                    'rel_type_id': REL_LINK_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_LINK_INVERSE_REL_TYPE_ID,
+                },
+            ]
+        },
+        {
+            # do this for each resourceinstance uuid
+            'raw_col': 'production__production_location_geo',
+            'targ_table': 'production_',
+            'stage_field_prefix': 'phys_things_prod_',
+            'value_transform': copy_value,
+            'targ_field': 'production_location_geo',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'source_geojson': True,
+            'default_values': [
+                ('transactionid', UUID, PHYS_THING_TRANSACTION_ID,),
+            ],
+            'tile_other_fields': [
+                # Mappings for other fields to include in the same tile
+                {
+                    'raw_col': 'production__production_type',
+                    'targ_field': 'production_type',
+                    'data_type': JSONB,
+                    'value_transform': make_prod_type_list_items,
+                },
+                {
+                    'raw_col': 'production__production_technique',
+                    'targ_field': 'production_technique',
+                    'data_type': JSONB,
+                    'value_transform': make_prod_tech_list_items,
+                },
+            ],
+            'related_resources': [
+                {
+                    'targ_field': 'production_location',
+                    'multi_value': True,
+                    'source_field_from_uuid': 'resourceinstanceid',
+                    'source_field_to_uuid': 'production__production_location',
+                    'rel_type_id': REL_LINK_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_LINK_INVERSE_REL_TYPE_ID,
+                },
+            ]
+        },
+    ],
+}
+
+
+IMPORT_PHYS_THING_STATE_DIM_CSV = os.path.join(DATA_DIR, 'gci-all-afs-physical-thing-statement-dimension-2.csv')
+
+AFS_PHYS_THING_STATEMENT_MAPPING_CONFIGS = {
+    'model_id': PHYS_THING_MODEL_ID,
+    'staging_table': 'etl_afs_phys_things',
+    'model_staging_schema': PHYS_THING_MODEL_NAME,
+    'raw_pk_col': 'resourceinstance_id',
+    'load_path': IMPORT_PHYS_THING_STATE_DIM_CSV,
+    'mappings': [
+        {
+            'raw_col': 'resourceinstance_id',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'do_distinct': True,
+            'default_values': [
+                ('graphid', UUID, PHYS_THING_MODEL_ID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+                ('transactionid', UUID, PHYS_THING_TRANSACTION_ID,),
+            ], 
         },
         {
             # do this for each resourceinstance uuid
@@ -2743,7 +2884,7 @@ MAIN_ALL_MAPPING_CONFIGS = [
 
 ALL_MAPPING_CONFIGS = [
     # AFS physical things
-    AFS_PHYS_THING_MAPPING_CONFIGS,
+    AFS_PHYS_THING_NAME_ID_MAPPING_CONFIGS,
 ]
 
 

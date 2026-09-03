@@ -1,2 +1,8 @@
 resourceinstance_id,name__name_language_,name__name_type_,name__name_content,identifier__identifier_type,identifier__identifier_content,object_type__object_type,object_type__Unnamed: 2,current_location__current_location,current_owner__current_owner,production__production_location,production__production_type,production__production_technique,production__production_carried_out_by,production__production_location_geo
-8fbd01f7-804b-4ae3-98bd-f9f18aa3cf3a,English (language),informal title,19th-century pigment mockup,internal identifier,TSR 2019.01,paintings (visual works),f29c3f29-101a-4e82-95bb-cdd7008e27af,52c75bc1-7797-4ef8-b829-7ce771e4968a,9392634f-e956-4776-b4a8-a924557a05f8,52c75bc1-7797-4ef8-b829-7ce771e4968a,painting (image-making),painting techniques,,GEOMETRYCOLLECTION (POINT (-118.47440884489482 34.07852060917476))
+8fbd01f7-804b-4ae3-98bd-f9f18aa3cf3a,English (language),informal title,19th-century pigment mockup,internal identifier,TSR 2019.01,paintings (visual works),f29c3f29-101a-4e82-95bb-cdd7008e27af,52c75bc1-7797-4ef8-b829-7ce771e4968a,9392634f-e956-4776-b4a8-a924557a05f8,52c75bc1-7797-4ef8-b829-7ce771e4968a,painting (image-making),painting techniques,,"{
+    ""type"": ""Point"",
+    ""coordinates"": [
+        -118.4741,
+        34.07804
+    ]
+}"
