@@ -32,6 +32,7 @@ def make_wide_csv_from_excel(excel_filepath, csv_filepath):
         df.rename(columns=rename_cols, inplace=True)
         if df_all is None:
             df_all = df.copy()
+            continue
         print(f'Merge sheet df with columns: {df.columns.tolist()}')
         df_all = pd.merge(left=df_all, right=df, on='resourceinstance_id', how='outer')
     df_all.to_csv(csv_filepath, index=False)
