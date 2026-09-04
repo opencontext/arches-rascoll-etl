@@ -345,11 +345,15 @@ ALTER TABLE TILES DISABLE TRIGGER __arches_trg_update_spatial_attributes;
     SELECT __arches_create_resource_model_views('c08bae61-9726-47d8-9751-2dd04d20a7b4');
     
 
+
+    SELECT __arches_create_resource_model_views('8713965e-d860-11ef-98f5-0275dc2ded29');
+    
+
 /* ---------------------------------------------------------------------------------- */ 
 
 
 
-                INSERT INTO physical_thing.instances (
+                INSERT INTO digital_resources.instances (
                     resourceinstanceid, 
 resource_instance_lifecycle_state_id, 
 graphid, 
@@ -366,267 +370,38 @@ graphpublicationid::uuid,
 principaluser_id::integer, 
 transactionid::uuid
                 
-                FROM staging.etl_afs_phys_things
-                WHERE (staging.etl_afs_phys_things.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM physical_thing.instances)) AND 
-((staging.etl_afs_phys_things.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_afs_digital_resources_name
+                WHERE (staging.etl_afs_digital_resources_name.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM digital_resources.instances)) AND 
+((staging.etl_afs_digital_resources_name.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.etl_afs_phys_things.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO physical_thing.name (
-                    resourceinstanceid, 
-tileid, 
-name_content, 
-name_type_, 
-transactionid, 
-name_language_
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-phys_things_name_tileid::uuid, 
-phys_things_name_name_content::jsonb, 
-phys_things_name_name_type_::jsonb, 
-phys_things_name_transactionid::uuid, 
-phys_things_name_name_language_::jsonb
-                
-                FROM staging.etl_afs_phys_things
-                WHERE (staging.etl_afs_phys_things.phys_things_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_afs_phys_things.phys_things_name_tileid::uuid IS NOT NULL) AND 
-((staging.etl_afs_phys_things.phys_things_name_name_content::jsonb IS NOT NULL) OR (staging.etl_afs_phys_things.phys_things_name_name_language_::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_afs_phys_things.resourceinstanceid
+                ORDER BY staging.etl_afs_digital_resources_name.resourceinstanceid
                 
                 ;
                 
 
 
-                INSERT INTO physical_thing.identifier (
+                INSERT INTO digital_resources.name (
                     resourceinstanceid, 
 tileid, 
-identifier_content, 
-identifier_type, 
+content, 
+type, 
+language, 
 transactionid
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
-phys_things_id_tileid::uuid, 
-phys_things_id_identifier_content::jsonb, 
-phys_things_id_identifier_type::jsonb, 
-phys_things_id_transactionid::uuid
+dig_res_name_tileid::uuid, 
+dig_res_name_content::jsonb, 
+dig_res_name_type::jsonb, 
+dig_res_name_language::jsonb, 
+dig_res_name_transactionid::uuid
                 
-                FROM staging.etl_afs_phys_things
-                WHERE (staging.etl_afs_phys_things.phys_things_id_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_afs_phys_things.phys_things_id_tileid::uuid IS NOT NULL) AND 
-((staging.etl_afs_phys_things.phys_things_id_identifier_content::jsonb IS NOT NULL))
+                FROM staging.etl_afs_digital_resources_name
+                WHERE (staging.etl_afs_digital_resources_name.dig_res_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_afs_digital_resources_name.dig_res_name_tileid::uuid IS NOT NULL) AND 
+((staging.etl_afs_digital_resources_name.dig_res_name_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.etl_afs_phys_things.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO physical_thing.object_type (
-                    resourceinstanceid, 
-tileid, 
-object_type, 
-transactionid
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-phys_things_obj_type_tileid::uuid, 
-phys_things_obj_type_object_type::jsonb, 
-phys_things_obj_type_transactionid::uuid
-                
-                FROM staging.etl_afs_phys_things
-                WHERE (staging.etl_afs_phys_things.phys_things_obj_type_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_afs_phys_things.phys_things_obj_type_tileid::uuid IS NOT NULL) AND 
-((staging.etl_afs_phys_things.phys_things_obj_type_object_type::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_afs_phys_things.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO physical_thing.current_location (
-                    resourceinstanceid, 
-tileid, 
-transactionid, 
-current_location
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-phys_things_cur_loc_tileid::uuid, 
-phys_things_cur_loc_transactionid::uuid, 
-
-                        coalesce(
-                            case jsonb_typeof(phys_things_cur_loc_related_objs) 
-                                when 'array' then phys_things_cur_loc_related_objs 
-                                else '[]'::jsonb end
-                            ) as phys_things_cur_loc_related_objs_1
-                        
-                
-                FROM staging.etl_afs_phys_things
-                WHERE (staging.etl_afs_phys_things.phys_things_cur_loc_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_afs_phys_things.phys_things_cur_loc_tileid::uuid IS NOT NULL) AND 
-((staging.etl_afs_phys_things.phys_things_cur_loc_transactionid::uuid IS NOT NULL) OR (staging.etl_afs_phys_things.phys_things_cur_loc_related_objs::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_afs_phys_things.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO physical_thing.current_owner (
-                    resourceinstanceid, 
-tileid, 
-transactionid, 
-current_owner
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-phys_things_cur_own_tileid::uuid, 
-phys_things_cur_own_transactionid::uuid, 
-
-                        coalesce(
-                            case jsonb_typeof(phys_things_cur_own_related_objs) 
-                                when 'array' then phys_things_cur_own_related_objs 
-                                else '[]'::jsonb end
-                            ) as phys_things_cur_own_related_objs_1
-                        
-                
-                FROM staging.etl_afs_phys_things
-                WHERE (staging.etl_afs_phys_things.phys_things_cur_own_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_afs_phys_things.phys_things_cur_own_tileid::uuid IS NOT NULL) AND 
-((staging.etl_afs_phys_things.phys_things_cur_own_transactionid::uuid IS NOT NULL) OR (staging.etl_afs_phys_things.phys_things_cur_own_related_objs::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_afs_phys_things.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO physical_thing.production_ (
-                    resourceinstanceid, 
-tileid, 
-production_location_geo, 
-transactionid, 
-production_location, 
-production_type, 
-production_technique
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-phys_things_prod_tileid::uuid, 
-ST_AsText(ST_GeomFromGeoJSON(phys_things_prod_production_location_geo)), 
-phys_things_prod_transactionid::uuid, 
-
-                        coalesce(
-                            case jsonb_typeof(phys_things_prod_related_objs) 
-                                when 'array' then phys_things_prod_related_objs 
-                                else '[]'::jsonb end
-                            ) as phys_things_prod_related_objs_1
-                        , 
-phys_things_prod_production_type::jsonb, 
-phys_things_prod_production_technique::jsonb
-                
-                FROM staging.etl_afs_phys_things
-                WHERE (staging.etl_afs_phys_things.phys_things_prod_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_afs_phys_things.phys_things_prod_tileid::uuid IS NOT NULL) AND 
-((staging.etl_afs_phys_things.phys_things_prod_production_location_geo::jsonb IS NOT NULL) OR (staging.etl_afs_phys_things.phys_things_prod_related_objs::jsonb IS NOT NULL) OR (staging.etl_afs_phys_things.phys_things_prod_production_type::jsonb IS NOT NULL) OR (staging.etl_afs_phys_things.phys_things_prod_production_technique::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_afs_phys_things.resourceinstanceid
-                
-                ;
-                
-
-/* ---------------------------------------------------------------------------------- */ 
-
-
-
-                INSERT INTO physical_thing.instances (
-                    resourceinstanceid, 
-resource_instance_lifecycle_state_id, 
-graphid, 
-graphpublicationid, 
-principaluser_id, 
-transactionid
-                ) SELECT
-                    
- DISTINCT
-                    resourceinstanceid::uuid, 
-'f75bb034-36e3-4ab4-8167-f520cf0b4c58'::uuid AS state_id, 
-graphid::uuid, 
-graphpublicationid::uuid, 
-principaluser_id::integer, 
-transactionid::uuid
-                
-                FROM staging.etl_afs_phys_things_state_dim
-                WHERE (staging.etl_afs_phys_things_state_dim.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM physical_thing.instances)) AND 
-((staging.etl_afs_phys_things_state_dim.resourceinstanceid::uuid IS NOT NULL))
-                
-                ORDER BY staging.etl_afs_phys_things_state_dim.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO physical_thing.statement (
-                    resourceinstanceid, 
-tileid, 
-statement_content, 
-transactionid, 
-statement_type, 
-statement_language_
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-phys_things_state_cont_tileid::uuid, 
-phys_things_state_cont_statement_content::jsonb, 
-phys_things_state_cont_transactionid::uuid, 
-phys_things_state_cont_statement_type::jsonb, 
-phys_things_state_cont_statement_language_::jsonb
-                
-                FROM staging.etl_afs_phys_things_state_dim
-                WHERE (staging.etl_afs_phys_things_state_dim.phys_things_state_cont_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_afs_phys_things_state_dim.phys_things_state_cont_tileid::uuid IS NOT NULL) AND 
-((staging.etl_afs_phys_things_state_dim.phys_things_state_cont_statement_content::jsonb IS NOT NULL) OR (staging.etl_afs_phys_things_state_dim.phys_things_state_cont_statement_type::jsonb IS NOT NULL) OR (staging.etl_afs_phys_things_state_dim.phys_things_state_cont_statement_language_::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_afs_phys_things_state_dim.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO physical_thing.dimension (
-                    resourceinstanceid, 
-tileid, 
-dimension_type_, 
-transactionid, 
-dimension_value_, 
-dimension_lowest_possible_value, 
-dimension_highest_possible_value, 
-dimension_unit
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-phys_things_dim_tileid::uuid, 
-phys_things_dim_dimension_type_::jsonb, 
-phys_things_dim_transactionid::uuid, 
-phys_things_dim_dimension_value_::numeric, 
-phys_things_dim_dimension_lowest_possible_value::numeric, 
-phys_things_dim_dimension_highest_possible_value::numeric, 
-phys_things_dim_dimension_unit::jsonb
-                
-                FROM staging.etl_afs_phys_things_state_dim
-                WHERE (staging.etl_afs_phys_things_state_dim.phys_things_dim_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_afs_phys_things_state_dim.phys_things_dim_tileid::uuid IS NOT NULL) AND 
-((staging.etl_afs_phys_things_state_dim.phys_things_dim_dimension_type_::jsonb IS NOT NULL) OR (staging.etl_afs_phys_things_state_dim.phys_things_dim_dimension_value_::numeric IS NOT NULL) OR (staging.etl_afs_phys_things_state_dim.phys_things_dim_dimension_lowest_possible_value::numeric IS NOT NULL) OR (staging.etl_afs_phys_things_state_dim.phys_things_dim_dimension_highest_possible_value::numeric IS NOT NULL) OR (staging.etl_afs_phys_things_state_dim.phys_things_dim_dimension_unit::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_afs_phys_things_state_dim.resourceinstanceid
+                ORDER BY staging.etl_afs_digital_resources_name.resourceinstanceid
                 
                 ;
                 

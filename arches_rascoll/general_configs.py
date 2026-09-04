@@ -2892,9 +2892,59 @@ AFS_PHYS_THING_STATE_DIM_MAPPING_CONFIGS = {
 
 
 
+DIGITAL_RESOURCES_MODEL_ID = '8713965e-d860-11ef-98f5-0275dc2ded29'
+DIGITAL_RESOURCES_MODEL_NAME = 'digital_resources'
+IMPORT_DIGITAL_RESOURCES_NAME_CSV = os.path.join(DATA_DIR, 'gci-all-afs-digital-resources-name-23.csv')
+DIGITAL_RESOURCES_TRANSACTION_ID = 'f9f0dce9-ad56-49a7-a013-017a510f5c58'
 
 
-
+AFS_DIGITAL_RESOURCES_NAME_MAPPING_CONFIGS = {
+    'model_id': DIGITAL_RESOURCES_MODEL_ID,
+    'staging_table': 'etl_afs_digital_resources_name',
+    'model_staging_schema': DIGITAL_RESOURCES_MODEL_NAME,
+    'raw_pk_col': 'row_num',
+    'load_path': IMPORT_DIGITAL_RESOURCES_NAME_CSV,
+    'mappings': [
+        {
+            'raw_col': 'resourceinstance_id',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'do_distinct': True,
+            'default_values': [
+                ('graphid', UUID, DIGITAL_RESOURCES_MODEL_ID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+                ('transactionid', UUID, DIGITAL_RESOURCES_TRANSACTION_ID,),
+            ], 
+        },
+        {
+            'raw_col': 'name__name_content',
+            'targ_table': 'name',
+            'stage_field_prefix': 'dig_res_name_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                # Yes, the graph currently uses the name types physical things
+                # concept list. So stick with this, even though we should probably
+                # use generic.
+                ('type', JSONB, NAME_TYPES_PHYSICAL_THING_PRIMARY_LIST_ITEMS,),
+                ('language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                ('transactionid', UUID, DIGITAL_RESOURCES_TRANSACTION_ID,),
+            ],
+        },
+    ],
+    'tileid_unique_groups': {
+        'dig_res_name_tileid': [
+            'dig_res_name_content',
+        ],
+    },
+}
 
 
 MAIN_ALL_MAPPING_CONFIGS = [
@@ -2929,12 +2979,14 @@ MAIN_ALL_MAPPING_CONFIGS = [
 
     FIELD_PLACE_MAPPING_CONFIGS,
     FIELD_RSCI_MAPPING_CONFIGS,
-]
 
-ALL_MAPPING_CONFIGS = [
     # AFS physical things
     AFS_PHYS_THING_NAME_ID_MAPPING_CONFIGS,
     AFS_PHYS_THING_STATE_DIM_MAPPING_CONFIGS,
+]
+
+ALL_MAPPING_CONFIGS = [
+    AFS_DIGITAL_RESOURCES_NAME_MAPPING_CONFIGS,
 ]
 
 
@@ -2959,5 +3011,8 @@ ARCHES_REL_VIEW_PREP_SQLS = [
     """,
     f"""
     SELECT __arches_create_resource_model_views('{PHYS_THING_MODEL_ID}');
+    """,
+    f"""
+    SELECT __arches_create_resource_model_views('{DIGITAL_RESOURCES_MODEL_ID}');
     """,
 ]
