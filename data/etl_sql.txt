@@ -370,38 +370,57 @@ graphpublicationid::uuid,
 principaluser_id::integer, 
 transactionid::uuid
                 
-                FROM staging.etl_afs_digital_resources_name
-                WHERE (staging.etl_afs_digital_resources_name.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM digital_resources.instances)) AND 
-((staging.etl_afs_digital_resources_name.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_afs_digital_resources_type_create
+                WHERE (staging.etl_afs_digital_resources_type_create.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM digital_resources.instances)) AND 
+((staging.etl_afs_digital_resources_type_create.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.etl_afs_digital_resources_name.resourceinstanceid
+                ORDER BY staging.etl_afs_digital_resources_type_create.resourceinstanceid
                 
                 ;
                 
 
 
-                INSERT INTO digital_resources.name (
+                INSERT INTO digital_resources.type (
                     resourceinstanceid, 
 tileid, 
-content, 
 type, 
-language, 
 transactionid
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
-dig_res_name_tileid::uuid, 
-dig_res_name_content::jsonb, 
-dig_res_name_type::jsonb, 
-dig_res_name_language::jsonb, 
-dig_res_name_transactionid::uuid
+dig_res_type_tileid::uuid, 
+dig_res_type_type::jsonb, 
+dig_res_type_transactionid::uuid
                 
-                FROM staging.etl_afs_digital_resources_name
-                WHERE (staging.etl_afs_digital_resources_name.dig_res_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_afs_digital_resources_name.dig_res_name_tileid::uuid IS NOT NULL) AND 
-((staging.etl_afs_digital_resources_name.dig_res_name_content::jsonb IS NOT NULL))
+                FROM staging.etl_afs_digital_resources_type_create
+                WHERE (staging.etl_afs_digital_resources_type_create.dig_res_type_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_afs_digital_resources_type_create.dig_res_type_tileid::uuid IS NOT NULL) AND 
+((staging.etl_afs_digital_resources_type_create.dig_res_type_type::jsonb IS NOT NULL))
                 
-                ORDER BY staging.etl_afs_digital_resources_name.resourceinstanceid
+                ORDER BY staging.etl_afs_digital_resources_type_create.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO digital_resources.digital_resource_creation (
+                    resourceinstanceid, 
+tileid, 
+digital_resource_creation_type, 
+transactionid
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+dig_res_create_tileid::uuid, 
+dig_res_create_digital_resource_creation_type::jsonb, 
+dig_res_create_transactionid::uuid
+                
+                FROM staging.etl_afs_digital_resources_type_create
+                WHERE (staging.etl_afs_digital_resources_type_create.dig_res_create_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_afs_digital_resources_type_create.dig_res_create_tileid::uuid IS NOT NULL) AND 
+((staging.etl_afs_digital_resources_type_create.dig_res_create_digital_resource_creation_type::jsonb IS NOT NULL))
+                
+                ORDER BY staging.etl_afs_digital_resources_type_create.resourceinstanceid
                 
                 ;
                 

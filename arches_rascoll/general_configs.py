@@ -2947,6 +2947,89 @@ AFS_DIGITAL_RESOURCES_NAME_MAPPING_CONFIGS = {
 }
 
 
+IMPORT_DIGITAL_RESOURCES_TYPE_CREATE_CSV = os.path.join(DATA_DIR, 'gci-all-afs-digital-resources-type_n2-digital_resource_creation-22.csv')
+
+def make_digital_resource_type_list_items(value):
+    if not value:
+        return None
+    value = value.strip()
+    # Digital Resource Types list_id='8dc4c1ac-aae5-41f6-817b-9ee5fef855fe'
+    return get_controlled_list_objs_by_pref_labels(
+        pref_labels=[value,],
+        list_id='8dc4c1ac-aae5-41f6-817b-9ee5fef855fe',
+    )
+
+def make_digital_resource_event_type_create_list_items(value):
+    if not value:
+        return None
+    value = value.strip()
+    # Event Types - Digital Resource Creation list_id='38867773-6543-4a98-90cc-dc1c7bec3340'
+    return get_controlled_list_objs_by_pref_labels(
+        pref_labels=[value,],
+        list_id='38867773-6543-4a98-90cc-dc1c7bec3340',
+    )
+
+
+
+AFS_DIGITAL_RESOURCES_TYPE_CREATE_MAPPING_CONFIGS = {
+    'model_id': DIGITAL_RESOURCES_MODEL_ID,
+    'staging_table': 'etl_afs_digital_resources_type_create',
+    'model_staging_schema': DIGITAL_RESOURCES_MODEL_NAME,
+    'raw_pk_col': 'row_num',
+    'load_path': IMPORT_DIGITAL_RESOURCES_TYPE_CREATE_CSV,
+    'mappings': [
+        {
+            'raw_col': 'resourceinstance_id',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'do_distinct': True,
+            'default_values': [
+                ('graphid', UUID, DIGITAL_RESOURCES_MODEL_ID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+                ('transactionid', UUID, DIGITAL_RESOURCES_TRANSACTION_ID,),
+            ], 
+        },
+        {
+            'raw_col': 'type_n2__type',
+            'targ_table': 'type',
+            'stage_field_prefix': 'dig_res_type_',
+            'value_transform': make_digital_resource_type_list_items,
+            'targ_field': 'type',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('transactionid', UUID, DIGITAL_RESOURCES_TRANSACTION_ID,),
+            ],
+        },
+        {
+            'raw_col': 'digital_resource_creation__digital_resource_creation_technique',
+            'targ_table': 'digital_resource_creation',
+            'stage_field_prefix': 'dig_res_create_',
+            'value_transform': make_digital_resource_event_type_create_list_items,
+            'targ_field': 'digital_resource_creation_type',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('transactionid', UUID, DIGITAL_RESOURCES_TRANSACTION_ID,),
+            ],
+        },
+    ],
+    'tileid_unique_groups': {
+        'dig_res_type_tileid': [
+            'dig_res_type_type',
+        ],
+        'dig_res_create_tileid': [
+            'dig_res_create_digital_resource_creation_type',
+        ],
+    },
+}
+
+
 MAIN_ALL_MAPPING_CONFIGS = [
     # Create resource instances for different models
     RSCI_MAPPING_CONFIGS,
@@ -2983,10 +3066,14 @@ MAIN_ALL_MAPPING_CONFIGS = [
     # AFS physical things
     AFS_PHYS_THING_NAME_ID_MAPPING_CONFIGS,
     AFS_PHYS_THING_STATE_DIM_MAPPING_CONFIGS,
+
+    AFS_DIGITAL_RESOURCES_NAME_MAPPING_CONFIGS,
+
 ]
 
 ALL_MAPPING_CONFIGS = [
-    AFS_DIGITAL_RESOURCES_NAME_MAPPING_CONFIGS,
+   
+    AFS_DIGITAL_RESOURCES_TYPE_CREATE_MAPPING_CONFIGS,
 ]
 
 
