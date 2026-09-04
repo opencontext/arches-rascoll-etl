@@ -1,5 +1,5 @@
 resourceinstance_id,statement__statement_language_,statement__statement_type,statement__statement_content,row_num
-bc42ef5b-73da-45ca-923b-9bbf34e2084a,English (language),sample description,orange on dark blue-black,1
-bc42ef5b-73da-45ca-923b-9bbf34e2084a,English (language),sampling motivation,pigment identification,2
-466f051a-1529-427d-9be5-d60be9d99073,English (language),sample description,light yellow on dark blue-black,3
-466f051a-1529-427d-9be5-d60be9d99073,English (language),sampling motivation,pigment identification,4
+466f051a-1529-427d-9be5-d60be9d99073,English (language),sample description,light yellow on dark blue-black,1
+466f051a-1529-427d-9be5-d60be9d99073,English (language),sampling motivation,pigment identification,2
+bc42ef5b-73da-45ca-923b-9bbf34e2084a,English (language),sample description,orange on dark blue-black,3
+bc42ef5b-73da-45ca-923b-9bbf34e2084a,English (language),sampling motivation,pigment identification,4

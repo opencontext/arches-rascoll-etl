@@ -50,16 +50,24 @@ def make_wide_csvs_from_excel(excel_filepath, csv_file_prefix):
             for key_col in ['resourceinstance_id', 'resourceinstanceid']:
                 rename_cols[key_col] = 'resourceinstance_id'
             df.rename(columns=rename_cols, inplace=True)
+            df.sort_values(by=['resourceinstance_id'], inplace=True)
+            df.reset_index(drop=True, inplace=True)
             if df_all is None:
                 df_all = df.copy()
                 continue
             print(f'Merge sheet df with columns: {df.columns.tolist()}')
+            # df_all = pd.merge(left=df_all, right=df, on='resourceinstance_id', how='left')
             # df_all = pd.merge(df_all, df, on='resourceinstance_id', how='inner')
+            df_all.set_index('resourceinstance_id')
+            df.set_index('resourceinstance_id')
             df_all = pd.concat([df_all, df], axis=1)
         # cols = df_all.columns.tolist()
         # df_all.drop_duplicates(subset=cols, inplace=True)
+        df_all.reset_index(drop=True, inplace=True)
         df_all['row_num'] = df_all.index + 1
         df_all.reset_index(drop=True, inplace=True)
+        df_all = df_all.loc[:,~df_all.columns.duplicated()].copy()
+        print(f'Saving CSV {csv_filepath} with columns: {df_all.columns.tolist()}')
         df_all.to_csv(csv_filepath, index=False)
         df_alls.append(df_all)
     return df_alls
