@@ -54,7 +54,12 @@ def make_wide_csvs_from_excel(excel_filepath, csv_file_prefix):
                 df_all = df.copy()
                 continue
             print(f'Merge sheet df with columns: {df.columns.tolist()}')
-            df_all = pd.merge(left=df_all, right=df, on='resourceinstance_id', how='outer')
+            # df_all = pd.merge(df_all, df, on='resourceinstance_id', how='inner')
+            df_all = pd.concat([df_all, df], axis=1)
+        # cols = df_all.columns.tolist()
+        # df_all.drop_duplicates(subset=cols, inplace=True)
+        df_all['row_num'] = df_all.index + 1
+        df_all.reset_index(drop=True, inplace=True)
         df_all.to_csv(csv_filepath, index=False)
         df_alls.append(df_all)
     return df_alls

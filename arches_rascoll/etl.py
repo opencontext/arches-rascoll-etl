@@ -67,7 +67,9 @@ def make_objs_from_json_strings(df_stage, col_data_types):
                 & (df_stage[col] != '""')
             )
             df_stage.loc[~index, col] = ''
-            df_stage.loc[index, col] = df_stage[index][col].apply(lambda x: json.loads(x))
+            print(f'Load json objs for col: {col}, {df_stage[col].dtype}')
+            df_stage[col] = df_stage[col].astype(object)
+            df_stage.loc[index, col] = df_stage[index][col].apply(lambda x: json.loads(str(x)))
             index = df_stage[col] == '""'
             df_stage.loc[index, col] = ''
         elif mapped_data_type == 'uuid[]':
@@ -75,6 +77,8 @@ def make_objs_from_json_strings(df_stage, col_data_types):
                 df_stage[col].notnull() 
             )
             df_stage.loc[~index, col] = ''
+            print(f'Load json objs for col: {col}, {df_stage[col].dtype}')
+            df_stage[col] = df_stage[col].astype(object)
             df_stage.loc[index, col] = df_stage[index][col].apply(lambda x: json.loads(x))
             index = df_stage[col] == '""'
             df_stage.loc[index, col] = ''
@@ -137,6 +141,37 @@ def add_default_values_and_cols(
         col_data_types[default_col] = d_type
         dict_rows[raw_pk][default_col] = d_val
     return dict_rows, col_data_types
+
+
+def ensure_unique_tileids_for_groups(df_staging, configs):
+    """If there are 'tileid_unique_groups' in configs, use this to 
+    generate unique tileids for groups of unique values
+    """
+    if not configs.get('tileid_unique_groups'):
+        return df_staging
+    dup_cols = ['resourceinstanceid']
+    for tileid_col, group_cols in configs.get('tileid_unique_groups', {}).items():
+        dup_cols.append(tileid_col)
+        if 'resourceinstanceid' not in group_cols:
+            group_cols = ['resourceinstanceid'] + group_cols
+        temp_cols = []
+        for c in group_cols:
+            temp_col = f'temp____{c}'
+            df_staging[temp_col] = df_staging[c].astype(str)
+            temp_cols.append(temp_col)
+        not_null_index = ~df_staging[temp_cols[0]].isnull()
+        for c in temp_cols[1:]:
+            not_null_index |= ~df_staging[c].isnull()
+        df_g = df_staging[not_null_index][temp_cols].groupby(temp_cols, as_index=False).first()
+        for _, row in df_g.iterrows():
+            act_index = df_staging[temp_cols[0]] == row[temp_cols[0]]
+            for c in temp_cols[1:]:
+                act_index &= df_staging[c] == row[c]
+            df_staging.loc[act_index, tileid_col] = str(GenUUID.uuid4())
+        df_staging.drop(columns=temp_cols, inplace=True)
+        print(f'Made unique tileids for {tileid_col} based on unique values in: {group_cols}')
+    df_staging.drop_duplicates(subset=dup_cols, inplace=True)
+    return df_staging
 
 
 def prep_transformed_data(df, configs):
@@ -323,6 +358,7 @@ def prep_transformed_data(df, configs):
             dict_rows[raw_pk][keep_col] = row[keep_col]
     rows = [dict(copy.deepcopy(row)) for _, row in dict_rows.items()]
     df_staging = pd.DataFrame(rows)
+    df_staging = ensure_unique_tileids_for_groups(df_staging, configs)
     return df_staging, col_data_types
 
 

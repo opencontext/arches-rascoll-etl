@@ -1525,7 +1525,7 @@ RSCI_DIMENSIONS_CONFIGS = {
             ], 
         },
         {
-           'raw_col': 'READY_dim1_type',
+            'raw_col': 'READY_dim1_type',
             'targ_table': 'dimension',
             'stage_field_prefix': 'dim1_',
             'value_transform': make_dimension_kind_list_items,
@@ -2787,11 +2787,11 @@ AFS_PHYS_THING_NAME_ID_MAPPING_CONFIGS = {
 
 IMPORT_PHYS_THING_STATE_DIM_CSV = os.path.join(DATA_DIR, 'gci-all-afs-physical-thing-statement-dimension-2.csv')
 
-AFS_PHYS_THING_STATEMENT_MAPPING_CONFIGS = {
+AFS_PHYS_THING_STATE_DIM_MAPPING_CONFIGS = {
     'model_id': PHYS_THING_MODEL_ID,
-    'staging_table': 'etl_afs_phys_things',
+    'staging_table': 'etl_afs_phys_things_state_dim',
     'model_staging_schema': PHYS_THING_MODEL_NAME,
-    'raw_pk_col': 'resourceinstance_id',
+    'raw_pk_col': 'row_num',
     'load_path': IMPORT_PHYS_THING_STATE_DIM_CSV,
     'mappings': [
         {
@@ -2838,7 +2838,56 @@ AFS_PHYS_THING_STATEMENT_MAPPING_CONFIGS = {
                 },
             ],
         },
+        {
+            'raw_col': 'dimension__dimension_type_',
+            'targ_table': 'dimension',
+            'stage_field_prefix': 'phys_things_dim_',
+            'value_transform': make_dimension_kind_list_items,
+            'targ_field': 'dimension_type_',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('transactionid', UUID, PHYS_THING_TRANSACTION_ID,),
+            ],
+            'tile_other_fields': [
+                # Mappings for other fields to include in the same tile
+                {
+                    'raw_col': 'dimension__dimension_value_',
+                    'targ_field': 'dimension_value_',
+                    'data_type': Numeric,
+                    'value_transform': copy_numeric_value,
+                },
+                {
+                    'raw_col': 'dimension__dimension_lowest_possible_value',
+                    'targ_field': 'dimension_lowest_possible_value',
+                    'data_type': Numeric,
+                    'value_transform': copy_numeric_value,
+                },
+                {
+                    'raw_col': 'dimension__dimension_highest_possible_value',
+                    'targ_field': 'dimension_highest_possible_value',
+                    'data_type': Numeric,
+                    'value_transform': copy_numeric_value,
+                },
+                {
+                    'raw_col': 'dimension__dimension_unit',
+                    'targ_field': 'dimension_unit',
+                    'data_type': JSONB,
+                    'value_transform': make_dimension_unit_list_items,
+                },
+            ], 
+        },
     ],
+    'tileid_unique_groups': {
+        'phys_things_state_cont_tileid': [
+            'phys_things_state_cont_statement_content',
+            'phys_things_state_cont_statement_type',
+        ],
+        'phys_things_dim_tileid': [
+            'phys_things_dim_dimension_type_',
+            'phys_things_dim_dimension_value_',
+        ],
+    },
 }
 
 
@@ -2885,6 +2934,7 @@ MAIN_ALL_MAPPING_CONFIGS = [
 ALL_MAPPING_CONFIGS = [
     # AFS physical things
     AFS_PHYS_THING_NAME_ID_MAPPING_CONFIGS,
+    AFS_PHYS_THING_STATE_DIM_MAPPING_CONFIGS,
 ]
 
 
