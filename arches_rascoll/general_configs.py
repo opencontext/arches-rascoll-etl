@@ -3221,6 +3221,69 @@ AFS_RSCI_NAME_REMOVAL_MAPPING_CONFIGS = {
 
 
 
+IMPORT_AFS_RSCI_STATEMENT_CSV = os.path.join(DATA_DIR, 'gci-all-afs-rsci-statement-4.csv')
+
+AFS_RSCI_STATEMENT_MAPPING_CONFIGS = {
+    'model_id': RSCI_UUID,
+    'staging_table': 'etl_afs_rsci_statement',
+    'model_staging_schema': RSCI_MODEL_NAME,
+    'raw_pk_col': 'row_num',
+    'load_path': IMPORT_AFS_RSCI_STATEMENT_CSV,
+    'mappings': [
+        {
+            'raw_col': 'resourceinstance_id',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'do_distinct': True,
+            'default_values': [
+                ('graphid', UUID, RSCI_UUID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+                ('transactionid', UUID, AFS_RSCI_TRANSACTION_ID,),
+            ], 
+        },
+        {
+            'raw_col': 'statement__statement_content',
+            'targ_table': 'statement',
+            'stage_field_prefix': 'statement_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'statement_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('transactionid', UUID, AFS_RSCI_TRANSACTION_ID,),
+            ],
+            'tile_other_fields': [
+                # Mappings for other fields to include in the same tile
+                {
+                    'raw_col': 'statement__statement_type',
+                    'targ_field': 'statement_type',
+                    'data_type': JSONB,
+                    'value_transform': make_statement_type_list_items,
+                },
+                {
+                    'raw_col': 'statement__statement_language_',
+                    'targ_field': 'statement_language_',
+                    'data_type': JSONB,
+                    'value_transform': make_language_list_items,
+                },
+            ],
+        },
+    ],
+    'tileid_unique_groups': {
+        'statement_tileid': [
+            'statement_statement_content',
+        ],
+    },
+}
+
+
+
+
 MAIN_ALL_MAPPING_CONFIGS = [
     # Create resource instances for different models
     RSCI_MAPPING_CONFIGS,
@@ -3260,11 +3323,12 @@ MAIN_ALL_MAPPING_CONFIGS = [
 
     AFS_DIGITAL_RESOURCES_NAME_MAPPING_CONFIGS,
     AFS_DIGITAL_RESOURCES_TYPE_CREATE_MAPPING_CONFIGS,
+
+    AFS_RSCI_NAME_REMOVAL_MAPPING_CONFIGS,
 ]
 
 ALL_MAPPING_CONFIGS = [
-
-    AFS_RSCI_NAME_REMOVAL_MAPPING_CONFIGS,
+    AFS_RSCI_STATEMENT_MAPPING_CONFIGS
 ]
 
 

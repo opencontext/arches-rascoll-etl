@@ -370,177 +370,38 @@ graphpublicationid::uuid,
 principaluser_id::integer, 
 transactionid::uuid
                 
-                FROM staging.etl_afs_rsci_name_removal
-                WHERE (staging.etl_afs_rsci_name_removal.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
-((staging.etl_afs_rsci_name_removal.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_afs_rsci_statement
+                WHERE (staging.etl_afs_rsci_statement.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.etl_afs_rsci_statement.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.etl_afs_rsci_name_removal.resourceinstanceid
+                ORDER BY staging.etl_afs_rsci_statement.resourceinstanceid
                 
                 ;
                 
 
 
-                INSERT INTO reference_and_sample_collection_item.name (
+                INSERT INTO reference_and_sample_collection_item.statement (
                     resourceinstanceid, 
 tileid, 
-name_content, 
+statement_content, 
 transactionid, 
-name_type_, 
-name_language_
+statement_type, 
+statement_language_
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
-name_tileid::uuid, 
-name_name_content::jsonb, 
-name_transactionid::uuid, 
-name_name_type_::jsonb, 
-name_name_language_::jsonb
+statement_tileid::uuid, 
+statement_statement_content::jsonb, 
+statement_transactionid::uuid, 
+statement_statement_type::jsonb, 
+statement_statement_language_::jsonb
                 
-                FROM staging.etl_afs_rsci_name_removal
-                WHERE (staging.etl_afs_rsci_name_removal.name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_afs_rsci_name_removal.name_tileid::uuid IS NOT NULL) AND 
-((staging.etl_afs_rsci_name_removal.name_name_content::jsonb IS NOT NULL) OR (staging.etl_afs_rsci_name_removal.name_name_type_::jsonb IS NOT NULL) OR (staging.etl_afs_rsci_name_removal.name_name_language_::jsonb IS NOT NULL))
+                FROM staging.etl_afs_rsci_statement
+                WHERE (staging.etl_afs_rsci_statement.statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_afs_rsci_statement.statement_tileid::uuid IS NOT NULL) AND 
+((staging.etl_afs_rsci_statement.statement_statement_content::jsonb IS NOT NULL) OR (staging.etl_afs_rsci_statement.statement_statement_type::jsonb IS NOT NULL) OR (staging.etl_afs_rsci_statement.statement_statement_language_::jsonb IS NOT NULL))
                 
-                ORDER BY staging.etl_afs_rsci_name_removal.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.object_type (
-                    resourceinstanceid, 
-tileid, 
-object_type, 
-transactionid
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-obj_type_tileid::uuid, 
-obj_type_object_type::jsonb, 
-obj_type_transactionid::uuid
-                
-                FROM staging.etl_afs_rsci_name_removal
-                WHERE (staging.etl_afs_rsci_name_removal.obj_type_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_afs_rsci_name_removal.obj_type_tileid::uuid IS NOT NULL) AND 
-((staging.etl_afs_rsci_name_removal.obj_type_object_type::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_afs_rsci_name_removal.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.current_location (
-                    resourceinstanceid, 
-tileid, 
-transactionid, 
-current_location
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-rsci_cur_loc_tileid::uuid, 
-rsci_cur_loc_transactionid::uuid, 
-
-                        coalesce(
-                            case jsonb_typeof(rsci_cur_loc_related_objs) 
-                                when 'array' then rsci_cur_loc_related_objs 
-                                else '[]'::jsonb end
-                            ) as rsci_cur_loc_related_objs_1
-                        
-                
-                FROM staging.etl_afs_rsci_name_removal
-                WHERE (staging.etl_afs_rsci_name_removal.rsci_cur_loc_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_afs_rsci_name_removal.rsci_cur_loc_tileid::uuid IS NOT NULL) AND 
-((staging.etl_afs_rsci_name_removal.rsci_cur_loc_transactionid::uuid IS NOT NULL) OR (staging.etl_afs_rsci_name_removal.rsci_cur_loc_related_objs::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_afs_rsci_name_removal.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.current_owner (
-                    resourceinstanceid, 
-tileid, 
-transactionid, 
-current_owner
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-rsci_cur_own_tileid::uuid, 
-rsci_cur_own_transactionid::uuid, 
-
-                        coalesce(
-                            case jsonb_typeof(rsci_cur_own_related_objs) 
-                                when 'array' then rsci_cur_own_related_objs 
-                                else '[]'::jsonb end
-                            ) as rsci_cur_own_related_objs_1
-                        
-                
-                FROM staging.etl_afs_rsci_name_removal
-                WHERE (staging.etl_afs_rsci_name_removal.rsci_cur_own_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_afs_rsci_name_removal.rsci_cur_own_tileid::uuid IS NOT NULL) AND 
-((staging.etl_afs_rsci_name_removal.rsci_cur_own_transactionid::uuid IS NOT NULL) OR (staging.etl_afs_rsci_name_removal.rsci_cur_own_related_objs::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_afs_rsci_name_removal.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.removal_from_object (
-                    resourceinstanceid, 
-tileid, 
-transactionid, 
-removal_from_object_removed_from
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-rsci_removal_tileid::uuid, 
-rsci_removal_transactionid::uuid, 
-
-                        coalesce(
-                            case jsonb_typeof(rsci_removal_related_objs) 
-                                when 'array' then rsci_removal_related_objs 
-                                else '[]'::jsonb end
-                            ) as rsci_removal_related_objs_1
-                        
-                
-                FROM staging.etl_afs_rsci_name_removal
-                WHERE (staging.etl_afs_rsci_name_removal.rsci_removal_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_afs_rsci_name_removal.rsci_removal_tileid::uuid IS NOT NULL) AND 
-((staging.etl_afs_rsci_name_removal.rsci_removal_transactionid::uuid IS NOT NULL) OR (staging.etl_afs_rsci_name_removal.rsci_removal_related_objs::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_afs_rsci_name_removal.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.part_of (
-                    resourceinstanceid, 
-tileid, 
-transactionid, 
-part_of
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-rsci_part_of_tileid::uuid, 
-rsci_part_of_transactionid::uuid, 
-
-                        coalesce(
-                            case jsonb_typeof(rsci_part_of_related_objs) 
-                                when 'array' then rsci_part_of_related_objs 
-                                else '[]'::jsonb end
-                            ) as rsci_part_of_related_objs_1
-                        
-                
-                FROM staging.etl_afs_rsci_name_removal
-                WHERE (staging.etl_afs_rsci_name_removal.rsci_part_of_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_afs_rsci_name_removal.rsci_part_of_tileid::uuid IS NOT NULL) AND 
-((staging.etl_afs_rsci_name_removal.rsci_part_of_transactionid::uuid IS NOT NULL) OR (staging.etl_afs_rsci_name_removal.rsci_part_of_related_objs::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_afs_rsci_name_removal.resourceinstanceid
+                ORDER BY staging.etl_afs_rsci_statement.resourceinstanceid
                 
                 ;
                 
