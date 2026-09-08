@@ -1707,7 +1707,8 @@ def make_attribute_type_list_items(value):
         list_id='9a61af90-9fd1-48fd-b5e1-e45bb8a6db5b',
     )
 
-def make_sample_object_type_list_items(value):
+
+def make_object_type_phys_thing_list_items(value):
     if not value:
         return None
     # Object Types - Physical Thing list_id='56991802-f539-4b22-b5a9-b1945fceb52b'
@@ -1715,6 +1716,16 @@ def make_sample_object_type_list_items(value):
         pref_labels=['samples',],
         list_id='56991802-f539-4b22-b5a9-b1945fceb52b',
     )
+
+
+def make_sample_object_type_list_items(value):
+    if not value:
+        return None
+    # Object Types - Physical Thing list_id='56991802-f539-4b22-b5a9-b1945fceb52b'
+    return make_object_type_phys_thing_list_items('samples')
+
+
+
 
 def make_material_list_items(value):
     """Make list items list objects from material values"""
@@ -3030,6 +3041,186 @@ AFS_DIGITAL_RESOURCES_TYPE_CREATE_MAPPING_CONFIGS = {
 }
 
 
+
+IMPORT_AFS_RSCI_NAME_REMOVAL_CSV = os.path.join(DATA_DIR, 'gci-all-afs-rsci-name-object_type-current_location-current_owner-removal_from_object_n1-part_of-2.csv')
+AFS_RSCI_TRANSACTION_ID = '126e39e6-a2b0-4bb9-9af3-a22e945b1c92'
+
+
+def make_name_type_physical_thing_list_items(value):
+    if not value:
+        return None
+    value = value.strip()
+    return get_controlled_list_objs_by_pref_labels(
+        pref_labels=[value,],
+        list_id='9f1cf9a8-ce65-455f-ab1e-a9b36e9e23ce',
+    )
+
+
+def make_afs_rsci_transaction_id_for_nonblanks(value):
+    if not value:
+        return None
+    return AFS_RSCI_TRANSACTION_ID
+
+
+AFS_RSCI_NAME_REMOVAL_MAPPING_CONFIGS = {
+    'model_id': RSCI_UUID,
+    'staging_table': 'etl_afs_rsci_name_removal',
+    'model_staging_schema': RSCI_MODEL_NAME,
+    'raw_pk_col': 'row_num',
+    'load_path': IMPORT_AFS_RSCI_NAME_REMOVAL_CSV,
+    'mappings': [
+        {
+            'raw_col': 'resourceinstance_id',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'do_distinct': True,
+            'default_values': [
+                ('graphid', UUID, RSCI_UUID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+                ('transactionid', UUID, AFS_RSCI_TRANSACTION_ID,),
+            ], 
+        },
+        {
+            'raw_col': 'name__name_content',
+            'targ_table': 'name',
+            'stage_field_prefix': 'name_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'name_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('transactionid', UUID, AFS_RSCI_TRANSACTION_ID,),
+            ],
+            'tile_other_fields': [
+                # Mappings for other fields to include in the same tile
+                {
+                    'raw_col': 'name__name_type_',
+                    'targ_field': 'name_type_',
+                    'data_type': JSONB,
+                    'value_transform': make_name_type_physical_thing_list_items,
+                },
+                {
+                    'raw_col': 'name__name_language_',
+                    'targ_field': 'name_language_',
+                    'data_type': JSONB,
+                    'value_transform': make_language_list_items,
+                },
+            ],
+        },
+        {
+            'raw_col': 'object_type__object_type',
+            'targ_table': 'object_type',
+            'stage_field_prefix': 'obj_type_',
+            'value_transform': make_object_type_phys_thing_list_items,
+            'targ_field': 'object_type',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('transactionid', UUID, AFS_RSCI_TRANSACTION_ID,),
+            ],
+        },
+        {
+            # do this for each resourceinstance uuid
+            'raw_col': 'resourceinstance_id',
+            'targ_table': 'current_location',
+            'stage_field_prefix': 'rsci_cur_loc_',
+            'value_transform': make_afs_rsci_transaction_id_for_nonblanks,
+            'targ_field': 'transactionid',
+            'data_type': UUID,
+            'make_tileid': True,
+            'default_values': [
+                # ('transactionid', UUID, PHYS_THING_TRANSACTION_ID,),
+            ],
+            'related_resources': [
+                {
+                    'targ_field': 'current_location',
+                    'multi_value': True,
+                    'source_field_from_uuid': 'resourceinstanceid',
+                    'source_field_to_uuid': 'current_location__current_location',
+                    'rel_type_id': REL_LINK_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_LINK_INVERSE_REL_TYPE_ID,
+                },
+            ],
+        },
+        {
+            # do this for each resourceinstance uuid
+            'raw_col': 'resourceinstance_id',
+            'targ_table': 'current_owner',
+            'stage_field_prefix': 'rsci_cur_own_',
+            'value_transform': make_afs_rsci_transaction_id_for_nonblanks,
+            'targ_field': 'transactionid',
+            'data_type': UUID,
+            'make_tileid': True,
+            'default_values': [
+                # ('transactionid', UUID, PHYS_THING_TRANSACTION_ID,),
+            ],
+            'related_resources': [
+                {
+                    'targ_field': 'current_owner',
+                    'multi_value': True,
+                    'source_field_from_uuid': 'resourceinstanceid',
+                    'source_field_to_uuid': 'current_owner__current_owner',
+                    'rel_type_id': REL_LINK_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_LINK_INVERSE_REL_TYPE_ID,
+                },
+            ],
+        },
+        {
+            # do this for each resourceinstance uuid
+            'raw_col': 'resourceinstance_id',
+            'targ_table': 'removal_from_object',
+            'stage_field_prefix': 'rsci_removal_',
+            'value_transform': make_afs_rsci_transaction_id_for_nonblanks,
+            'targ_field': 'transactionid',
+            'data_type': UUID,
+            'make_tileid': True,
+            'default_values': [
+                # ('transactionid', UUID, PHYS_THING_TRANSACTION_ID,),
+            ],
+            'related_resources': [
+                {
+                    'targ_field': 'removal_from_object_removed_from',
+                    'multi_value': True,
+                    'source_field_from_uuid': 'resourceinstanceid',
+                    'source_field_to_uuid': 'removal_from_object_n1__removal_from_object_removed_from',
+                    'rel_type_id': REL_LINK_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_LINK_INVERSE_REL_TYPE_ID,
+                },
+            ],
+        },
+        {
+            # do this for each resourceinstance uuid
+            'raw_col': 'resourceinstance_id',
+            'targ_table': 'part_of',
+            'stage_field_prefix': 'rsci_part_of_',
+            'value_transform': make_afs_rsci_transaction_id_for_nonblanks,
+            'targ_field': 'transactionid',
+            'data_type': UUID,
+            'make_tileid': True,
+            'default_values': [
+                # ('transactionid', UUID, PHYS_THING_TRANSACTION_ID,),
+            ],
+            'related_resources': [
+                {
+                    'targ_field': 'part_of',
+                    'multi_value': True,
+                    'source_field_from_uuid': 'resourceinstanceid',
+                    'source_field_to_uuid': 'part_of__part_of',
+                    'rel_type_id': REL_LINK_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_LINK_INVERSE_REL_TYPE_ID,
+                },
+            ],
+        },
+    ],
+}
+
+
+
 MAIN_ALL_MAPPING_CONFIGS = [
     # Create resource instances for different models
     RSCI_MAPPING_CONFIGS,
@@ -3068,12 +3259,12 @@ MAIN_ALL_MAPPING_CONFIGS = [
     AFS_PHYS_THING_STATE_DIM_MAPPING_CONFIGS,
 
     AFS_DIGITAL_RESOURCES_NAME_MAPPING_CONFIGS,
-
+    AFS_DIGITAL_RESOURCES_TYPE_CREATE_MAPPING_CONFIGS,
 ]
 
 ALL_MAPPING_CONFIGS = [
-   
-    AFS_DIGITAL_RESOURCES_TYPE_CREATE_MAPPING_CONFIGS,
+
+    AFS_RSCI_NAME_REMOVAL_MAPPING_CONFIGS,
 ]
 
 
