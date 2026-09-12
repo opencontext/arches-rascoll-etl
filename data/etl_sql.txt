@@ -209,6 +209,10 @@ UPDATE node_groups
 SET cardinality = 'n'
 WHERE nodegroupid = '2924a04c-73c0-4d09-972e-089a6630e232';
 
+UPDATE node_groups
+SET cardinality = 'n'
+WHERE nodegroupid = '8713ddc6-d860-11ef-98f5-0275dc2ded29';
+
 
 
 -- FUNCTION: public.__arches_instance_view_update()
@@ -353,7 +357,7 @@ ALTER TABLE TILES DISABLE TRIGGER __arches_trg_update_spatial_attributes;
 
 
 
-                INSERT INTO reference_and_sample_collection_item.instances (
+                INSERT INTO digital_resources.instances (
                     resourceinstanceid, 
 resource_instance_lifecycle_state_id, 
 graphid, 
@@ -370,38 +374,79 @@ graphpublicationid::uuid,
 principaluser_id::integer, 
 transactionid::uuid
                 
-                FROM staging.etl_afs_rsci_statement
-                WHERE (staging.etl_afs_rsci_statement.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
-((staging.etl_afs_rsci_statement.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_afs_digital_resources_file_statements
+                WHERE (staging.etl_afs_digital_resources_file_statements.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM digital_resources.instances)) AND 
+((staging.etl_afs_digital_resources_file_statements.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.etl_afs_rsci_statement.resourceinstanceid
+                ORDER BY staging.etl_afs_digital_resources_file_statements.resourceinstanceid
                 
                 ;
                 
 
 
-                INSERT INTO reference_and_sample_collection_item.statement (
+                INSERT INTO digital_resources.file (
                     resourceinstanceid, 
 tileid, 
-statement_content, 
-transactionid, 
-statement_type, 
-statement_language_
+file, 
+transactionid
                 ) SELECT
                     
+ DISTINCT
                     resourceinstanceid::uuid, 
-statement_tileid::uuid, 
-statement_statement_content::jsonb, 
-statement_transactionid::uuid, 
-statement_statement_type::jsonb, 
-statement_statement_language_::jsonb
+file_tileid::uuid, 
+file_file::jsonb, 
+file_transactionid::uuid
                 
-                FROM staging.etl_afs_rsci_statement
-                WHERE (staging.etl_afs_rsci_statement.statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_afs_rsci_statement.statement_tileid::uuid IS NOT NULL) AND 
-((staging.etl_afs_rsci_statement.statement_statement_content::jsonb IS NOT NULL) OR (staging.etl_afs_rsci_statement.statement_statement_type::jsonb IS NOT NULL) OR (staging.etl_afs_rsci_statement.statement_statement_language_::jsonb IS NOT NULL))
+                FROM staging.etl_afs_digital_resources_file_statements
+                WHERE (staging.etl_afs_digital_resources_file_statements.file_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_afs_digital_resources_file_statements.file_tileid::uuid IS NOT NULL) AND 
+((staging.etl_afs_digital_resources_file_statements.file_file::jsonb IS NOT NULL))
                 
-                ORDER BY staging.etl_afs_rsci_statement.resourceinstanceid
+                ORDER BY staging.etl_afs_digital_resources_file_statements.resourceinstanceid
+                
+                ;
+                
+
+
+                    INSERT INTO files (
+                        fileid, 
+                        path, 
+                        tileid
+                    ) SELECT
+                        DISTINCT
+                        staging.etl_afs_digital_resources_file_statements.sql_file_id::uuid,
+                        staging.etl_afs_digital_resources_file_statements.sql_file_path,
+                        staging.etl_afs_digital_resources_file_statements.file_tileid::uuid
+                    FROM staging.etl_afs_digital_resources_file_statements
+                    WHERE staging.etl_afs_digital_resources_file_statements.file_tileid::uuid NOT IN (SELECT tileid FROM files);
+                    
+
+
+                INSERT INTO digital_resources.file_statement (
+                    resourceinstanceid, 
+tileid, 
+file_statement_content, 
+transactionid, 
+file, 
+file_statement_type, 
+file_statement_language
+                ) SELECT
+                    
+ DISTINCT
+                    resourceinstanceid::uuid, 
+fs_tileid::uuid, 
+fs_file_statement_content::jsonb, 
+fs_transactionid::uuid, 
+file_tileid::uuid, 
+fs_file_statement_type::jsonb, 
+fs_file_statement_language::jsonb
+                
+                FROM staging.etl_afs_digital_resources_file_statements
+                WHERE (staging.etl_afs_digital_resources_file_statements.fs_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_afs_digital_resources_file_statements.fs_tileid::uuid IS NOT NULL) AND 
+((staging.etl_afs_digital_resources_file_statements.fs_file_statement_content::jsonb IS NOT NULL) OR (staging.etl_afs_digital_resources_file_statements.fs_file_statement_type::jsonb IS NOT NULL) OR (staging.etl_afs_digital_resources_file_statements.fs_file_statement_language::jsonb IS NOT NULL))
+                
+                ORDER BY staging.etl_afs_digital_resources_file_statements.resourceinstanceid
                 
                 ;
                 

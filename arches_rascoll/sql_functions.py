@@ -285,8 +285,11 @@ NODE_CARDINALITY_FIX = """
 UPDATE node_groups
 SET cardinality = 'n'
 WHERE nodegroupid = '2924a04c-73c0-4d09-972e-089a6630e232';
-"""
 
+UPDATE node_groups
+SET cardinality = 'n'
+WHERE nodegroupid = '8713ddc6-d860-11ef-98f5-0275dc2ded29';
+"""
 
 
 

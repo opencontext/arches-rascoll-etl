@@ -1,6 +1,6 @@
 import codecs
 import copy
-import datetime
+import time
 import json
 import os
 from openpyxl import load_workbook
@@ -137,3 +137,29 @@ def read_excel_to_dataframes(excel_filepath):
         # dfs[sheet_name] = pd.read_excel(xls, sheet_name=sheet_name, engine='xlrd')
         dfs[sheet_name] = pd.read_excel(wb, sheet_name, engine='openpyxl')
     return dfs
+
+
+def make_file_dict(
+    file_name,
+    file_id,
+    filesize,
+    mimetype,
+):
+    """Make a dictionary for a file object"""
+    obj = {
+        "url": f"/files/{file_id}",
+        "name": file_name,
+        "path": f"uploadedfiles/{file_name}",
+        "size": filesize,
+        "type": mimetype,
+        "index": 0,
+        "status": "uploaded",
+        # "content":"blob:http://127.0.0.1:8004/86096968-f210-4b25-9ed8-4f4adc878a92",
+        "content": None,
+        "file_id": file_id,
+        "accepted": True,
+        # "renderer": "5e05aa2e-5db0-4922-8938-b4d2b7919733",
+        "lastModified":int( time.time() )
+                       
+    }
+    return obj

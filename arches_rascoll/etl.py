@@ -150,8 +150,9 @@ def ensure_unique_tileids_for_groups(df_staging, configs):
     if not configs.get('tileid_unique_groups'):
         return df_staging
     dup_cols = ['resourceinstanceid']
-    for tileid_col, group_cols in configs.get('tileid_unique_groups', {}).items():
-        dup_cols.append(tileid_col)
+    updated_tileid_fields = []
+    for tileid_field, group_cols in configs.get('tileid_unique_groups', {}).items():
+        dup_cols.append(tileid_field)
         if 'resourceinstanceid' not in group_cols:
             group_cols = ['resourceinstanceid'] + group_cols
         temp_cols = []
@@ -167,9 +168,10 @@ def ensure_unique_tileids_for_groups(df_staging, configs):
             act_index = df_staging[temp_cols[0]] == row[temp_cols[0]]
             for c in temp_cols[1:]:
                 act_index &= df_staging[c] == row[c]
-            df_staging.loc[act_index, tileid_col] = str(GenUUID.uuid4())
+            df_staging.loc[act_index, tileid_field] = str(GenUUID.uuid4())
         df_staging.drop(columns=temp_cols, inplace=True)
-        print(f'Made unique tileids for {tileid_col} based on unique values in: {group_cols}')
+        print(f'Made unique tileids for {tileid_field} based on unique values in: {group_cols}')
+        updated_tileid_fields.append(tileid_field)
     df_staging.drop_duplicates(subset=dup_cols, inplace=True)
     return df_staging
 
@@ -243,10 +245,14 @@ def prep_transformed_data(df, configs):
             if mapping.get('make_file'):
                 # We need to make a file object for this row.
                 file_config = mapping.get('make_file')
+                if file_config.get('raw_filesize_col'):
+                    file_size = row['raw_filesize_col']
+                else:
+                    file_size = None
                 file_dict = utilities.make_file_dict(
                     file_name=row[file_config.get('raw_filename_col')],
                     file_id=row[file_config.get('raw_file_id_col')],
-                    filesize=row[file_config.get('raw_filesize_col')],
+                    filesize=file_size,
                     mimetype=file_config.get('mimetype', 'application/octet-stream'),
                 )
                 if file_config.get('raw_mimetype_col'):
@@ -693,6 +699,7 @@ def prepare_all_sql_inserts(
                         path, 
                         tileid
                     ) SELECT
+                        DISTINCT
                         {source_tab}.sql_file_id::uuid,
                         {source_tab}.sql_file_path,
                         {source_tab}.{staging_tileid_field}::uuid

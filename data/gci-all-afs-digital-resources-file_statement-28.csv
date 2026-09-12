@@ -1,29 +1,29 @@
-resourceinstance_id,file_statement__file,file_statement__file_statement_type,file_statement__file_statement_language,file_statement__file_statement_content,row_num
-199e8923-c314-46ab-8e89-c0d07a08bf81,biolk_sC_100x_spot3.txt,brief text,English (language),"100xL, low gain, orange area, very high fluorescence",1
-199e8923-c314-46ab-8e89-c0d07a08bf81,biolk_sC_100x_spot3.txt,interpretation,English (language),Fluorescence only,2
-1dec1dcc-f336-4ff3-a82d-9ea5dffc66a9,biolk_sC_100x_spot1.txt,interpretation,English (language),Fluorescence only,3
-1dec1dcc-f336-4ff3-a82d-9ea5dffc66a9,biolk_sC_100x_spot1.txt,brief text,English (language),"100xL, low gain, orange area, very high fluorescence",4
-4ec84f54-c27f-4880-8339-146eb381363b,biolk_sC_100x_spot4.txt,brief text,English (language),"100xL, low gain, orange area, very high fluorescence",5
-4ec84f54-c27f-4880-8339-146eb381363b,biolk_sC_100x_spot4.txt,interpretation,English (language),Fluorescence only,6
-55e29584-b631-4dd2-a8dc-60ad4fcf4bd9,biolk_sA2_50x_spot1.txt,interpretation,English (language),indigo,7
-55e29584-b631-4dd2-a8dc-60ad4fcf4bd9,biolk_sA2_20x_spot1.txt,interpretation,English (language),indigo,8
-55e29584-b631-4dd2-a8dc-60ad4fcf4bd9,biolk_sA2_50x_spot1.txt,brief text,English (language),"50xL, low gain, dark area, high fluorescence",9
-55e29584-b631-4dd2-a8dc-60ad4fcf4bd9,biolk_sA2_20x_spot1.txt,brief text,English (language),"20x, low gain, dark area, high fluorescence",10
-566f96fe-87ef-4711-9ad8-3693d48277ea,biolk_sC_100x_spot5.txt,brief text,English (language),"100xL, low gain, orange area, very high fluorescence",11
-566f96fe-87ef-4711-9ad8-3693d48277ea,biolk_sC_100x_spot5.txt,interpretation,English (language),Fluorescence only,12
-5746c92f-b8ce-4a90-bf26-e8ca2429ad59,biolk_sC_100x_spot6.txt,interpretation,English (language),Fluorescence. only,13
-5746c92f-b8ce-4a90-bf26-e8ca2429ad59,biolk_sC_100x_spot6.txt,brief text,English (language),"100xL, low gain, white in orange area, very high fluorescence",14
-5effbdb1-63af-4d23-97fe-3711972d34b4,biolk_sA2_50x_spot3.txt,brief text,English (language),"50xL, low gain, dark area",15
-5effbdb1-63af-4d23-97fe-3711972d34b4,biolk_sA2_50x_spot3.txt,interpretation,English (language),Indigo and Barium yellow,16
-7ccefd30-b863-48af-b58d-33a75e7cec1b,Biolk_XRF__007.txt,interpretation,English (language),"blue spot: Major Ti, Ca; minor Fe, Cr; trace K, S",17
-83a6ebf8-4e43-4233-aa2c-8c33731de73d,Biolk_XRF__004.txt,interpretation,English (language),orange area: Major Cd ; Minor S; trace Ti,18
-86cdd5f1-0359-4fee-9b44-48e144998ea4,Biolk_XRF__003.txt,interpretation,English (language),"dark red area: Major Ca, Ti  Minor Fe, K trace S, Ni, Sr",19
-c4677cb7-f7a8-4186-bf30-aad543b9d316,biolk_sA2_50x_spot2.txt,interpretation,English (language),Barium yellow,20
-c4677cb7-f7a8-4186-bf30-aad543b9d316,biolk_sA2_50x_spot2.txt,brief text,English (language),"50xL, low gain, white area",21
-cd01f397-1a5e-4a26-bec1-66d66fc482d6,Biolk_XRF__002.txt,interpretation,English (language),"golden yellow spot: Major Ca, Ti Fe; trace S, Ni, Cu, Sr;",22
-d9c0434a-e70f-4760-ad26-b5137f1b3576,biolk_sC_100x_spot2.txt,brief text,English (language),"100xL, low gain, dark area, very high fluorescence",23
-d9c0434a-e70f-4760-ad26-b5137f1b3576,biolk_sC_100x_spot2.txt,interpretation,English (language),indigo,24
-db7a234e-14a9-4c9a-928e-9ef3be493ab4,Biolk_XRF__008.txt,interpretation,English (language),"bare canvas:  Major Ca, Ti; Minor Fe; trace K",25
-f04a3ee9-855c-4f09-8814-00dab1925a1b,Biolk_XRF__001.txt,interpretation,English (language),"black, green area: Major Ti, Ti, Fe; Minor Ba, Sr; trace Ni, Cu",26
-f43fd007-ca58-4c5d-9981-2a7f7f9a8a12,Biolk_XRF__006.txt,interpretation,English (language),"green spot: Major Ni, Ti, Co, Zn; Minor --; trace Ca, Sr, S, Nd?, Pr?",27
-f58f23da-3d10-488d-867e-e844aecec68b,Biolk_XRF__005.txt,interpretation,English (language),"yellow area: Major Ca, Ti, Cr, Pb; Minor Fe; trace Sr",28
+resourceinstance_id,file_statement__file,file_statement__file_uuid,file_statement__file_statement_type,file_statement__file_statement_language,file_statement__file_statement_content,row_num
+199e8923-c314-46ab-8e89-c0d07a08bf81,biolk_sC_100x_spot3.txt,09452bc1-c53d-4c01-93a7-cf838c762e9f,brief text,English (language),"100xL, low gain, orange area, very high fluorescence",1
+199e8923-c314-46ab-8e89-c0d07a08bf81,biolk_sC_100x_spot3.txt,09452bc1-c53d-4c01-93a7-cf838c762e9f,interpretation,English (language),Fluorescence only,2
+1dec1dcc-f336-4ff3-a82d-9ea5dffc66a9,biolk_sC_100x_spot1.txt,0e04427c-6a89-45fe-bd6c-ac8926263b4e,interpretation,English (language),Fluorescence only,3
+1dec1dcc-f336-4ff3-a82d-9ea5dffc66a9,biolk_sC_100x_spot1.txt,0e04427c-6a89-45fe-bd6c-ac8926263b4e,brief text,English (language),"100xL, low gain, orange area, very high fluorescence",4
+4ec84f54-c27f-4880-8339-146eb381363b,biolk_sC_100x_spot4.txt,a38326d2-3980-40c1-a34a-c20931def52e,brief text,English (language),"100xL, low gain, orange area, very high fluorescence",5
+4ec84f54-c27f-4880-8339-146eb381363b,biolk_sC_100x_spot4.txt,a38326d2-3980-40c1-a34a-c20931def52e,interpretation,English (language),Fluorescence only,6
+55e29584-b631-4dd2-a8dc-60ad4fcf4bd9,biolk_sA2_50x_spot1.txt,6150f5d5-0c88-4376-9757-292e6efcde9b,interpretation,English (language),indigo,7
+55e29584-b631-4dd2-a8dc-60ad4fcf4bd9,biolk_sA2_20x_spot1.txt,3e1b0909-651e-4444-8285-d47a8e2e271a,interpretation,English (language),indigo,8
+55e29584-b631-4dd2-a8dc-60ad4fcf4bd9,biolk_sA2_50x_spot1.txt,6150f5d5-0c88-4376-9757-292e6efcde9b,brief text,English (language),"50xL, low gain, dark area, high fluorescence",9
+55e29584-b631-4dd2-a8dc-60ad4fcf4bd9,biolk_sA2_20x_spot1.txt,3e1b0909-651e-4444-8285-d47a8e2e271a,brief text,English (language),"20x, low gain, dark area, high fluorescence",10
+566f96fe-87ef-4711-9ad8-3693d48277ea,biolk_sC_100x_spot5.txt,eb8f81be-dc41-47de-b1ea-c7ab5877ef29,brief text,English (language),"100xL, low gain, orange area, very high fluorescence",11
+566f96fe-87ef-4711-9ad8-3693d48277ea,biolk_sC_100x_spot5.txt,eb8f81be-dc41-47de-b1ea-c7ab5877ef29,interpretation,English (language),Fluorescence only,12
+5746c92f-b8ce-4a90-bf26-e8ca2429ad59,biolk_sC_100x_spot6.txt,9eba1281-1db0-4623-b918-bd6862ebd3a4,interpretation,English (language),Fluorescence. only,13
+5746c92f-b8ce-4a90-bf26-e8ca2429ad59,biolk_sC_100x_spot6.txt,9eba1281-1db0-4623-b918-bd6862ebd3a4,brief text,English (language),"100xL, low gain, white in orange area, very high fluorescence",14
+5effbdb1-63af-4d23-97fe-3711972d34b4,biolk_sA2_50x_spot3.txt,a95f55ab-350f-4234-82b8-e7ba061b65c8,brief text,English (language),"50xL, low gain, dark area",15
+5effbdb1-63af-4d23-97fe-3711972d34b4,biolk_sA2_50x_spot3.txt,a95f55ab-350f-4234-82b8-e7ba061b65c8,interpretation,English (language),Indigo and Barium yellow,16
+7ccefd30-b863-48af-b58d-33a75e7cec1b,Biolk_XRF__007.txt,4dc73d16-5089-40d2-9936-e94bf4e6e32e,interpretation,English (language),"blue spot: Major Ti, Ca; minor Fe, Cr; trace K, S",17
+83a6ebf8-4e43-4233-aa2c-8c33731de73d,Biolk_XRF__004.txt,b6666138-7306-4fe0-b0f5-aeed7e3c75e4,interpretation,English (language),orange area: Major Cd ; Minor S; trace Ti,18
+86cdd5f1-0359-4fee-9b44-48e144998ea4,Biolk_XRF__003.txt,5b9d5bc8-87f4-43d5-be8d-492720d16fd9,interpretation,English (language),"dark red area: Major Ca, Ti  Minor Fe, K trace S, Ni, Sr",19
+c4677cb7-f7a8-4186-bf30-aad543b9d316,biolk_sA2_50x_spot2.txt,9ef5f363-e1e9-431e-b8f1-9a99352ffd89,interpretation,English (language),Barium yellow,20
+c4677cb7-f7a8-4186-bf30-aad543b9d316,biolk_sA2_50x_spot2.txt,9ef5f363-e1e9-431e-b8f1-9a99352ffd89,brief text,English (language),"50xL, low gain, white area",21
+cd01f397-1a5e-4a26-bec1-66d66fc482d6,Biolk_XRF__002.txt,a88f5b03-4ae4-443d-ae45-2269e268a738,interpretation,English (language),"golden yellow spot: Major Ca, Ti Fe; trace S, Ni, Cu, Sr;",22
+d9c0434a-e70f-4760-ad26-b5137f1b3576,biolk_sC_100x_spot2.txt,af157539-4908-460c-9f76-099fc56cf3b7,brief text,English (language),"100xL, low gain, dark area, very high fluorescence",23
+d9c0434a-e70f-4760-ad26-b5137f1b3576,biolk_sC_100x_spot2.txt,af157539-4908-460c-9f76-099fc56cf3b7,interpretation,English (language),indigo,24
+db7a234e-14a9-4c9a-928e-9ef3be493ab4,Biolk_XRF__008.txt,75dba810-82d0-4349-b9f2-c0073c974852,interpretation,English (language),"bare canvas:  Major Ca, Ti; Minor Fe; trace K",25
+f04a3ee9-855c-4f09-8814-00dab1925a1b,Biolk_XRF__001.txt,37d8bc63-dd9c-4bf6-90cd-41e947532537,interpretation,English (language),"black, green area: Major Ti, Ti, Fe; Minor Ba, Sr; trace Ni, Cu",26
+f43fd007-ca58-4c5d-9981-2a7f7f9a8a12,Biolk_XRF__006.txt,22dfd757-4142-49a8-ba15-383370bbb85e,interpretation,English (language),"green spot: Major Ni, Ti, Co, Zn; Minor --; trace Ca, Sr, S, Nd?, Pr?",27
+f58f23da-3d10-488d-867e-e844aecec68b,Biolk_XRF__005.txt,a1d5ce40-7cb4-452c-afa6-4796cd795302,interpretation,English (language),"yellow area: Major Ca, Ti, Cr, Pb; Minor Fe; trace Sr",28

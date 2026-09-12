@@ -3041,6 +3041,99 @@ AFS_DIGITAL_RESOURCES_TYPE_CREATE_MAPPING_CONFIGS = {
 }
 
 
+IMPORT_DIGITAL_RESOURCES_FILE_STATEMENTS_CSV = os.path.join(DATA_DIR, 'gci-all-afs-digital-resources-file_statement-28.csv')
+
+
+AFS_DIGITAL_RESOURCES_FILE_STATEMENTS_MAPPING_CONFIGS = {
+    'model_id': DIGITAL_RESOURCES_MODEL_ID,
+    'staging_table': 'etl_afs_digital_resources_file_statements',
+    'model_staging_schema': DIGITAL_RESOURCES_MODEL_NAME,
+    'raw_pk_col': 'row_num',
+    'load_path': IMPORT_DIGITAL_RESOURCES_FILE_STATEMENTS_CSV,
+    'mappings': [
+        {
+            'raw_col': 'resourceinstance_id',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'do_distinct': True,
+            'default_values': [
+                ('graphid', UUID, DIGITAL_RESOURCES_MODEL_ID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+                ('transactionid', UUID, DIGITAL_RESOURCES_TRANSACTION_ID,),
+            ], 
+        },
+        {
+            'raw_col': 'file_statement__file',
+            'targ_table': 'file',
+            'stage_field_prefix': 'file_',
+            'value_transform': copy_value,
+            'targ_field': 'file',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'do_distinct': True,
+            'default_values': [
+                ('transactionid', UUID, DIGITAL_RESOURCES_TRANSACTION_ID,),
+            ],
+            'make_file': {
+                'raw_filename_col': 'file_statement__file',
+                'raw_file_id_col': 'file_statement__file_uuid',
+                # 'raw_filesize_col': 'filesize',
+                # 'raw_mimetype_col': 'mimetype',
+                'mimetype': 'text/plain',
+            },
+        },
+        {
+            'raw_col': 'file_statement__file_statement_content',
+            'targ_table': 'file_statement',
+            'stage_field_prefix': 'fs_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'file_statement_content',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'do_distinct': True,
+            'default_values': [
+                ('transactionid', UUID, DIGITAL_RESOURCES_TRANSACTION_ID,),
+            ],
+            'tile_other_fields': [
+                # Mappings for other fields to include in the same tile
+                {
+                    'raw_col': 'file_statement__file_statement_type',
+                    'targ_field': 'file_statement_type',
+                    'data_type': JSONB,
+                    'value_transform': make_statement_type_list_items, # just the generic Statement Types
+                },
+                {
+                    'raw_col': 'file_statement__file_statement_language',
+                    'targ_field': 'file_statement_language',
+                    'data_type': JSONB,
+                    'value_transform': make_language_list_items,
+                },
+            ],
+            'related_tileid': {
+                'source_tile_field': 'file_tileid',
+                'targ_tile_field': 'file',
+            },
+        },
+    ],
+    'tileid_unique_groups': {
+        'file_tileid': [
+            'file_file',
+            'sql_file_id',
+        ],
+        'fs_tileid': [
+            'file_file',
+            'fs_file_statement_content',
+            'fs_file_statement_type',
+        ],
+    },
+}
+
+
 
 IMPORT_AFS_RSCI_NAME_REMOVAL_CSV = os.path.join(DATA_DIR, 'gci-all-afs-rsci-name-object_type-current_location-current_owner-removal_from_object_n1-part_of-2.csv')
 AFS_RSCI_TRANSACTION_ID = '126e39e6-a2b0-4bb9-9af3-a22e945b1c92'
@@ -3325,10 +3418,11 @@ MAIN_ALL_MAPPING_CONFIGS = [
     AFS_DIGITAL_RESOURCES_TYPE_CREATE_MAPPING_CONFIGS,
 
     AFS_RSCI_NAME_REMOVAL_MAPPING_CONFIGS,
+    AFS_RSCI_STATEMENT_MAPPING_CONFIGS,
 ]
 
 ALL_MAPPING_CONFIGS = [
-    AFS_RSCI_STATEMENT_MAPPING_CONFIGS
+    AFS_DIGITAL_RESOURCES_FILE_STATEMENTS_MAPPING_CONFIGS,  
 ]
 
 
