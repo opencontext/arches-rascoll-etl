@@ -253,7 +253,7 @@ def prep_transformed_data(df, configs):
                     file_name=row[file_config.get('raw_filename_col')],
                     file_id=row[file_config.get('raw_file_id_col')],
                     filesize=file_size,
-                    mimetype=file_config.get('mimetype', 'application/octet-stream'),
+                    mimetype=file_config.get('mimetype'),
                 )
                 if file_config.get('raw_mimetype_col'):
                     # use the mimetype specified in the mimetype column
@@ -704,7 +704,8 @@ def prepare_all_sql_inserts(
                         {source_tab}.sql_file_path,
                         {source_tab}.{staging_tileid_field}::uuid
                     FROM {source_tab}
-                    WHERE {source_tab}.{staging_tileid_field}::uuid NOT IN (SELECT tileid FROM files);
+                    WHERE {source_tab}.{staging_tileid_field}::uuid NOT IN (SELECT tileid FROM files)
+                    AND {source_tab}.sql_file_id::uuid NOT IN (SELECT fileid FROM files);
                     """
                     sqls.append(file_sql)
 

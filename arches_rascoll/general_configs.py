@@ -3135,6 +3135,62 @@ AFS_DIGITAL_RESOURCES_FILE_STATEMENTS_MAPPING_CONFIGS = {
 
 
 
+IMPORT_DIGITAL_RESOURCES_FILES_CSV = os.path.join(DATA_DIR, 'gci-all-afs-digital-resources-file-68.csv')
+
+
+AFS_DIGITAL_RESOURCES_FILES_MAPPING_CONFIGS = {
+    'model_id': DIGITAL_RESOURCES_MODEL_ID,
+    'staging_table': 'etl_afs_digital_resources_files',
+    'model_staging_schema': DIGITAL_RESOURCES_MODEL_NAME,
+    'raw_pk_col': 'row_num',
+    'load_path': IMPORT_DIGITAL_RESOURCES_FILES_CSV,
+    'mappings': [
+        {
+            'raw_col': 'resourceinstance_id',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'do_distinct': True,
+            'default_values': [
+                ('graphid', UUID, DIGITAL_RESOURCES_MODEL_ID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+                ('transactionid', UUID, DIGITAL_RESOURCES_TRANSACTION_ID,),
+            ], 
+        },
+        {
+            'raw_col': 'file__file',
+            'targ_table': 'file',
+            'stage_field_prefix': 'file_',
+            'value_transform': copy_value,
+            'targ_field': 'file',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'do_distinct': True,
+            'default_values': [
+                ('transactionid', UUID, DIGITAL_RESOURCES_TRANSACTION_ID,),
+            ],
+            'make_file': {
+                'raw_filename_col': 'file__file',
+                'raw_file_id_col': 'file__file_uuid',
+                # 'raw_filesize_col': 'filesize',
+                # 'raw_mimetype_col': 'mimetype',
+                # 'mimetype': 'text/plain',
+            },
+        },
+    ],
+    'tileid_unique_groups': {
+        'file_tileid': [
+            'file_file',
+            'sql_file_id',
+        ],
+    },
+}
+
+
 IMPORT_AFS_RSCI_NAME_REMOVAL_CSV = os.path.join(DATA_DIR, 'gci-all-afs-rsci-name-object_type-current_location-current_owner-removal_from_object_n1-part_of-2.csv')
 AFS_RSCI_TRANSACTION_ID = '126e39e6-a2b0-4bb9-9af3-a22e945b1c92'
 
@@ -3416,13 +3472,16 @@ MAIN_ALL_MAPPING_CONFIGS = [
 
     AFS_DIGITAL_RESOURCES_NAME_MAPPING_CONFIGS,
     AFS_DIGITAL_RESOURCES_TYPE_CREATE_MAPPING_CONFIGS,
+    AFS_DIGITAL_RESOURCES_FILE_STATEMENTS_MAPPING_CONFIGS,
+    AFS_DIGITAL_RESOURCES_FILES_MAPPING_CONFIGS,
 
     AFS_RSCI_NAME_REMOVAL_MAPPING_CONFIGS,
     AFS_RSCI_STATEMENT_MAPPING_CONFIGS,
 ]
 
 ALL_MAPPING_CONFIGS = [
-    AFS_DIGITAL_RESOURCES_FILE_STATEMENTS_MAPPING_CONFIGS,  
+   
+    
 ]
 
 
