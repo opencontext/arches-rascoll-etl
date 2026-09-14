@@ -3432,6 +3432,70 @@ AFS_RSCI_STATEMENT_MAPPING_CONFIGS = {
 
 
 
+IMPORT_PHYS_THING_DIGITAL_REF_CSV = os.path.join(DATA_DIR, 'gci-all-afs-physical-thing-digital_reference-14.csv')
+
+
+def make_digital_reference_type_list_items(value):
+    if not value:
+        return None
+    value = value.strip()
+    # Reference Types - Digital Resource Reference 933cf221-2d71-478f-998a-a5e088457971
+    return get_controlled_list_objs_by_pref_labels(
+        pref_labels=[value,],
+        list_id='933cf221-2d71-478f-998a-a5e088457971',
+    )
+
+
+
+AFS_PHYS_THING_DIGITAL_REF_MAPPING_CONFIGS = {
+    'model_id': PHYS_THING_MODEL_ID,
+    'staging_table': 'etl_afs_phys_things_dig_ref',
+    'model_staging_schema': PHYS_THING_MODEL_NAME,
+    'raw_pk_col': 'row_num',
+    'load_path': IMPORT_PHYS_THING_DIGITAL_REF_CSV,
+    'mappings': [
+        {
+            'raw_col': 'resourceinstance_id',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'do_distinct': True,
+            'default_values': [
+                ('graphid', UUID, PHYS_THING_MODEL_ID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+                ('transactionid', UUID, PHYS_THING_TRANSACTION_ID,),
+            ], 
+        },
+        {
+            'raw_col': 'digital_reference__digital_reference_type',
+            'targ_table': 'digital_reference',
+            'stage_field_prefix': 'dig_ref_',
+            'value_transform': make_digital_reference_type_list_items,
+            'targ_field': 'digital_reference_type',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('transactionid', UUID, PHYS_THING_TRANSACTION_ID,),
+            ],
+            'related_resources': [
+                {
+                    'targ_field': 'digital_source',
+                    'multi_value': True,
+                    'source_field_from_uuid': 'resourceinstanceid',
+                    'source_field_to_uuid': 'digital_reference__digital_source',
+                    'rel_type_id': REL_RSCI_GROUP_REL_SAFETY_TYPE_ID,
+                    'inverse_rel_type_id': REL_RSCI_GROUP_REL_INVERSE_SAFETY_TYPE_ID,
+                    # 'rel_nodeid': 'bda5f8e0-d376-11ef-a239-0275dc2ded29', # hold for nodeid
+                },
+            ]
+        },
+    ],
+}
+
 
 MAIN_ALL_MAPPING_CONFIGS = [
     # Create resource instances for different models
@@ -3477,11 +3541,13 @@ MAIN_ALL_MAPPING_CONFIGS = [
 
     AFS_RSCI_NAME_REMOVAL_MAPPING_CONFIGS,
     AFS_RSCI_STATEMENT_MAPPING_CONFIGS,
+
+
 ]
 
 ALL_MAPPING_CONFIGS = [
    
-    
+    AFS_PHYS_THING_DIGITAL_REF_MAPPING_CONFIGS,
 ]
 
 

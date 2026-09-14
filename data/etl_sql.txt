@@ -357,7 +357,7 @@ ALTER TABLE TILES DISABLE TRIGGER __arches_trg_update_spatial_attributes;
 
 
 
-                INSERT INTO digital_resources.instances (
+                INSERT INTO physical_thing.instances (
                     resourceinstanceid, 
 resource_instance_lifecycle_state_id, 
 graphid, 
@@ -374,53 +374,45 @@ graphpublicationid::uuid,
 principaluser_id::integer, 
 transactionid::uuid
                 
-                FROM staging.etl_afs_digital_resources_files
-                WHERE (staging.etl_afs_digital_resources_files.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM digital_resources.instances)) AND 
-((staging.etl_afs_digital_resources_files.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_afs_phys_things_dig_ref
+                WHERE (staging.etl_afs_phys_things_dig_ref.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM physical_thing.instances)) AND 
+((staging.etl_afs_phys_things_dig_ref.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.etl_afs_digital_resources_files.resourceinstanceid
+                ORDER BY staging.etl_afs_phys_things_dig_ref.resourceinstanceid
                 
                 ;
                 
 
 
-                INSERT INTO digital_resources.file (
+                INSERT INTO physical_thing.digital_reference (
                     resourceinstanceid, 
 tileid, 
-file, 
-transactionid
+digital_reference_type, 
+transactionid, 
+digital_source
                 ) SELECT
                     
- DISTINCT
                     resourceinstanceid::uuid, 
-file_tileid::uuid, 
-file_file::jsonb, 
-file_transactionid::uuid
+dig_ref_tileid::uuid, 
+dig_ref_digital_reference_type::jsonb, 
+dig_ref_transactionid::uuid, 
+
+                        coalesce(
+                            case jsonb_typeof(dig_ref_related_objs) 
+                                when 'array' then dig_ref_related_objs 
+                                else '[]'::jsonb end
+                            ) as dig_ref_related_objs_1
+                        
                 
-                FROM staging.etl_afs_digital_resources_files
-                WHERE (staging.etl_afs_digital_resources_files.file_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_afs_digital_resources_files.file_tileid::uuid IS NOT NULL) AND 
-((staging.etl_afs_digital_resources_files.file_file::jsonb IS NOT NULL))
+                FROM staging.etl_afs_phys_things_dig_ref
+                WHERE (staging.etl_afs_phys_things_dig_ref.dig_ref_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_afs_phys_things_dig_ref.dig_ref_tileid::uuid IS NOT NULL) AND 
+((staging.etl_afs_phys_things_dig_ref.dig_ref_digital_reference_type::jsonb IS NOT NULL) OR (staging.etl_afs_phys_things_dig_ref.dig_ref_related_objs::jsonb IS NOT NULL))
                 
-                ORDER BY staging.etl_afs_digital_resources_files.resourceinstanceid
+                ORDER BY staging.etl_afs_phys_things_dig_ref.resourceinstanceid
                 
                 ;
                 
-
-
-                    INSERT INTO files (
-                        fileid, 
-                        path, 
-                        tileid
-                    ) SELECT
-                        DISTINCT
-                        staging.etl_afs_digital_resources_files.sql_file_id::uuid,
-                        staging.etl_afs_digital_resources_files.sql_file_path,
-                        staging.etl_afs_digital_resources_files.file_tileid::uuid
-                    FROM staging.etl_afs_digital_resources_files
-                    WHERE staging.etl_afs_digital_resources_files.file_tileid::uuid NOT IN (SELECT tileid FROM files)
-                    AND staging.etl_afs_digital_resources_files.sql_file_id::uuid NOT IN (SELECT fileid FROM files);
-                    
 
 
 /*
