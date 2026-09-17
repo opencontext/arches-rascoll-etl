@@ -388,3 +388,18 @@ update cards_x_nodes_x_widgets set config = jsonb_set(
 	true
 ) where config -> 'defaultValue' ->> '__ko_mapping__' is not null;
 """
+
+
+
+
+CHECK_UNUSED_REFERENCE_NODES = """
+SELECT n.nodeid, n.name AS node_name, n.graphid, g.name AS graph_name, COUNT(t.resourceinstanceid) AS resource_count
+FROM nodes AS n
+JOIN graphs AS g ON n.graphid = g.graphid
+JOIN node_groups AS ng ON n.nodegroupid = ng.nodegroupid
+LEFT JOIN tiles AS t ON n.nodegroupid = t.nodegroupid
+WHERE n.datatype IN ('reference')
+AND t.resourceinstanceid is null
+GROUP BY n.nodeid, n.name, n.graphid, g.name, t.resourceinstanceid
+ORDER BY g.name, n.name;
+"""
