@@ -205,8 +205,8 @@ RSCI_MAPPING_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('name_type_', JSONB, NAME_TYPES_PHYSICAL_THING_PRIMARY_LIST_ITEMS,),
-                ('name_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                ('name_type', JSONB, NAME_TYPES_PHYSICAL_THING_PRIMARY_LIST_ITEMS,),
+                ('name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('transactionid', UUID, ETL_RSCI_TRANSACTION_ID,),
             ], 
         },
@@ -219,8 +219,8 @@ RSCI_MAPPING_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('name_type_', JSONB, NAME_TYPES_PHYSICAL_THING_ALTERNATE_LIST_ITEMS,),
-                ('name_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                ('name_type', JSONB, NAME_TYPES_PHYSICAL_THING_ALTERNATE_LIST_ITEMS,),
+                ('name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('transactionid', UUID, ETL_RSCI_TRANSACTION_ID,),
             ],
         },
@@ -606,7 +606,7 @@ RSCI_STATEMENTS_CONFIGS = {
             'make_tileid': True,
             'default_values': [
                 ('statement_type', JSONB, STATEMENT_PHYS_THING_NOTE_LIST_ITEMS,),
-                ('statement_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                ('statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('transactionid', UUID, ETL_RSCI_STATEMENTS_TRANSACTION_ID,),
             ],
         },
@@ -620,7 +620,7 @@ RSCI_STATEMENTS_CONFIGS = {
             'make_tileid': True,
             'default_values': [
                 ('statement_type', JSONB, STATEMENT_PHYS_THING_SAMPLE_DESCRIPTION_LIST_ITEMS,),
-                ('statement_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                ('statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('transactionid', UUID, ETL_RSCI_STATEMENTS_TRANSACTION_ID,),
             ],
         },
@@ -634,7 +634,7 @@ RSCI_STATEMENTS_CONFIGS = {
             'make_tileid': True,
             'default_values': [
                 ('statement_type', JSONB, STATEMENT_PHYS_THING_EXPERIMENT_DESCRIPTION_LIST_ITEMS,),
-                ('statement_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                ('statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('transactionid', UUID, ETL_RSCI_STATEMENTS_TRANSACTION_ID,),
             ],
         }
@@ -939,7 +939,7 @@ RSCI_PRODUCTION_CONFIGS = {
         },
         {
             'raw_col': 'prod_label',
-            'targ_table': 'production_',
+            'targ_table': 'production',
             'stage_field_prefix': 'prod_1_',
             'value_transform': make_lang_dict_value,
             'targ_field': 'production__label',
@@ -1005,7 +1005,7 @@ RSCI_PRODUCTION_CONFIGS = {
             ],
             'related_tileid': {
                 'source_tile_field': 'prod_1_tileid',
-                'targ_tile_field': 'production_',
+                'targ_tile_field': 'production',
             },
         },
         {
@@ -1021,7 +1021,7 @@ RSCI_PRODUCTION_CONFIGS = {
             ],
             'related_tileid': {
                 'source_tile_field': 'prod_1_tileid',
-                'targ_tile_field': 'production_',
+                'targ_tile_field': 'production',
             },
         },
         {
@@ -1037,7 +1037,7 @@ RSCI_PRODUCTION_CONFIGS = {
             ],
             'related_tileid': {
                 'source_tile_field': 'prod_1_tileid',
-                'targ_tile_field': 'production_',
+                'targ_tile_field': 'production',
             },
         },
         {
@@ -1050,7 +1050,7 @@ RSCI_PRODUCTION_CONFIGS = {
             'make_tileid': True,
             'related_tileid': {
                 'source_tile_field': 'prod_1_tileid',
-                'targ_tile_field': 'production_',
+                'targ_tile_field': 'production',
             },
             'default_values': [
                 ('production_statement_type', JSONB, STATEMENT_PRODUCER_DESC_LIST_ITEMS,),
@@ -1068,7 +1068,7 @@ RSCI_PRODUCTION_CONFIGS = {
             'make_tileid': True,
             'related_tileid': {
                 'source_tile_field': 'prod_1_tileid',
-                'targ_tile_field': 'production_',
+                'targ_tile_field': 'production',
             },
             'default_values': [
                 ('production_statement_type', JSONB, STATEMENT_EXPIRE_DATE_LIST_ITEMS,),
@@ -1187,7 +1187,7 @@ RSCI_CHEMICAL_MATERIAL_CONFIGS = {
             'data_type': Text,
             'make_tileid': True,
             'default_values': [
-                ('chemical_material_name_type_', JSONB, NAME_PHYSICAL_THINGS_CHEMICAL_NAMES_LIST_ITEMS,),
+                ('chemical_material_name_type', JSONB, NAME_PHYSICAL_THINGS_CHEMICAL_NAMES_LIST_ITEMS,),
                 ('transactionid', UUID, RSCI_CHEMICAL_MATERIAL_TRANSACTION_ID,),
             ],
             'related_tileid': {
@@ -1221,7 +1221,7 @@ RSCI_CHEMICAL_MATERIAL_CONFIGS = {
             'data_type': Text,
             'make_tileid': True,
             'default_values': [
-                ('chemical_material_name_type_', JSONB, NAME_CHEMICAL_FORMULA_LIST_ITEMS,),
+                ('chemical_material_name_type', JSONB, NAME_CHEMICAL_FORMULA_LIST_ITEMS,),
                 ('transactionid', UUID, RSCI_CHEMICAL_MATERIAL_TRANSACTION_ID,),
             ], 
             'related_tileid': {
@@ -1539,7 +1539,7 @@ RSCI_DIMENSIONS_CONFIGS = {
                 # Mappings for other fields to include in the same tile
                 {
                     'raw_col': 'READY_dim1_value',
-                    'targ_field': 'dimension_value_',
+                    'targ_field': 'dimension_value',
                     'data_type': Numeric,
                     'value_transform': copy_numeric_value,
                 },
@@ -1584,7 +1584,7 @@ RSCI_DIMENSIONS_CONFIGS = {
                 # Mappings for other fields to include in the same tile
                 {
                     'raw_col': 'READY_dim2_value',
-                    'targ_field': 'dimension_value_',
+                    'targ_field': 'dimension_value',
                     'data_type': Numeric,
                     'value_transform': copy_numeric_value,
                 },
@@ -1791,8 +1791,8 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('name_type_', JSONB, NAME_PHYSICAL_THINGS_GBIF_LIST_ITEMS,),
-                ('name_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                ('name_type', JSONB, NAME_PHYSICAL_THINGS_GBIF_LIST_ITEMS,),
+                ('name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('transactionid', UUID, RSCI_MATERIALS_TYPES_TRANSACTION_ID,),
             ], 
         },
@@ -1806,7 +1806,7 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
             'make_tileid': True,
             'default_values': [
                 ('statement_type', JSONB, STATEMENT_PHYS_THING_BIO_TAXON_LIST_ITEMS,),
-                ('statement_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                ('statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('transactionid', UUID, RSCI_MATERIALS_TYPES_TRANSACTION_ID,),
             ], 
         },
@@ -1934,7 +1934,7 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
             'make_tileid': True,
             'default_values': [
                 ('part_dimension_statement_type', JSONB, STATEMENT_PHYS_THING_MEASUREMENT_DESCRIPTION_LIST_ITEMS),
-                ('part_dimension_statement_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                ('part_dimension_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('transactionid', UUID, RSCI_MATERIALS_TYPES_TRANSACTION_ID,),
             ],
             'related_tileid': {
@@ -1945,7 +1945,7 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
                 # Mappings for other fields to include in the same tile
                 {
                     'raw_col': 'READY_comp_pigment_dim_value',
-                    'targ_field': 'part_dimension_value_',
+                    'targ_field': 'part_dimension_value',
                     'data_type': Numeric,
                     'value_transform': copy_numeric_value,
                 },
@@ -1957,7 +1957,7 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
                 },
                 {
                     'raw_col': 'READY_comp_pigment_dim_type',
-                    'targ_field': 'part_dimension_type_',
+                    'targ_field': 'part_dimension_type',
                     'data_type': JSONB,
                     'value_transform': make_dimension_kind_list_items,
                 },
@@ -2013,7 +2013,7 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
             'make_tileid': True,
             'default_values': [
                 ('part_dimension_statement_type', JSONB, STATEMENT_PHYS_THING_MEASUREMENT_DESCRIPTION_LIST_ITEMS),
-                ('part_dimension_statement_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                ('part_dimension_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('transactionid', UUID, RSCI_MATERIALS_TYPES_TRANSACTION_ID,),
             ],
             'related_tileid': {
@@ -2024,7 +2024,7 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
                 # Mappings for other fields to include in the same tile
                 {
                     'raw_col': 'READY_comp_basemix_dim_value',
-                    'targ_field': 'part_dimension_value_',
+                    'targ_field': 'part_dimension_value',
                     'data_type': Numeric,
                     'value_transform': copy_numeric_value,
                 },
@@ -2036,7 +2036,7 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
                 },
                 {
                     'raw_col': 'READY_comp_basemix_dim_type',
-                    'targ_field': 'part_dimension_type_',
+                    'targ_field': 'part_dimension_type',
                     'data_type': JSONB,
                     'value_transform': make_dimension_kind_list_items,
                 },
@@ -2092,7 +2092,7 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
             'make_tileid': True,
             'default_values': [
                 ('part_dimension_statement_type', JSONB, STATEMENT_PHYS_THING_MEASUREMENT_DESCRIPTION_LIST_ITEMS),
-                ('part_dimension_statement_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                ('part_dimension_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('transactionid', UUID, RSCI_MATERIALS_TYPES_TRANSACTION_ID,),
             ],
             'related_tileid': {
@@ -2103,7 +2103,7 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
                 # Mappings for other fields to include in the same tile
                 {
                     'raw_col': 'READY_comp1_dim_value',
-                    'targ_field': 'part_dimension_value_',
+                    'targ_field': 'part_dimension_value',
                     'data_type': Numeric,
                     'value_transform': copy_numeric_value,
                 },
@@ -2115,7 +2115,7 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
                 },
                 {
                     'raw_col': 'READY_comp1_dim_type',
-                    'targ_field': 'part_dimension_type_',
+                    'targ_field': 'part_dimension_type',
                     'data_type': JSONB,
                     'value_transform': make_dimension_kind_list_items,
                 },
@@ -2171,7 +2171,7 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
             'make_tileid': True,
             'default_values': [
                 ('part_dimension_statement_type', JSONB, STATEMENT_PHYS_THING_MEASUREMENT_DESCRIPTION_LIST_ITEMS),
-                ('part_dimension_statement_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                ('part_dimension_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('transactionid', UUID, RSCI_MATERIALS_TYPES_TRANSACTION_ID,),
             ],
             'related_tileid': {
@@ -2182,7 +2182,7 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
                 # Mappings for other fields to include in the same tile
                 {
                     'raw_col': 'READY_comp2_dim_value',
-                    'targ_field': 'part_dimension_value_',
+                    'targ_field': 'part_dimension_value',
                     'data_type': Numeric,
                     'value_transform': copy_numeric_value,
                 },
@@ -2194,7 +2194,7 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
                 },
                 {
                     'raw_col': 'READY_comp2_dim_type',
-                    'targ_field': 'part_dimension_type_',
+                    'targ_field': 'part_dimension_type',
                     'data_type': JSONB,
                     'value_transform': make_dimension_kind_list_items,
                 },
@@ -2250,7 +2250,7 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
             'make_tileid': True,
             'default_values': [
                 ('part_dimension_statement_type', JSONB, STATEMENT_PHYS_THING_MEASUREMENT_DESCRIPTION_LIST_ITEMS),
-                ('part_dimension_statement_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                ('part_dimension_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('transactionid', UUID, RSCI_MATERIALS_TYPES_TRANSACTION_ID,),
             ],
             'related_tileid': {
@@ -2261,7 +2261,7 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
                 # Mappings for other fields to include in the same tile
                 {
                     'raw_col': 'READY_comp3_dim_value',
-                    'targ_field': 'part_dimension_value_',
+                    'targ_field': 'part_dimension_value',
                     'data_type': Numeric,
                     'value_transform': copy_numeric_value,
                 },
@@ -2273,7 +2273,7 @@ RSCI_MATERIALS_TYPES_CONFIGS = {
                 },
                 {
                     'raw_col': 'READY_comp3_dim_type',
-                    'targ_field': 'part_dimension_type_',
+                    'targ_field': 'part_dimension_type',
                     'data_type': JSONB,
                     'value_transform': make_dimension_kind_list_items,
                 },
@@ -2541,8 +2541,8 @@ FIELD_RSCI_MAPPING_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('name_type_', JSONB, NAME_TYPES_PHYSICAL_THING_PRIMARY_LIST_ITEMS,),
-                ('name_language_', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                ('name_type', JSONB, NAME_TYPES_PHYSICAL_THING_PRIMARY_LIST_ITEMS,),
+                ('name_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('transactionid', UUID, FIELD_SAMPLES_TRANSACTION_ID,),
             ], 
         },
@@ -2668,14 +2668,14 @@ AFS_PHYS_THING_NAME_ID_MAPPING_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
-                ('name_type_', JSONB, NAME_TYPES_PHYSICAL_THING_PRIMARY_LIST_ITEMS,),
+                ('name_type', JSONB, NAME_TYPES_PHYSICAL_THING_PRIMARY_LIST_ITEMS,),
                 ('transactionid', UUID, PHYS_THING_TRANSACTION_ID,),
             ],
             'tile_other_fields': [
                 # Mappings for other fields to include in the same tile
                 {
                     'raw_col': 'name__name_language_',
-                    'targ_field': 'name_language_',
+                    'targ_field': 'name_language',
                     'data_type': JSONB,
                     'value_transform': make_language_list_items,
                 },
@@ -2756,7 +2756,7 @@ AFS_PHYS_THING_NAME_ID_MAPPING_CONFIGS = {
         {
             # do this for each resourceinstance uuid
             'raw_col': 'production__production_location_geo',
-            'targ_table': 'production_',
+            'targ_table': 'production',
             'stage_field_prefix': 'phys_things_prod_',
             'value_transform': copy_value,
             'targ_field': 'production_location_geo',
@@ -2843,7 +2843,7 @@ AFS_PHYS_THING_STATE_DIM_MAPPING_CONFIGS = {
                 },
                 {
                     'raw_col': 'statement__statement_language_',
-                    'targ_field': 'statement_language_',
+                    'targ_field': 'statement_language',
                     'data_type': JSONB,
                     'value_transform': make_language_list_items,
                 },
@@ -2854,7 +2854,7 @@ AFS_PHYS_THING_STATE_DIM_MAPPING_CONFIGS = {
             'targ_table': 'dimension',
             'stage_field_prefix': 'phys_things_dim_',
             'value_transform': make_dimension_kind_list_items,
-            'targ_field': 'dimension_type_',
+            'targ_field': 'dimension_type',
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
@@ -2864,7 +2864,7 @@ AFS_PHYS_THING_STATE_DIM_MAPPING_CONFIGS = {
                 # Mappings for other fields to include in the same tile
                 {
                     'raw_col': 'dimension__dimension_value_',
-                    'targ_field': 'dimension_value_',
+                    'targ_field': 'dimension_value',
                     'data_type': Numeric,
                     'value_transform': copy_numeric_value,
                 },
@@ -2895,8 +2895,8 @@ AFS_PHYS_THING_STATE_DIM_MAPPING_CONFIGS = {
             'phys_things_state_cont_statement_type',
         ],
         'phys_things_dim_tileid': [
-            'phys_things_dim_dimension_type_',
-            'phys_things_dim_dimension_value_',
+            'phys_things_dim_dimension_type',
+            'phys_things_dim_dimension_value',
         ],
     },
 }
@@ -3249,13 +3249,13 @@ AFS_RSCI_NAME_REMOVAL_MAPPING_CONFIGS = {
                 # Mappings for other fields to include in the same tile
                 {
                     'raw_col': 'name__name_type_',
-                    'targ_field': 'name_type_',
+                    'targ_field': 'name_type',
                     'data_type': JSONB,
                     'value_transform': make_name_type_physical_thing_list_items,
                 },
                 {
                     'raw_col': 'name__name_language_',
-                    'targ_field': 'name_language_',
+                    'targ_field': 'name_language',
                     'data_type': JSONB,
                     'value_transform': make_language_list_items,
                 },
@@ -3416,7 +3416,7 @@ AFS_RSCI_STATEMENT_MAPPING_CONFIGS = {
                 },
                 {
                     'raw_col': 'statement__statement_language_',
-                    'targ_field': 'statement_language_',
+                    'targ_field': 'statement_language',
                     'data_type': JSONB,
                     'value_transform': make_language_list_items,
                 },
@@ -3545,7 +3545,7 @@ MAIN_ALL_MAPPING_CONFIGS = [
 
 ]
 
-ALL_MAPPING_CONFIGS = [
+ALL_MAPPING_CONFIGS = MAIN_ALL_MAPPING_CONFIGS + [
    
     AFS_PHYS_THING_DIGITAL_REF_MAPPING_CONFIGS,
 ]
