@@ -360,7 +360,7 @@ PLACE_MAPPING_CONFIGS = {
 #- GROUP CONFIGS -----------------#
 #---------------------------------#
 GROUP_MODEL_UUID = '36956e50-d770-11ef-8f5d-0275dc2ded29'
-GROUP_MODEL_NAME = 'group_'
+GROUP_MODEL_NAME = 'group__model'
 IMPORT_RAW_GROUP_CSV = os.path.join(DATA_DIR, 'gci-all-groups.csv')
 
 # UUID for the NFPA group, to reference for branches about types of safety standards
@@ -777,6 +777,9 @@ RSCI_ACQUISITION_MAPPINGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
+                ('acquisition_statement_type', JSONB, STATEMENT_TYPE_BRIEF_TEXT_LIST_ITEMS,),
+                ('acquisition_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                ('acquisition_timespan_type', JSONB, TIMESPAN_TYPES_APPROXIMATE_LIST_ITEMS,),
                 ('transactionid', UUID, RSCI_ACQUISITION_TRANSACTION_ID,),
             ],
             'related_resources': [
@@ -841,41 +844,21 @@ RSCI_ACQUISITION_MAPPINGS = {
                     # 'rel_nodeid': PROV_ACT_ACQUIRE_FROM_NODE_ID,
                 },
             ],
-        },
-        {
-            'raw_col': 'acquisition_note',
-            'targ_table': 'acquisition_statement',
-            'stage_field_prefix': 'acq_state_',
-            'value_transform': make_lang_dict_value,
-            'targ_field': 'acquisition_statement_content',
-            'data_type': JSONB,
-            'make_tileid': True,
-            'default_values': [
-                ('acquisition_statement_type', JSONB, STATEMENT_TYPE_BRIEF_TEXT_LIST_ITEMS,),
-                ('acquisition_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                ('transactionid', UUID, RSCI_ACQUISITION_TRANSACTION_ID,),
+            'tile_other_fields': [
+                # Mappings for other fields to include in the same tile
+                {
+                    'raw_col': 'acquisition_note',
+                    'targ_field': 'acquisition_statement_content',
+                    'data_type': JSONB,
+                    'value_transform': make_lang_dict_value,
+                },
+                {
+                    'raw_col': 'Acquisition Date__edtf',
+                    'targ_field': 'acquisition_timespan_production_time_edtf',
+                    'data_type': Text,
+                    'value_transform': copy_value,
+                },
             ],
-            'related_tileid': {
-                'source_tile_field': 'acq_tileid',
-                'targ_tile_field': 'acquisition',
-            },
-        },
-        {
-            'raw_col': 'Acquisition Date__edtf',
-            'targ_table': 'acquisition_timespan',
-            'stage_field_prefix': 'acq_time_',
-            'value_transform': copy_value,
-            'targ_field': 'acquisition_timespan_edtf',
-            'data_type': Text,
-            'make_tileid': True,
-            'default_values': [
-                ('acquisition_timespan_type', JSONB, TIMESPAN_TYPES_APPROXIMATE_LIST_ITEMS,),
-                ('transactionid', UUID, RSCI_ACQUISITION_TRANSACTION_ID,),
-            ],
-            'related_tileid': {
-                'source_tile_field': 'acq_tileid',
-                'targ_tile_field': 'acquisition',
-            },
         },
     ],
 }
@@ -948,6 +931,8 @@ RSCI_PRODUCTION_CONFIGS = {
             'default_values': [
                 ('production_type', JSONB, EVENT_TYPE_PRODUCTION_LIST_ITEMS,),
                 ('transactionid', UUID, RSCI_PRODUCTION_TRANSACTION_ID,),
+                ('production_statement_type', JSONB, STATEMENT_EXPIRE_DATE_LIST_ITEMS,),
+                ('production_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
             ],
             'related_resources': [
                 {
@@ -990,90 +975,31 @@ RSCI_PRODUCTION_CONFIGS = {
                     'source_geojson': True,
                     'value_transform': copy_value,
                 },
-            ]
-        },
-        {
-            'raw_col': 'READY_origination_date_edtf_1',
-            'targ_table': 'production_time',
-            'stage_field_prefix': 'pt_d1_',
-            'value_transform': copy_value,
-            'targ_field': 'production_time_edtf',
-            'data_type': Text,
-            'make_tileid': True,
-            'default_values': [
-                ('transactionid', UUID, RSCI_PRODUCTION_TRANSACTION_ID,),
-            ],
-            'related_tileid': {
-                'source_tile_field': 'prod_1_tileid',
-                'targ_tile_field': 'production',
-            },
-        },
-        {
-            'raw_col': 'READY_origination_date_edtf_2',
-            'targ_table': 'production_time',
-            'stage_field_prefix': 'pt_d2_',
-            'value_transform': copy_value,
-            'targ_field': 'production_time_edtf',
-            'data_type': Text,
-            'make_tileid': True,
-            'default_values': [
-                ('transactionid', UUID, RSCI_PRODUCTION_TRANSACTION_ID,),
-            ],
-            'related_tileid': {
-                'source_tile_field': 'prod_1_tileid',
-                'targ_tile_field': 'production',
-            },
-        },
-        {
-            'raw_col': 'READY_origination_date_edtf_3',
-            'targ_table': 'production_time',
-            'stage_field_prefix': 'pt_d3_',
-            'value_transform': copy_value,
-            'targ_field': 'production_time_edtf',
-            'data_type': Text,
-            'make_tileid': True,
-            'default_values': [
-                ('transactionid', UUID, RSCI_PRODUCTION_TRANSACTION_ID,),
-            ],
-            'related_tileid': {
-                'source_tile_field': 'prod_1_tileid',
-                'targ_tile_field': 'production',
-            },
-        },
-        {
-            'raw_col': 'origination_date_statement',
-            'targ_table': 'production_statement',
-            'stage_field_prefix': 'prod_statement_',
-            'value_transform': make_lang_dict_value,
-            'targ_field': 'production_statement_content',
-            'data_type': JSONB,
-            'make_tileid': True,
-            'related_tileid': {
-                'source_tile_field': 'prod_1_tileid',
-                'targ_tile_field': 'production',
-            },
-            'default_values': [
-                ('production_statement_type', JSONB, STATEMENT_PRODUCER_DESC_LIST_ITEMS,),
-                ('production_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                ('transactionid', UUID, RSCI_PRODUCTION_TRANSACTION_ID,),
-            ],
-        },
-        {
-            'raw_col': 'READY_expiration_date_statement',
-            'targ_table': 'production_statement',
-            'stage_field_prefix': 'prod_exp_statement_',
-            'value_transform': make_lang_dict_value,
-            'targ_field': 'production_statement_content',
-            'data_type': JSONB,
-            'make_tileid': True,
-            'related_tileid': {
-                'source_tile_field': 'prod_1_tileid',
-                'targ_tile_field': 'production',
-            },
-            'default_values': [
-                ('production_statement_type', JSONB, STATEMENT_EXPIRE_DATE_LIST_ITEMS,),
-                ('production_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
-                ('transactionid', UUID, RSCI_PRODUCTION_TRANSACTION_ID,),
+                # We're now collapsing multiple origination dates into the same node tile id. Is this good?
+                {
+                    'raw_col': 'READY_origination_date_edtf_1',
+                    'targ_field': 'production_time_edtf',
+                    'data_type': Text,
+                    'value_transform': copy_value,
+                },
+                {
+                    'raw_col': 'READY_origination_date_edtf_2',
+                    'targ_field': 'production_time_edtf',
+                    'data_type': Text,
+                    'value_transform': copy_value,
+                },
+                {
+                    'raw_col': 'READY_origination_date_edtf_3',
+                    'targ_field': 'production_time_edtf',
+                    'data_type': Text,
+                    'value_transform': copy_value,
+                },
+                {
+                    'raw_col': 'READY_expiration_date_statement',
+                    'targ_field': 'production_statement_content',
+                    'data_type': JSONB,
+                    'value_transform': make_lang_dict_value,
+                },
             ],
         },
     ],
@@ -1163,25 +1089,23 @@ RSCI_CHEMICAL_MATERIAL_CONFIGS = {
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
+                ('chemical_material_identifier_type', JSONB, NAME_CAS_REGISTRY_NUMBER_LIST_ITEMS,),
                 ('transactionid', UUID, RSCI_CHEMICAL_MATERIAL_TRANSACTION_ID,),
-            ], 
-        },
-        {
-            'raw_col': 'READY_natural-synthetic',
-            'targ_table': 'attribute_type',
-            'stage_field_prefix': 'attrib_type_',
-            'value_transform': make_attributes_nat_synth_list_items,
-            'targ_field': 'attribute_type',
-            'data_type': JSONB,
-            'make_tileid': True,
-            'default_values': [
-                ('transactionid', UUID, RSCI_CHEMICAL_MATERIAL_TRANSACTION_ID,),
-            ], 
+            ],
+            'tile_other_fields': [
+                # Mappings for other fields to include in the same tile
+                {
+                    'raw_col': 'Chemical (CAS) No.',
+                    'targ_field': 'chemical_material_identifier_content',
+                    'data_type': JSONB,
+                    'value_transform': make_lang_dict_value,
+                },
+            ],
         },
         {
             'raw_col': 'Chemical Name',
             'targ_table': 'chemical_material_name',
-            'stage_field_prefix': 'chem_',
+            'stage_field_prefix': 'chem_name_',
             'value_transform': copy_value,
             'targ_field': 'chemical_material_name_content',
             'data_type': Text,
@@ -1189,28 +1113,11 @@ RSCI_CHEMICAL_MATERIAL_CONFIGS = {
             'default_values': [
                 ('chemical_material_name_type', JSONB, NAME_PHYSICAL_THINGS_CHEMICAL_NAMES_LIST_ITEMS,),
                 ('transactionid', UUID, RSCI_CHEMICAL_MATERIAL_TRANSACTION_ID,),
-            ],
+            ], 
             'related_tileid': {
                 'source_tile_field': 'chem_tileid',
                 'targ_tile_field': 'chemical_material',
-            }, 
-        },
-        {
-            'raw_col': 'Chemical (CAS) No.',
-            'targ_table': 'chemical_material_identifier',
-            'stage_field_prefix': 'chem_id_',
-            'value_transform': make_lang_dict_value,
-            'targ_field': 'chemical_material_identifier_content',
-            'data_type': JSONB,
-            'make_tileid': True,
-            'default_values': [
-                ('chemical_material_identifier_type', JSONB, NAME_CAS_REGISTRY_NUMBER_LIST_ITEMS,),
-                ('transactionid', UUID, RSCI_CHEMICAL_MATERIAL_TRANSACTION_ID,),
-            ],
-            'related_tileid': {
-                'source_tile_field': 'chem_tileid',
-                'targ_tile_field': 'chemical_material',
-            }, 
+            },
         },
         {
             'raw_col': 'Chemical Formula',
@@ -1228,6 +1135,18 @@ RSCI_CHEMICAL_MATERIAL_CONFIGS = {
                 'source_tile_field': 'chem_tileid',
                 'targ_tile_field': 'chemical_material',
             },
+        },
+        {
+            'raw_col': 'READY_natural-synthetic',
+            'targ_table': 'attribute_type',
+            'stage_field_prefix': 'attrib_type_',
+            'value_transform': make_attributes_nat_synth_list_items,
+            'targ_field': 'attribute_type',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('transactionid', UUID, RSCI_CHEMICAL_MATERIAL_TRANSACTION_ID,),
+            ], 
         },
     ],
 }
@@ -3509,7 +3428,7 @@ MAIN_ALL_MAPPING_CONFIGS = [
     RSCI_SAFETY_GROUP_MAPPINGS,
 
     RSCI_ACQUISITION_MAPPINGS,
-    RSCI_PRODUCTION_CONFIGS,
+    # RSCI_PRODUCTION_CONFIGS,
 
     # Materials
     RSCI_CHEMICAL_MATERIAL_CONFIGS,
@@ -3562,7 +3481,7 @@ ARCHES_REL_VIEW_PREP_SQLS = [
     """,
 
     f"""
-    SELECT __arches_create_resource_model_views('{GROUP_MODEL_UUID}');
+    SELECT __arches_create_resource_model_views('{GROUP_MODEL_UUID}', 'group__model');
     """,
     f"""
     SELECT __arches_create_resource_model_views('{PERSON_MODEL_UUID}');

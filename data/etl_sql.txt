@@ -120,7 +120,7 @@ ALTER TABLE TILES DISABLE TRIGGER __arches_trg_update_spatial_attributes;
     
 
 
-    SELECT __arches_create_resource_model_views('36956e50-d770-11ef-8f5d-0275dc2ded29');
+    SELECT __arches_create_resource_model_views('36956e50-d770-11ef-8f5d-0275dc2ded29', 'group__model');
     
 
 
@@ -409,7 +409,7 @@ geo_point_transactionid::uuid
 
 
 
-                INSERT INTO group_.instances (
+                INSERT INTO group__model.instances (
                     resourceinstanceid, 
 resource_instance_lifecycle_state_id, 
 graphid, 
@@ -426,17 +426,17 @@ graphpublicationid::uuid,
 principaluser_id::integer, 
 transactionid::uuid
                 
-                FROM staging.etl_group_
-                WHERE (staging.etl_group_.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM group_.instances)) AND 
-((staging.etl_group_.resourceinstanceid::uuid IS NOT NULL))
+                FROM staging.etl_group__model
+                WHERE (staging.etl_group__model.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM group__model.instances)) AND 
+((staging.etl_group__model.resourceinstanceid::uuid IS NOT NULL))
                 
-                ORDER BY staging.etl_group_.resourceinstanceid
+                ORDER BY staging.etl_group__model.resourceinstanceid
                 
                 ;
                 
 
 
-                INSERT INTO group_.name (
+                INSERT INTO group__model.name (
                     resourceinstanceid, 
 tileid, 
 name_content, 
@@ -452,12 +452,12 @@ group_name_name_type::jsonb,
 group_name_name_language::jsonb, 
 group_name_transactionid::uuid
                 
-                FROM staging.etl_group_
-                WHERE (staging.etl_group_.group_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_group_.group_name_tileid::uuid IS NOT NULL) AND 
-((staging.etl_group_.group_name_name_content::jsonb IS NOT NULL))
+                FROM staging.etl_group__model
+                WHERE (staging.etl_group__model.group_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_group__model.group_name_tileid::uuid IS NOT NULL) AND 
+((staging.etl_group__model.group_name_name_content::jsonb IS NOT NULL))
                 
-                ORDER BY staging.etl_group_.resourceinstanceid
+                ORDER BY staging.etl_group__model.resourceinstanceid
                 
                 ;
                 
@@ -785,14 +785,22 @@ transactionid::uuid
                     resourceinstanceid, 
 tileid, 
 acquisition_type, 
+acquisition_statement_type, 
+acquisition_statement_language, 
+acquisition_timespan_type, 
 transactionid, 
 acquisition_carried_out_by, 
-acquisition_transferred_title_from
+acquisition_transferred_title_from, 
+acquisition_statement_content, 
+acquisition_timespan_production_time_edtf
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 acq_tileid::uuid, 
 acq_acquisition_type::jsonb, 
+acq_acquisition_statement_type::jsonb, 
+acq_acquisition_statement_language::jsonb, 
+acq_acquisition_timespan_type::jsonb, 
 acq_transactionid::uuid, 
 
                         coalesce(
@@ -807,283 +815,16 @@ acq_transactionid::uuid,
                                 when 'array' then acq_transferred_title_from_related_objs 
                                 else '[]'::jsonb end
                             ) as acq_transferred_title_from_related_objs_5
-                        
+                        , 
+acq_acquisition_statement_content::jsonb, 
+acq_acquisition_timespan_production_time_edtf::text
                 
                 FROM staging.etl_rsci_acquistition
                 WHERE (staging.etl_rsci_acquistition.acq_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.etl_rsci_acquistition.acq_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_acquistition.acq_acquisition_type::jsonb IS NOT NULL) OR (staging.etl_rsci_acquistition.acq_carried_out_by_related_objs::jsonb IS NOT NULL) OR (staging.etl_rsci_acquistition.acq_transferred_title_from_related_objs::jsonb IS NOT NULL))
+((staging.etl_rsci_acquistition.acq_acquisition_type::jsonb IS NOT NULL) OR (staging.etl_rsci_acquistition.acq_carried_out_by_related_objs::jsonb IS NOT NULL) OR (staging.etl_rsci_acquistition.acq_transferred_title_from_related_objs::jsonb IS NOT NULL) OR (staging.etl_rsci_acquistition.acq_acquisition_statement_content::jsonb IS NOT NULL) OR (staging.etl_rsci_acquistition.acq_acquisition_timespan_production_time_edtf::text IS NOT NULL))
                 
                 ORDER BY staging.etl_rsci_acquistition.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.acquisition_statement (
-                    resourceinstanceid, 
-tileid, 
-acquisition_statement_content, 
-acquisition_statement_type, 
-acquisition_statement_language, 
-transactionid, 
-acquisition
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-acq_state_tileid::uuid, 
-acq_state_acquisition_statement_content::jsonb, 
-acq_state_acquisition_statement_type::jsonb, 
-acq_state_acquisition_statement_language::jsonb, 
-acq_state_transactionid::uuid, 
-acq_tileid::uuid
-                
-                FROM staging.etl_rsci_acquistition
-                WHERE (staging.etl_rsci_acquistition.acq_state_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_acquistition.acq_state_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_acquistition.acq_state_acquisition_statement_content::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_acquistition.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.acquisition_timespan (
-                    resourceinstanceid, 
-tileid, 
-acquisition_timespan_edtf, 
-acquisition_timespan_type, 
-transactionid, 
-acquisition
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-acq_time_tileid::uuid, 
-acq_time_acquisition_timespan_edtf::text, 
-acq_time_acquisition_timespan_type::jsonb, 
-acq_time_transactionid::uuid, 
-acq_tileid::uuid
-                
-                FROM staging.etl_rsci_acquistition
-                WHERE (staging.etl_rsci_acquistition.acq_time_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_acquistition.acq_time_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_acquistition.acq_time_acquisition_timespan_edtf::text IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_acquistition.resourceinstanceid
-                
-                ;
-                
-
-/* ---------------------------------------------------------------------------------- */ 
-
-
-
-                INSERT INTO reference_and_sample_collection_item.instances (
-                    resourceinstanceid, 
-resource_instance_lifecycle_state_id, 
-graphid, 
-graphpublicationid, 
-principaluser_id, 
-transactionid
-                ) SELECT
-                    
- DISTINCT
-                    resourceinstanceid::uuid, 
-'f75bb034-36e3-4ab4-8167-f520cf0b4c58'::uuid AS state_id, 
-graphid::uuid, 
-graphpublicationid::uuid, 
-principaluser_id::integer, 
-transactionid::uuid
-                
-                FROM staging.etl_rsci_production
-                WHERE (staging.etl_rsci_production.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
-((staging.etl_rsci_production.resourceinstanceid::uuid IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_production.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.production (
-                    resourceinstanceid, 
-tileid, 
-production__label, 
-production_type, 
-transactionid, 
-production_carried_out_by, 
-production_location, 
-production_location_geo
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-prod_1_tileid::uuid, 
-prod_1_production__label::jsonb, 
-prod_1_production_type::jsonb, 
-prod_1_transactionid::uuid, 
-
-                        coalesce(
-                            case jsonb_typeof(prod_1_production_carried_out_by_related_objs) 
-                                when 'array' then prod_1_production_carried_out_by_related_objs 
-                                else '[]'::jsonb end
-                            ) as prod_1_production_carried_out_by_related_objs_1
-                        , 
-
-                        coalesce(
-                            case jsonb_typeof(prod_1_production_location_related_objs) 
-                                when 'array' then prod_1_production_location_related_objs 
-                                else '[]'::jsonb end
-                            ) as prod_1_production_location_related_objs_2
-                        , 
-
-                        CASE 
-                            WHEN prod_1_production_location_geo IS NULL THEN NULL 
-                            WHEN jsonb_typeof(prod_1_production_location_geo) = 'object' 
-                            THEN ST_AsText(ST_GeomFromGeoJSON(prod_1_production_location_geo)) 
-                            ELSE NULL 
-                        END AS prod_1_production_location_geo_geom
-                        
-                
-                FROM staging.etl_rsci_production
-                WHERE (staging.etl_rsci_production.prod_1_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_production.prod_1_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_production.prod_1_production__label::jsonb IS NOT NULL) OR (staging.etl_rsci_production.prod_1_production_carried_out_by_related_objs::jsonb IS NOT NULL) OR (staging.etl_rsci_production.prod_1_production_location_related_objs::jsonb IS NOT NULL) OR (staging.etl_rsci_production.prod_1_production_location_geo::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_production.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.production_time (
-                    resourceinstanceid, 
-tileid, 
-production_time_edtf, 
-transactionid, 
-production
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-pt_d1_tileid::uuid, 
-pt_d1_production_time_edtf::text, 
-pt_d1_transactionid::uuid, 
-prod_1_tileid::uuid
-                
-                FROM staging.etl_rsci_production
-                WHERE (staging.etl_rsci_production.pt_d1_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_production.pt_d1_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_production.pt_d1_production_time_edtf::text IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_production.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.production_time (
-                    resourceinstanceid, 
-tileid, 
-production_time_edtf, 
-transactionid, 
-production
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-pt_d2_tileid::uuid, 
-pt_d2_production_time_edtf::text, 
-pt_d2_transactionid::uuid, 
-prod_1_tileid::uuid
-                
-                FROM staging.etl_rsci_production
-                WHERE (staging.etl_rsci_production.pt_d2_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_production.pt_d2_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_production.pt_d2_production_time_edtf::text IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_production.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.production_time (
-                    resourceinstanceid, 
-tileid, 
-production_time_edtf, 
-transactionid, 
-production
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-pt_d3_tileid::uuid, 
-pt_d3_production_time_edtf::text, 
-pt_d3_transactionid::uuid, 
-prod_1_tileid::uuid
-                
-                FROM staging.etl_rsci_production
-                WHERE (staging.etl_rsci_production.pt_d3_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_production.pt_d3_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_production.pt_d3_production_time_edtf::text IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_production.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.production_statement (
-                    resourceinstanceid, 
-tileid, 
-production_statement_content, 
-production_statement_type, 
-production_statement_language, 
-transactionid, 
-production
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-prod_statement_tileid::uuid, 
-prod_statement_production_statement_content::jsonb, 
-prod_statement_production_statement_type::jsonb, 
-prod_statement_production_statement_language::jsonb, 
-prod_statement_transactionid::uuid, 
-prod_1_tileid::uuid
-                
-                FROM staging.etl_rsci_production
-                WHERE (staging.etl_rsci_production.prod_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_production.prod_statement_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_production.prod_statement_production_statement_content::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_production.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.production_statement (
-                    resourceinstanceid, 
-tileid, 
-production_statement_content, 
-production_statement_type, 
-production_statement_language, 
-transactionid, 
-production
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-prod_exp_statement_tileid::uuid, 
-prod_exp_statement_production_statement_content::jsonb, 
-prod_exp_statement_production_statement_type::jsonb, 
-prod_exp_statement_production_statement_language::jsonb, 
-prod_exp_statement_transactionid::uuid, 
-prod_1_tileid::uuid
-                
-                FROM staging.etl_rsci_production
-                WHERE (staging.etl_rsci_production.prod_exp_statement_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_production.prod_exp_statement_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_production.prod_exp_statement_production_statement_content::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_production.resourceinstanceid
                 
                 ;
                 
@@ -1123,41 +864,22 @@ transactionid::uuid
                     resourceinstanceid, 
 tileid, 
 chemical_material, 
-transactionid
+chemical_material_identifier_type, 
+transactionid, 
+chemical_material_identifier_content
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
 chem_tileid::uuid, 
 chem_chemical_material::jsonb, 
-chem_transactionid::uuid
+chem_chemical_material_identifier_type::jsonb, 
+chem_transactionid::uuid, 
+chem_chemical_material_identifier_content::jsonb
                 
                 FROM staging.etl_rsci_chemical_material
                 WHERE (staging.etl_rsci_chemical_material.chem_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.etl_rsci_chemical_material.chem_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_chemical_material.chem_chemical_material::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_chemical_material.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.attribute_type (
-                    resourceinstanceid, 
-tileid, 
-attribute_type, 
-transactionid
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-attrib_type_tileid::uuid, 
-attrib_type_attribute_type::jsonb, 
-attrib_type_transactionid::uuid
-                
-                FROM staging.etl_rsci_chemical_material
-                WHERE (staging.etl_rsci_chemical_material.attrib_type_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_chemical_material.attrib_type_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_chemical_material.attrib_type_attribute_type::jsonb IS NOT NULL))
+((staging.etl_rsci_chemical_material.chem_chemical_material::jsonb IS NOT NULL) OR (staging.etl_rsci_chemical_material.chem_chemical_material_identifier_content::jsonb IS NOT NULL))
                 
                 ORDER BY staging.etl_rsci_chemical_material.resourceinstanceid
                 
@@ -1175,43 +897,16 @@ chemical_material
                 ) SELECT
                     
                     resourceinstanceid::uuid, 
-chem_tileid::uuid, 
-chem_chemical_material_name_content::text, 
-chem_chemical_material_name_type::jsonb, 
-chem_transactionid::uuid, 
+chem_name_tileid::uuid, 
+chem_name_chemical_material_name_content::text, 
+chem_name_chemical_material_name_type::jsonb, 
+chem_name_transactionid::uuid, 
 chem_tileid::uuid
                 
                 FROM staging.etl_rsci_chemical_material
-                WHERE (staging.etl_rsci_chemical_material.chem_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_chemical_material.chem_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_chemical_material.chem_chemical_material_name_content::text IS NOT NULL))
-                
-                ORDER BY staging.etl_rsci_chemical_material.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO reference_and_sample_collection_item.chemical_material_identifier (
-                    resourceinstanceid, 
-tileid, 
-chemical_material_identifier_content, 
-chemical_material_identifier_type, 
-transactionid, 
-chemical_material
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-chem_id_tileid::uuid, 
-chem_id_chemical_material_identifier_content::jsonb, 
-chem_id_chemical_material_identifier_type::jsonb, 
-chem_id_transactionid::uuid, 
-chem_tileid::uuid
-                
-                FROM staging.etl_rsci_chemical_material
-                WHERE (staging.etl_rsci_chemical_material.chem_id_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_rsci_chemical_material.chem_id_tileid::uuid IS NOT NULL) AND 
-((staging.etl_rsci_chemical_material.chem_id_chemical_material_identifier_content::jsonb IS NOT NULL))
+                WHERE (staging.etl_rsci_chemical_material.chem_name_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_chemical_material.chem_name_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_chemical_material.chem_name_chemical_material_name_content::text IS NOT NULL))
                 
                 ORDER BY staging.etl_rsci_chemical_material.resourceinstanceid
                 
@@ -1239,6 +934,29 @@ chem_tileid::uuid
                 WHERE (staging.etl_rsci_chemical_material.chem_form_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
 (staging.etl_rsci_chemical_material.chem_form_tileid::uuid IS NOT NULL) AND 
 ((staging.etl_rsci_chemical_material.chem_form_chemical_material_name_content::text IS NOT NULL))
+                
+                ORDER BY staging.etl_rsci_chemical_material.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.attribute_type (
+                    resourceinstanceid, 
+tileid, 
+attribute_type, 
+transactionid
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+attrib_type_tileid::uuid, 
+attrib_type_attribute_type::jsonb, 
+attrib_type_transactionid::uuid
+                
+                FROM staging.etl_rsci_chemical_material
+                WHERE (staging.etl_rsci_chemical_material.attrib_type_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_chemical_material.attrib_type_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_chemical_material.attrib_type_attribute_type::jsonb IS NOT NULL))
                 
                 ORDER BY staging.etl_rsci_chemical_material.resourceinstanceid
                 
