@@ -983,6 +983,103 @@ RSCI_PRODUCTION_CONFIGS = {
                     'value_transform': copy_value,
                 },
                 {
+                    'raw_col': 'READY_expiration_date_statement',
+                    'targ_field': 'production_statement_content',
+                    'data_type': JSONB,
+                    'value_transform': make_lang_dict_value,
+                },
+            ],
+        },
+    ],
+}
+
+
+OLD_RSCI_PRODUCTION_CONFIGS = {
+    'model_id': RSCI_UUID,
+    'staging_table': 'etl_rsci_production',
+    'model_staging_schema': RSCI_MODEL_NAME,
+    'raw_pk_col': 'rsci_uuid',
+    'load_path': IMPORT_RAW_PROD_CSV,
+    'mappings': [
+        {
+            'raw_col': 'rsci_uuid',
+            'targ_table': 'instances',
+            'stage_field_prefix': '',
+            'value_transform': copy_value,
+            'targ_field': 'resourceinstanceid',
+            'data_type': UUID,
+            'make_tileid': False,
+            'do_distinct': True,
+            'default_values': [
+                ('graphid', UUID, RSCI_UUID,),
+                ('graphpublicationid', UUID, 'a4ea5a7a-d7f0-11ef-a75a-0275dc2ded29',),
+                ('principaluser_id', Integer, 1,),
+                ('transactionid', UUID, RSCI_PRODUCTION_TRANSACTION_ID,),
+            ], 
+        },
+        {
+            'raw_col': 'prod_label',
+            'targ_table': 'production',
+            'stage_field_prefix': 'prod_1_',
+            'value_transform': make_lang_dict_value,
+            'targ_field': 'production__label',
+            'data_type': JSONB,
+            'make_tileid': True,
+            'default_values': [
+                ('production_type', JSONB, EVENT_TYPE_PRODUCTION_LIST_ITEMS,),
+                ('transactionid', UUID, RSCI_PRODUCTION_TRANSACTION_ID,),
+                ('production_statement_type', JSONB, STATEMENT_EXPIRE_DATE_LIST_ITEMS,),
+                ('production_statement_language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+            ],
+            'related_resources': [
+                {
+                    'group_source_field': 'production_carried_out_by_',
+                    'multi_value': True,
+                    'targ_field': 'production_carried_out_by',
+                    'source_field_from_uuid': 'rsci_uuid',
+                    'source_field_to_uuid': 'manu_group_uuid',
+                    'rel_type_id': REL_LINK_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_LINK_INVERSE_REL_TYPE_ID,
+                    # 'rel_nodeid': PRODUCTION_NODE_ID,
+                },
+                {
+                    'group_source_field': 'production_location_',
+                    'targ_field': 'production_location',
+                    'multi_value': True,
+                    'source_field_from_uuid': 'rsci_uuid',
+                    'source_field_to_uuid': 'place_uuid_1',
+                    'rel_type_id': REL_RSCI_PLACE_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_RSCI_PLACE_INVERSE_REL_TYPE_ID,
+                    # 'rel_nodeid': REL_RSCI_PLACE_NODEID,
+                },
+                {
+                    'group_source_field': 'production_location_',
+                    'targ_field': 'production_location',
+                    'multi_value': True,
+                    'source_field_from_uuid': 'rsci_uuid',
+                    'source_field_to_uuid': 'place_uuid_2',
+                    'rel_type_id': REL_RSCI_PLACE_REL_TYPE_ID,
+                    'inverse_rel_type_id': REL_RSCI_PLACE_INVERSE_REL_TYPE_ID,
+                    # 'rel_nodeid': REL_RSCI_PLACE_NODEID,
+                },
+            ],
+            'tile_other_fields': [
+                # Mappings for other fields to include in the same tile
+                {
+                    'raw_col': 'geo_point_1',
+                    'targ_field': 'production_location_geo',
+                    'data_type': JSONB,
+                    'source_geojson': True,
+                    'value_transform': copy_value,
+                },
+                # We're now collapsing multiple origination dates into the same node tile id. Is this good?
+                {
+                    'raw_col': 'READY_origination_date_edtf_1',
+                    'targ_field': 'production_time_edtf',
+                    'data_type': Text,
+                    'value_transform': copy_value,
+                },
+                {
                     'raw_col': 'READY_origination_date_edtf_2',
                     'targ_field': 'production_time_edtf',
                     'data_type': Text,
@@ -1004,7 +1101,6 @@ RSCI_PRODUCTION_CONFIGS = {
         },
     ],
 }
-
 
 #---------------------------------#
 #- RSCI CHEMICAL MATERIAL CONFIGS #
@@ -3428,7 +3524,7 @@ MAIN_ALL_MAPPING_CONFIGS = [
     RSCI_SAFETY_GROUP_MAPPINGS,
 
     RSCI_ACQUISITION_MAPPINGS,
-    # RSCI_PRODUCTION_CONFIGS,
+    RSCI_PRODUCTION_CONFIGS,
 
     # Materials
     RSCI_CHEMICAL_MATERIAL_CONFIGS,

@@ -850,6 +850,94 @@ graphpublicationid::uuid,
 principaluser_id::integer, 
 transactionid::uuid
                 
+                FROM staging.etl_rsci_production
+                WHERE (staging.etl_rsci_production.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
+((staging.etl_rsci_production.resourceinstanceid::uuid IS NOT NULL))
+                
+                ORDER BY staging.etl_rsci_production.resourceinstanceid
+                
+                ;
+                
+
+
+                INSERT INTO reference_and_sample_collection_item.production (
+                    resourceinstanceid, 
+tileid, 
+production__label, 
+production_type, 
+transactionid, 
+production_statement_type, 
+production_statement_language, 
+production_carried_out_by, 
+production_location, 
+production_location_geo, 
+production_time_edtf, 
+production_statement_content
+                ) SELECT
+                    
+                    resourceinstanceid::uuid, 
+prod_1_tileid::uuid, 
+prod_1_production__label::jsonb, 
+prod_1_production_type::jsonb, 
+prod_1_transactionid::uuid, 
+prod_1_production_statement_type::jsonb, 
+prod_1_production_statement_language::jsonb, 
+
+                        coalesce(
+                            case jsonb_typeof(prod_1_production_carried_out_by_related_objs) 
+                                when 'array' then prod_1_production_carried_out_by_related_objs 
+                                else '[]'::jsonb end
+                            ) as prod_1_production_carried_out_by_related_objs_1
+                        , 
+
+                        coalesce(
+                            case jsonb_typeof(prod_1_production_location_related_objs) 
+                                when 'array' then prod_1_production_location_related_objs 
+                                else '[]'::jsonb end
+                            ) as prod_1_production_location_related_objs_2
+                        , 
+
+                        CASE 
+                            WHEN prod_1_production_location_geo IS NULL THEN NULL 
+                            WHEN jsonb_typeof(prod_1_production_location_geo) = 'object' 
+                            THEN ST_AsText(ST_GeomFromGeoJSON(prod_1_production_location_geo)) 
+                            ELSE NULL 
+                        END AS prod_1_production_location_geo_geom
+                        , 
+prod_1_production_time_edtf::text, 
+prod_1_production_statement_content::jsonb
+                
+                FROM staging.etl_rsci_production
+                WHERE (staging.etl_rsci_production.prod_1_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
+(staging.etl_rsci_production.prod_1_tileid::uuid IS NOT NULL) AND 
+((staging.etl_rsci_production.prod_1_production__label::jsonb IS NOT NULL) OR (staging.etl_rsci_production.prod_1_production_carried_out_by_related_objs::jsonb IS NOT NULL) OR (staging.etl_rsci_production.prod_1_production_location_related_objs::jsonb IS NOT NULL) OR (staging.etl_rsci_production.prod_1_production_location_geo::jsonb IS NOT NULL) OR (staging.etl_rsci_production.prod_1_production_time_edtf::text IS NOT NULL) OR (staging.etl_rsci_production.prod_1_production_statement_content::jsonb IS NOT NULL))
+                
+                ORDER BY staging.etl_rsci_production.resourceinstanceid
+                
+                ;
+                
+
+/* ---------------------------------------------------------------------------------- */ 
+
+
+
+                INSERT INTO reference_and_sample_collection_item.instances (
+                    resourceinstanceid, 
+resource_instance_lifecycle_state_id, 
+graphid, 
+graphpublicationid, 
+principaluser_id, 
+transactionid
+                ) SELECT
+                    
+ DISTINCT
+                    resourceinstanceid::uuid, 
+'f75bb034-36e3-4ab4-8167-f520cf0b4c58'::uuid AS state_id, 
+graphid::uuid, 
+graphpublicationid::uuid, 
+principaluser_id::integer, 
+transactionid::uuid
+                
                 FROM staging.etl_rsci_chemical_material
                 WHERE (staging.etl_rsci_chemical_material.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM reference_and_sample_collection_item.instances)) AND 
 ((staging.etl_rsci_chemical_material.resourceinstanceid::uuid IS NOT NULL))
