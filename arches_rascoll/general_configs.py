@@ -1448,7 +1448,7 @@ RSCI_DIMENSIONS_CONFIGS = {
             'targ_table': 'dimension',
             'stage_field_prefix': 'dim1_',
             'value_transform': make_dimension_kind_list_items,
-            'targ_field': 'dimension_type_',
+            'targ_field': 'dimension_type',
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
@@ -1493,7 +1493,7 @@ RSCI_DIMENSIONS_CONFIGS = {
             'targ_table': 'dimension',
             'stage_field_prefix': 'dim2_',
             'value_transform': make_dimension_kind_list_items,
-            'targ_field': 'dimension_type_',
+            'targ_field': 'dimension_type',
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
@@ -2856,22 +2856,22 @@ AFS_DIGITAL_RESOURCES_NAME_MAPPING_CONFIGS = {
             'targ_table': 'name',
             'stage_field_prefix': 'dig_res_name_',
             'value_transform': make_lang_dict_value,
-            'targ_field': 'content',
+            'targ_field': 'content_n2',
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
                 # Yes, the graph currently uses the name types physical things
                 # concept list. So stick with this, even though we should probably
                 # use generic.
-                ('type', JSONB, NAME_TYPES_PHYSICAL_THING_PRIMARY_LIST_ITEMS,),
-                ('language', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
+                ('type_n1', JSONB, NAME_TYPES_PHYSICAL_THING_PRIMARY_LIST_ITEMS,),
+                ('language_n1', JSONB, LANGUAGES_ENGLISH_LIST_ITEMS,),
                 ('transactionid', UUID, DIGITAL_RESOURCES_TRANSACTION_ID,),
             ],
         },
     ],
     'tileid_unique_groups': {
         'dig_res_name_tileid': [
-            'dig_res_name_content',
+            'dig_res_name_content_n2',
         ],
     },
 }
@@ -2926,10 +2926,10 @@ AFS_DIGITAL_RESOURCES_TYPE_CREATE_MAPPING_CONFIGS = {
         },
         {
             'raw_col': 'type_n2__type',
-            'targ_table': 'type',
+            'targ_table': 'type_n2',
             'stage_field_prefix': 'dig_res_type_',
             'value_transform': make_digital_resource_type_list_items,
-            'targ_field': 'type',
+            'targ_field': 'type_n2',
             'data_type': JSONB,
             'make_tileid': True,
             'default_values': [
@@ -2951,7 +2951,7 @@ AFS_DIGITAL_RESOURCES_TYPE_CREATE_MAPPING_CONFIGS = {
     ],
     'tileid_unique_groups': {
         'dig_res_type_tileid': [
-            'dig_res_type_type',
+            'dig_res_type_type_n2',
         ],
         'dig_res_create_tileid': [
             'dig_res_create_digital_resource_creation_type',
@@ -3241,7 +3241,7 @@ AFS_RSCI_NAME_REMOVAL_MAPPING_CONFIGS = {
         {
             # do this for each resourceinstance uuid
             'raw_col': 'resourceinstance_id',
-            'targ_table': 'removal_from_object',
+            'targ_table': 'removal_from_object_n1',
             'stage_field_prefix': 'rsci_removal_',
             'value_transform': make_afs_rsci_transaction_id_for_nonblanks,
             'targ_field': 'transactionid',
