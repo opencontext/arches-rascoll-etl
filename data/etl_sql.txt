@@ -3159,67 +3159,6 @@ statement_statement_language::jsonb
                 ;
                 
 
-/* ---------------------------------------------------------------------------------- */ 
-
-
-
-                INSERT INTO physical_thing.instances (
-                    resourceinstanceid, 
-resource_instance_lifecycle_state_id, 
-graphid, 
-graphpublicationid, 
-principaluser_id, 
-transactionid
-                ) SELECT
-                    
- DISTINCT
-                    resourceinstanceid::uuid, 
-'f75bb034-36e3-4ab4-8167-f520cf0b4c58'::uuid AS state_id, 
-graphid::uuid, 
-graphpublicationid::uuid, 
-principaluser_id::integer, 
-transactionid::uuid
-                
-                FROM staging.etl_afs_phys_things_dig_ref
-                WHERE (staging.etl_afs_phys_things_dig_ref.resourceinstanceid NOT IN (SELECT resourceinstanceid FROM physical_thing.instances)) AND 
-((staging.etl_afs_phys_things_dig_ref.resourceinstanceid::uuid IS NOT NULL))
-                
-                ORDER BY staging.etl_afs_phys_things_dig_ref.resourceinstanceid
-                
-                ;
-                
-
-
-                INSERT INTO physical_thing.digital_reference (
-                    resourceinstanceid, 
-tileid, 
-digital_reference_type, 
-transactionid, 
-digital_source
-                ) SELECT
-                    
-                    resourceinstanceid::uuid, 
-dig_ref_tileid::uuid, 
-dig_ref_digital_reference_type::jsonb, 
-dig_ref_transactionid::uuid, 
-
-                        coalesce(
-                            case jsonb_typeof(dig_ref_related_objs) 
-                                when 'array' then dig_ref_related_objs 
-                                else '[]'::jsonb end
-                            ) as dig_ref_related_objs_1
-                        
-                
-                FROM staging.etl_afs_phys_things_dig_ref
-                WHERE (staging.etl_afs_phys_things_dig_ref.dig_ref_tileid::uuid NOT IN (SELECT tileid FROM tiles)) AND 
-(staging.etl_afs_phys_things_dig_ref.dig_ref_tileid::uuid IS NOT NULL) AND 
-((staging.etl_afs_phys_things_dig_ref.dig_ref_digital_reference_type::jsonb IS NOT NULL) OR (staging.etl_afs_phys_things_dig_ref.dig_ref_related_objs::jsonb IS NOT NULL))
-                
-                ORDER BY staging.etl_afs_phys_things_dig_ref.resourceinstanceid
-                
-                ;
-                
-
 
 /*
 ALTER TABLE TILES ENABLE TRIGGER __arches_check_excess_tiles_trigger;
