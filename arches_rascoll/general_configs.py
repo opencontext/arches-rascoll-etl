@@ -54,6 +54,20 @@ def get_controlled_list_objs_by_pref_labels(pref_labels, list_id=None,):
     return result
 
 
+def get_controlled_list_objs_by_alt_labels(alt_labels, list_id=None,):
+    from arches_rascoll import controlled_lists
+    key = (str((['alt_labels'] + alt_labels)), str(list_id),)
+    if key in CONTROLLED_LIST_CACHE_DICT:
+        return CONTROLLED_LIST_CACHE_DICT.get(key)
+    result = controlled_lists.make_json_for_controlled_list_items(
+        pref_labels=None,
+        list_id=list_id,
+        alt_labels=alt_labels,
+    )
+    CONTROLLED_LIST_CACHE_DICT[key] = result
+    return result
+
+
 # TODO: Remove these legacy IDs
 ENG_VALUE_UUID = None
 PREFERRED_TERM_TYPE_UUID = None
@@ -1740,8 +1754,6 @@ def make_sample_object_type_list_items(value):
     return make_object_type_phys_thing_list_items('samples')
 
 
-
-
 def make_material_list_items(value):
     """Make list items list objects from material values"""
     if not value:
@@ -1752,8 +1764,16 @@ def make_material_list_items(value):
     else:
         pref_labels = value
     pref_labels = list(set(pref_labels))
-    return get_controlled_list_objs_by_pref_labels(
+    output = get_controlled_list_objs_by_pref_labels(
         pref_labels=pref_labels,
+        list_id='9a2ee63b-d696-4686-979b-994597790289',
+    )
+    if output:
+        return output
+    # Just to make things more clear.
+    alt_labels = pref_labels
+    return get_controlled_list_objs_by_alt_labels(
+        alt_labels=alt_labels,
         list_id='9a2ee63b-d696-4686-979b-994597790289',
     )
 
@@ -3558,7 +3578,6 @@ ALL_MAPPING_CONFIGS = [
     AFS_RSCI_STATEMENT_MAPPING_CONFIGS,
 
 ]
-
 
 
 ARCHES_REL_VIEW_PREP_SQLS = [

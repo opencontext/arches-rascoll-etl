@@ -129,6 +129,69 @@ def get_controlled_list_item_by_preflabel(
     return d_list[0]
 
 
+def get_controlled_list_item_by_altlabel(
+    alt_label,
+    list_id=None,
+    db_url=general_configs.ARCHES_DB_URL
+):
+    """Get a conceptid, concept_uri, and preflabel
+    and various valueids by a preflabel."""
+    engine = utilities.create_engine(db_url)
+    alt_label = str(alt_label).strip()
+    alt_label = alt_label.replace("'", "''")
+    if not list_id:
+        sql = f"""
+        SELECT
+            l.id AS list_id,
+            l.name AS list_name,
+            li.id,
+            li.uri AS uri, 
+            liv.id AS preflabel_valueid,
+            liv.value AS preflabel,
+            liv.languageid AS language_id,
+            liv.valuetype_id AS valuetype_id
+        FROM public.arches_controlled_lists_listitemvalue AS liv
+        LEFT JOIN public.arches_controlled_lists_listitem AS li ON (
+            liv.list_item_id = li.id
+        )
+        LEFT JOIN public.arches_controlled_lists_list AS l ON (
+           li.list_id = l.id
+        )
+        WHERE liv.value = '{alt_label}'
+        AND liv.valuetype_id = 'altLabel'
+        LIMIT 1;
+        """
+    else:
+        sql = f"""
+        SELECT
+            l.id AS list_id,
+            l.name AS list_name,
+            li.id,
+            li.uri AS uri, 
+            liv.id AS preflabel_valueid,
+            liv.value AS preflabel,
+            liv.languageid AS language_id,
+            liv.valuetype_id AS valuetype_id
+        FROM public.arches_controlled_lists_listitemvalue AS liv
+        LEFT JOIN public.arches_controlled_lists_listitem AS li ON (
+            liv.list_item_id = li.id
+        )
+        LEFT JOIN public.arches_controlled_lists_list AS l ON (
+           li.list_id = l.id
+        )
+        WHERE liv.value = '{alt_label}'
+        AND liv.valuetype_id = 'altLabel'
+        AND li.list_id = '{list_id}'
+        LIMIT 1;
+        """
+    df = pd.read_sql(sql, engine)
+    d_list = df.to_dict(orient='records')
+    if len(d_list) == 0:
+        return None
+    return d_list[0]
+
+
+
 def get_controlled_list_item_by_list_item_id(
     list_item_id,
     list_id=None,
@@ -194,17 +257,34 @@ def make_json_for_controlled_list_items(
     pref_labels,
     list_id=None,
     as_string=False,
+    alt_labels=None,
     db_url=general_configs.ARCHES_DB_URL,
 ):
-    if not isinstance(pref_labels, list):
+    if pref_labels is not None and not isinstance(pref_labels, list):
         pref_labels = [pref_labels]
+    if alt_labels is not None and not isinstance(alt_labels, list):
+        alt_labels = [alt_labels]
+    all_labels = []
+    check_alt_labels = False
+    if pref_labels is not None:
+        all_labels += pref_labels
+    if alt_labels is not None:
+        all_labels += alt_labels
+        check_alt_labels = True
     output = []
-    for pref_label in pref_labels:
-        r = get_controlled_list_item_by_preflabel(
-            pref_label=pref_label,
-            list_id=list_id,
-            db_url=db_url,
-        )
+    for label in all_labels:
+        if not check_alt_labels:
+            r = get_controlled_list_item_by_preflabel(
+                pref_label=label,
+                list_id=list_id,
+                db_url=db_url,
+            )
+        else:
+            r = get_controlled_list_item_by_altlabel(
+                alt_label=label,
+                list_id=list_id,
+                db_url=db_url,
+            )
         if not r:
             continue
         item = {
