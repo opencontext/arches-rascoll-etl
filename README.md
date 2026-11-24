@@ -56,8 +56,15 @@ docker exec -it arches python manage.py migrate arches_rascolls
 docker exec -it arches python manage.py graph publish --update -ui
 docker exec -it arches python manage.py report_configs load
 docker exec -it arches python manage.py arches_search reindex_database
+
+
 ```
 
+### NOTE: Frontend Debug (run int Arches container)
+
+```shell
+rm -r node_modules;rm -r package-lock.json;npm install --force;npm run build_development
+```
 
 ### NOTE: Why don't my Name Descriptors show up in Arches?
 
@@ -71,11 +78,31 @@ Here's a quick way to dump the Arches-RASColl PostgreSQL database:
 ```shell
 
 # Make a database dump
-docker exec -it arches bash -c "pg_dump -U postgres -h arches_db -F c -b rascolls > '/arches_data/rascolls_v8_draft.dump'"
+docker exec -it arches bash -c "pg_dump -U postgres -h arches_db -F c -b rascolls > '/arches_data/rascolls_v8_2_w_afs_draft_2026_11_24.dump'"
 
 # Reindex the data
 docker exec -it arches python manage.py es reindex_database -rd
 ```
+
+### NOTE: Recalculating Descriptors
+Sometimes you will want to recalculate descriptors:
+
+```shell
+
+docker exec -it arches python manage.py resources calculate_descriptors --yes
+
+```
+
+If you run into an error, some of the tiles may not have sort orders.
+
+```sql
+
+UPDATE tiles
+SET sortorder = 0
+WHERE sortorder is null;
+
+```
+
 
 
 ### NOTE: Some Function Configurations
