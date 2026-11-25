@@ -146,16 +146,21 @@ def get_controlled_list_item_by_altlabel(
             l.name AS list_name,
             li.id,
             li.uri AS uri, 
-            liv.id AS preflabel_valueid,
-            liv.value AS preflabel,
-            liv.languageid AS language_id,
-            liv.valuetype_id AS valuetype_id
+            liv_pl.id AS preflabel_valueid,
+            liv_pl.value AS preflabel,
+            liv_pl.languageid AS language_id,
+            liv_pl.valuetype_id AS valuetype_id
         FROM public.arches_controlled_lists_listitemvalue AS liv
         LEFT JOIN public.arches_controlled_lists_listitem AS li ON (
             liv.list_item_id = li.id
         )
         LEFT JOIN public.arches_controlled_lists_list AS l ON (
            li.list_id = l.id
+        )
+        LEFT JOIN public.arches_controlled_lists_listitemvalue AS liv_pl ON (
+            li.id = liv_pl.list_item_id
+            AND
+            liv_pl.valuetype_id = 'prefLabel'
         )
         WHERE liv.value = '{alt_label}'
         AND liv.valuetype_id = 'altLabel'
@@ -168,16 +173,21 @@ def get_controlled_list_item_by_altlabel(
             l.name AS list_name,
             li.id,
             li.uri AS uri, 
-            liv.id AS preflabel_valueid,
-            liv.value AS preflabel,
-            liv.languageid AS language_id,
-            liv.valuetype_id AS valuetype_id
+            liv_pl.id AS preflabel_valueid,
+            liv_pl.value AS preflabel,
+            liv_pl.languageid AS language_id,
+            liv_pl.valuetype_id AS valuetype_id
         FROM public.arches_controlled_lists_listitemvalue AS liv
         LEFT JOIN public.arches_controlled_lists_listitem AS li ON (
             liv.list_item_id = li.id
         )
         LEFT JOIN public.arches_controlled_lists_list AS l ON (
            li.list_id = l.id
+        )
+        LEFT JOIN public.arches_controlled_lists_listitemvalue AS liv_pl ON (
+            li.id = liv_pl.list_item_id
+            AND
+            liv_pl.valuetype_id = 'prefLabel'
         )
         WHERE liv.value = '{alt_label}'
         AND liv.valuetype_id = 'altLabel'
